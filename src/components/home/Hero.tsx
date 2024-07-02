@@ -3,7 +3,7 @@ import Image from 'next/image'
 const Hero = () => {
 
     return (
-        <section className="relative h-svh">
+        <section className="relative h-lvh overflow-hidden">
             <div className="p-2 md:max-w-4xl md:max-h-96 absolute z-10 top-2/4 -translate-y-2/4 left-14">
                 <h2 className="text-center font-bold text-6xl text-neutral-800 md:text-left mb-4">
                     We Have Prepared a Car For Your Trip
@@ -33,7 +33,7 @@ const Hero = () => {
                 alt='Picture of world map'
                 width={800}
                 height={600}
-                className='absolute top-[30%] right-4 z-0 hidden md:block'
+                className='absolute top-[20%] right-4 z-0 hidden md:block'
             />
         </section>
     )
