@@ -1,11 +1,15 @@
 import Image from "next/image"
-import { useState } from "react"
 import { DateTime } from 'luxon'
+import { redirect } from "next/navigation"
 
 const BookNow = () => {
-    const [] = useState()
-
     const currentDate = DateTime.now()
+
+    async function handleForm(form: FormData) {
+        redirect('/book?data=' + encodeURIComponent(JSON.stringify(
+            Object.fromEntries(form.entries())
+        )))
+    }
 
     return (
         <section className="bg-[#1F6FE6] w-full p-10">
@@ -14,86 +18,112 @@ const BookNow = () => {
                     Make A Booking
                 </h2>
             </div>
-            <form className="p-8 flex justify-between w-full bg-white text-neutral-700 text-xl">
-                <div>
-                    <label htmlFor="pickup">Pickup</label>
-                    <div className="flex gap-2">
+            <form 
+                className="p-6 lg:p-8 flex flex-col lg:flex-row items-center justify-start md:justify-between gap-3 w-full bg-white text-neutral-700 text-xl"
+                action={handleForm}
+            >
+                <div className="text-center lg:text-left">
+                    <label 
+                        htmlFor="pickup"
+                        className="font-bold justify-center"
+                    >
+                        Pickup
+                    </label>
+                    <div className="flex">
                         <Image 
                             width={50}
                             height={50}
                             src="/images/location_pin.png"
                             alt="Location pin"
-                            className="w-4"
+                            className="w-4 hidden lg:block"
                         />
                         <select 
-                            id="sel_pickup"
-                            className="bg-transparent active:border-neutral-900"
+                            id="selPickup"
+                            className="bg-transparent w-full md:w-auto active:border-neutral-900 text-center lg:text-left"
+                            name="selPickup"
+                            defaultValue="CLT Airport (Home)"
                         >
-                            <option selected>CLT Airport (Home)</option>
+                            <option>CLT Airport (Home)</option>
                             <option>Delivery</option>
                         </select>
                     </div>
                 </div>
-                <div>
-                    <label htmlFor="dropOff">Drop Off</label>
+                <div className="text-center lg:text-left">
+                    <label 
+                        htmlFor="dropOff"
+                        className="font-bold text-center lg:text-left"
+                    >
+                        Drop Off</label>
                     <div className="flex gap-2">
                         <Image 
                             width={50}
                             height={50}
                             src="/images/location_pin.png"
                             alt="Location pin"
-                            className="w-4"
+                            className="w-4 hidden lg:block"
                         />
                         <select 
-                            id="sel_pickup"
+                            id="selDropoff"
                             className="bg-transparent active:border-neutral-900"
+                            name="selDropoff"
+                            defaultValue="CLT Airport (Home)"
                         >
-                            <option selected>CLT Airport (Home)</option>
+                            <option>CLT Airport (Home)</option>
                             <option>Delivery</option>
                         </select>
                     </div>
                 </div>
-                <div>
-                    <label htmlFor="from">From</label>
+                <div className="text-center lg:text-left">
+                    <label 
+                        htmlFor="from"
+                        className="font-bold text-center lg:text-left"
+                    >
+                        From
+                    </label>
                     <div className="flex gap-2">
                         <Image 
                             width={50}
                             height={50}
-                            src="/images/location_pin.png"
+                            src="/images/location_pin.png "
                             alt="Location pin"
-                            className="w-4"
+                            className="w-4 hidden lg:block"
                         />
                         <input 
                             type="text" 
                             name="from" 
                             id="from" 
-                            value={currentDate.plus({day: 1}).toFormat('M/dd/yy')}
-                            className="bg-transparent active:border-neutral-900"
+                            defaultValue={currentDate.plus({day: 1}).toFormat('M/dd/yy')}
+                            className="bg-transparent active:border-neutral-900 w-full text-center lg:text-left"
                         />
                     </div>
                 </div>
-                <div>
-                    <label htmlFor="until">Until</label>
+                <div className="text-center lg:text-left">
+                    <label 
+                        htmlFor="until"
+                        className="font-bold text-center lg:text-left"
+                    >
+                        Until
+                    </label>
                     <div className="flex gap-2">
                         <Image 
                             width={50}
                             height={50}
                             src="/images/location_pin.png"
                             alt="Location pin"
-                            className="w-4"
+                            className="w-4 hidden lg:block"
                         />
                         <input 
                             type="text" 
                             name="until"
                             id="until"
                             placeholder="until"
-                            className="bg-transparent active:border-neutral-900"
-                            value={currentDate.plus({day: 3}).toFormat('M/dd/yy')}
+                            className="bg-transparent active:border-neutral-900 w-full text-center lg:text-left"
+                            defaultValue={currentDate.plus({day: 3}).toFormat('M/dd/yy')}
                         />
                     </div>
                 </div>
                 <button
-                    className="p-4 bg-orange-500 text-white"
+                    className="p-4 bg-orange-500 text-white w-full lg:w-auto lg:min-w-fit"
                 >
                     Rent Now
                 </button>
