@@ -17,9 +17,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="light">
+      <head>
+        <meta name="color-scheme" content="light only"></meta>
+      </head>
       <body className={inter.className}>
-        <ThemeProvider>
+        <ThemeProvider attribute="class" enableSystem={false} enableColorScheme={false}>
           <Navbar />
           {children}
         </ThemeProvider>

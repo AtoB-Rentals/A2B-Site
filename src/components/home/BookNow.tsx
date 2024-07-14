@@ -89,7 +89,7 @@ const BookNow = () => {
                             className="w-4 hidden lg:block"
                         />
                         <input 
-                            type="text" 
+                            type="date" 
                             name="from" 
                             id="from" 
                             defaultValue={currentDate.plus({day: 1}).toFormat('M/dd/yy')}
@@ -113,12 +113,12 @@ const BookNow = () => {
                             className="w-4 hidden lg:block"
                         />
                         <input 
-                            type="text" 
+                            type="date" 
                             name="until"
                             id="until"
                             placeholder="until"
                             className="bg-transparent active:border-neutral-900 w-full text-center lg:text-left"
-                            defaultValue={currentDate.plus({day: 3}).toFormat('M/dd/yy')}
+                            defaultValue={currentDate.plus({day: 3}).toFormat('yy-MM-dd')}
                         />
                     </div>
                 </div>

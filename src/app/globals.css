@@ -9,6 +9,15 @@
   scrollbar-color: #2682c5 rgb(249 115 22);
 }
 
+@layer components {
+  .hamburger div:first-child {
+    @apply rotate-45 translate-y-1.5;
+  }
+  .hamburger div:last-child {
+    @apply -rotate-45 -translate-y-1;
+  }
+}
+
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 24px;
