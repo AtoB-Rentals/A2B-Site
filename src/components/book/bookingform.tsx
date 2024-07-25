@@ -53,8 +53,8 @@ const BookingForm = () => {
         if (response.status === 400) {
             if(data.code === 'FIELD_VALIDATION_ERROR') {
                 data.Data.forEach(error => {
-                    console.log(`Field: ${error.field}, Error: ${error.error}`);
-                });
+                    console.log(`Field: ${error.field}, Error: ${error.error}`); 
+                })
             }
             return
         }
