@@ -6,6 +6,7 @@ const BookNow = () => {
     const currentDate = DateTime.now()
 
     async function handleForm(form: FormData) {
+        'use server'
         redirect('/book?data=' + encodeURIComponent(JSON.stringify(
             Object.fromEntries(form.entries())
         )))
@@ -41,9 +42,9 @@ const BookNow = () => {
                             id="selPickup"
                             className="bg-transparent w-full md:w-auto active:border-neutral-900 text-center lg:text-left"
                             name="selPickup"
-                            defaultValue="CLT Airport (Home)"
+                            defaultValue="CLT Airport"
                         >
-                            <option>CLT Airport (Home)</option>
+                            <option>CLT Airport</option>
                             <option>Delivery</option>
                         </select>
                     </div>
@@ -66,9 +67,9 @@ const BookNow = () => {
                             id="selDropoff"
                             className="bg-transparent active:border-neutral-900"
                             name="selDropoff"
-                            defaultValue="CLT Airport (Home)"
+                            defaultValue="CLT Airport"
                         >
-                            <option>CLT Airport (Home)</option>
+                            <option>CLT Airport</option>
                             <option>Delivery</option>
                         </select>
                     </div>

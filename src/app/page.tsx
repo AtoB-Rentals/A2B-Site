@@ -1,4 +1,3 @@
-'use client'
 import BookNow from "@/components/home/BookNow";
 import Hero from "@/components/home/Hero"
 

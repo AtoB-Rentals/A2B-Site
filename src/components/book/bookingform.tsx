@@ -1,3 +1,5 @@
+import { formDataToObject } from "@/constants/form"
+import { redirect } from "next/navigation"
 import { HTMLAttributes, InputHTMLAttributes } from "react"
 import { InputType } from "zlib"
 
@@ -29,13 +31,42 @@ const Input = ({
 
 const BookingForm = () => {
 
+    const handleBookingForm = async (form: FormData) => {
+        'use server'
+        const formObj = formDataToObject(form)
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API!}/api/bookings`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formObj)
+        })
+
+        const data = await response.json() as ApiResponse
+
+        if(response.status === 200) {
+            redirect('/book/complete')
+        }
+
+        if (response.status === 400) {
+            if(data.code === 'FIELD_VALIDATION_ERROR') {
+                data.Data.forEach(error => {
+                    console.log(`Field: ${error.field}, Error: ${error.error}`);
+                });
+            }
+            return
+        }
+    }
+
     return (
         <section className="my-6 mx-3 md:mx-auto max-w-[800px] rounded-2xl shadow-[0px_0px_12px_3px] py-8 shadow-neutral-500">
             <h2 className="text-center text-3xl">
                 Book A Rental
             </h2>
             <form 
-                action=""
+                action={handleBookingForm}
                 className=" mx-auto mt-2 flex flex-col gap-6 px-10"
             >
                 <h3
