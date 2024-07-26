@@ -7,10 +7,14 @@ const BookNow = () => {
 
     async function handleForm(form: FormData) {
         'use server'
+        console.log('former', form.get('startDate'))
         redirect('/book?data=' + encodeURIComponent(JSON.stringify(
             Object.fromEntries(form.entries())
         )))
+
     }
+
+    console.log(currentDate.plus({day: 1}).toFormat('yyyy-MM-dd'))
 
     return (
         <section className="bg-[#1F6FE6] w-full p-10">
@@ -25,23 +29,16 @@ const BookNow = () => {
             >
                 <div className="text-center lg:text-left">
                     <label 
-                        htmlFor="pickup"
+                        htmlFor="pickupAddress"
                         className="font-bold justify-center"
                     >
                         Pickup
                     </label>
                     <div className="flex">
-                        <Image 
-                            width={50}
-                            height={50}
-                            src="/images/location_pin.png"
-                            alt="Location pin"
-                            className="w-4 hidden lg:block"
-                        />
                         <select 
-                            id="selPickup"
+                            id="pickupAddress"
                             className="bg-transparent w-full md:w-auto active:border-neutral-900 text-center lg:text-left"
-                            name="selPickup"
+                            name="pickupAddress"
                             defaultValue="CLT Airport"
                         >
                             <option>CLT Airport</option>
@@ -51,22 +48,15 @@ const BookNow = () => {
                 </div>
                 <div className="text-center lg:text-left">
                     <label 
-                        htmlFor="dropOff"
+                        htmlFor="dropoffAddress"
                         className="font-bold text-center lg:text-left"
                     >
                         Drop Off</label>
                     <div className="flex gap-2">
-                        <Image 
-                            width={50}
-                            height={50}
-                            src="/images/location_pin.png"
-                            alt="Location pin"
-                            className="w-4 hidden lg:block"
-                        />
                         <select 
-                            id="selDropoff"
+                            id="dropoffAddress"
                             className="bg-transparent active:border-neutral-900"
-                            name="selDropoff"
+                            name="dropoffAddress"
                             defaultValue="CLT Airport"
                         >
                             <option>CLT Airport</option>
@@ -76,50 +66,36 @@ const BookNow = () => {
                 </div>
                 <div className="text-center lg:text-left">
                     <label 
-                        htmlFor="from"
+                        htmlFor="startDate"
                         className="font-bold text-center lg:text-left"
                     >
                         From
                     </label>
                     <div className="flex gap-2">
-                        <Image 
-                            width={50}
-                            height={50}
-                            src="/images/location_pin.png "
-                            alt="Location pin"
-                            className="w-4 hidden lg:block"
-                        />
                         <input 
                             type="date" 
-                            name="from" 
-                            id="from" 
-                            defaultValue={currentDate.plus({day: 1}).toFormat('M/dd/yy')}
+                            name="startDate" 
+                            id="startDate" 
+                            defaultValue={currentDate.plus({day: 1}).toFormat('yyyy-MM-dd')}
                             className="bg-transparent active:border-neutral-900 w-full text-center lg:text-left"
                         />
                     </div>
                 </div>
                 <div className="text-center lg:text-left">
                     <label 
-                        htmlFor="until"
+                        htmlFor="endDate"
                         className="font-bold text-center lg:text-left"
                     >
                         Until
                     </label>
                     <div className="flex gap-2">
-                        <Image 
-                            width={50}
-                            height={50}
-                            src="/images/location_pin.png"
-                            alt="Location pin"
-                            className="w-4 hidden lg:block"
-                        />
                         <input 
                             type="date" 
-                            name="until"
-                            id="until"
+                            name="endDate"
+                            id="endDate"
                             placeholder="until"
                             className="bg-transparent active:border-neutral-900 w-full text-center lg:text-left"
-                            defaultValue={currentDate.plus({day: 3}).toFormat('yy-MM-dd')}
+                            defaultValue={currentDate.plus({day: 3}).toFormat('yyyy-MM-dd')}
                         />
                     </div>
                 </div>

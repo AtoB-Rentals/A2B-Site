@@ -1,4 +1,5 @@
 import { formDataToObject } from "@/constants/form"
+import { BookingRequestBody } from "@/interface/api/booking"
 import { redirect } from "next/navigation"
 import { HTMLAttributes, InputHTMLAttributes } from "react"
 import { InputType } from "zlib"
@@ -29,8 +30,18 @@ const Input = ({
     )
 }
 
-const BookingForm = () => {
-
+const BookingForm: React.FC<BookingRequestBody> = ({
+    firstName,
+    lastName,
+    phone,
+    email,
+    policyNumber,
+    insuranceProvider,
+    startDate,
+    endDate,
+    pickupAddress,
+    dropoffAddress
+}) => {
     const handleBookingForm = async (form: FormData) => {
         'use server'
         const formObj = formDataToObject(form)
@@ -59,6 +70,8 @@ const BookingForm = () => {
             return
         }
     }
+
+    console.log('pickupAddress', pickupAddress || 'nothin')
 
     return (
         <section className="my-6 mx-3 md:mx-auto max-w-[800px] rounded-2xl shadow-[0px_0px_12px_3px] py-8 shadow-neutral-500">
@@ -124,7 +137,8 @@ const BookingForm = () => {
                             name:"pickupDate",
                             required: true,
                             type: "date",
-                            "aria-required": true
+                            "aria-required": true,
+                            defaultValue: startDate
                         }}
                     />
                     <Input 
@@ -133,7 +147,8 @@ const BookingForm = () => {
                             name:"dropoffDate",
                             required: true,
                             type: "date",
-                            "aria-required": true
+                            "aria-required": true,
+                            defaultValue: endDate
                         }}
                     />
                 </div>
@@ -151,7 +166,8 @@ const BookingForm = () => {
                         name:"pickupAddress",
                         required: true,
                         type: "text",
-                        "aria-required": true
+                        "aria-required": true,
+                        defaultValue: pickupAddress === 'Delivery' ? '' : pickupAddress
                     }}
                 />
                 <Input 
@@ -160,7 +176,8 @@ const BookingForm = () => {
                         name:"dropoffAddress",
                         required: true,
                         type: "text",
-                        "aria-required": true
+                        "aria-required": true,
+                        defaultValue: dropoffAddress === 'Delivery' || !dropoffAddress ? '' : dropoffAddress
                     }}
                 />
                 <div>
