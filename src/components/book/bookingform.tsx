@@ -1,5 +1,6 @@
 import { formDataToObject } from "@/constants/form"
 import { BookingRequestBody } from "@/interface/api/booking"
+import { parsePhoneNumber } from "libphonenumber-js"
 import { redirect } from "next/navigation"
 import { HTMLAttributes, InputHTMLAttributes } from "react"
 import { InputType } from "zlib"
@@ -44,7 +45,20 @@ const BookingForm: React.FC<BookingRequestBody> = ({
 }) => {
     const handleBookingForm = async (form: FormData) => {
         'use server'
+        const phoneNumber = form.get('phoneNumber')
+        if(typeof phoneNumber !== 'string' || !!!phoneNumber) {
+            return
+        }
+
+        
+
+        form.set(
+            "phoneNumber",
+            parsePhoneNumber(phoneNumber, 'US').format('E.164')
+        )
         const formObj = formDataToObject(form)
+
+        console.log(formObj)
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_API!}/api/bookings`, {
             method: 'POST',
@@ -134,7 +148,7 @@ const BookingForm: React.FC<BookingRequestBody> = ({
                     <Input 
                         labelName="Pickup Date"
                         inputProps={{
-                            name:"pickupDate",
+                            name:"startDate",
                             required: true,
                             type: "date",
                             "aria-required": true,
@@ -144,7 +158,7 @@ const BookingForm: React.FC<BookingRequestBody> = ({
                     <Input 
                         labelName="Dropoff Date"
                         inputProps={{
-                            name:"dropoffDate",
+                            name:"endDate",
                             required: true,
                             type: "date",
                             "aria-required": true,
