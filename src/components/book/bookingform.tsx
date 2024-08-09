@@ -1,6 +1,7 @@
 import { formDataToObject } from "@/constants/form"
 import { BookingRequestBody } from "@/interface/api/booking"
 import { parsePhoneNumber } from "libphonenumber-js"
+import { DateTime } from "luxon"
 import { redirect } from "next/navigation"
 import { HTMLAttributes, InputHTMLAttributes } from "react"
 import { InputType } from "zlib"
@@ -31,7 +32,7 @@ const Input = ({
     )
 }
 
-const BookingForm: React.FC<BookingRequestBody> = ({
+const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: string}> = ({
     firstName,
     lastName,
     phone,
@@ -50,15 +51,47 @@ const BookingForm: React.FC<BookingRequestBody> = ({
             return
         }
 
-        
-
         form.set(
             "phoneNumber",
             parsePhoneNumber(phoneNumber, 'US').format('E.164')
         )
-        const formObj = formDataToObject(form)
+        // const formObj = formDataToObject(form)
 
-        console.log(formObj)
+        const startDate = form.get("startDate")
+        const endDate = form.get("endDate")
+        const startTime = form.get("startTime")
+        const endTime = form.get("endTime")
+
+        const fmt = "yyyy-MM-dd HH:mm"
+        const startDT = DateTime.fromFormat(
+            startDate + " " + startTime,
+            fmt
+        )
+        const endDT = DateTime.fromFormat(
+            endDate + " " + endTime,
+            fmt
+        )
+
+        console.log("startTime: ", startDate + " " + startTime)
+
+        const body = {
+            firstName: form.get("firstName"),
+            lastName: form.get("lastName"),
+            email: form.get("email"),
+            phoneNumber: form.get("phoneNumber"),
+            pickupAddress: form.get("pickupAddress"),
+            dropoffAddress: form.get("dropoffAddress"),
+            insuranceProvider: form.get("insuranceProvider"),
+            policyNumber: form.get("policyNumber"),
+            startTime: {
+                local: startDT.toISO(),
+                iana: "America/New_York"
+            },
+            endTime: {
+                local: endDT.toISO(),
+                iana: "America/New_York"
+            },
+        }
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_API!}/api/bookings`, {
             method: 'POST',
@@ -66,23 +99,26 @@ const BookingForm: React.FC<BookingRequestBody> = ({
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(formObj)
+
+            body: JSON.stringify(body as BookingRequestBody)
         })
 
         const data = await response.json() as ApiResponse
 
-        if(response.status === 200) {
-            redirect('/book/complete')
-        }
+        // if(response.status === 200) {
+        //     redirect('/book/complete')
+        // }
 
-        if (response.status === 400) {
-            if(data.code === 'FIELD_VALIDATION_ERROR') {
-                data.Data.forEach(error => {
-                    console.log(`Field: ${error.field}, Error: ${error.error}`); 
-                })
-            }
-            return
-        }
+        // if (response.status === 400) {
+        //     if(data.code === 'FIELD_VALIDATION_ERROR') {
+        //         data.Data.forEach(error => {
+        //             console.log(`Field: ${error.field}, Error: ${error.error}`); 
+        //         })
+        //     }
+        //     return
+        // }
+
+        console.log("data: ", data)
     }
 
     console.log('pickupAddress', pickupAddress || 'nothin')
@@ -144,6 +180,7 @@ const BookingForm: React.FC<BookingRequestBody> = ({
                 >
                     Schedule
                 </h3>
+                <p>The timezone is EST</p>
                 <div className="w-full flex flex-col lg:flex-row justify-between gap-5">
                     <Input 
                         labelName="Pickup Date"
@@ -156,13 +193,33 @@ const BookingForm: React.FC<BookingRequestBody> = ({
                         }}
                     />
                     <Input 
-                        labelName="Dropoff Date"
+                        labelName="Pickup Time"
+                        inputProps={{
+                            name:"startTime",
+                            required: true,
+                            type: "time",
+                            "aria-required": true,
+                        }}
+                    />
+                </div>
+                <div className="w-full flex flex-col lg:flex-row justify-between gap-5">
+                    <Input 
+                        labelName="Drop-off Date"
                         inputProps={{
                             name:"endDate",
                             required: true,
                             type: "date",
                             "aria-required": true,
                             defaultValue: endDate
+                        }}
+                    />
+                    <Input 
+                        labelName="Drop-off Time"
+                        inputProps={{
+                            name:"endTime",
+                            required: true,
+                            type: "time",
+                            "aria-required": true,
                         }}
                     />
                 </div>
@@ -218,6 +275,7 @@ const BookingForm: React.FC<BookingRequestBody> = ({
                         type: "text"
                     }}
                 />
+                
                 <button 
                     type="submit"
                     className="w-full p-5 bg-orange-500 rounded-lg"
