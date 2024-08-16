@@ -14,8 +14,6 @@ const BookNow = () => {
 
     }
 
-    console.log(currentDate.plus({day: 1}).toFormat('yyyy-MM-dd'))
-
     return (
         <section className="bg-[#1F6FE6] w-full p-10">
             <div className="text-center mb-8">
