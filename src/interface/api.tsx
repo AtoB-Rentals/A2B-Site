@@ -34,4 +34,4 @@ interface SuccessResponse {
     Message: string;
 }
 
-type ApiResponse = ServerError | FieldValidationError | BodyError | SuccessResponse
+export type ApiResponse = ServerError | FieldValidationError | BodyError | SuccessResponse
