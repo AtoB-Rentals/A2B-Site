@@ -1,7 +1,10 @@
 import { formDataToObject } from "@/constants/form"
+<<<<<<< HEAD
 import { BookingRequestBody } from "@/interface/api/booking"
 import { parsePhoneNumber } from "libphonenumber-js"
 import { DateTime } from "luxon"
+=======
+>>>>>>> 6228a1b27f2684d04e6c73d58703599e57733824
 import { redirect } from "next/navigation"
 import { HTMLAttributes, InputHTMLAttributes } from "react"
 import { InputType } from "zlib"
@@ -32,6 +35,7 @@ const Input = ({
     )
 }
 
+<<<<<<< HEAD
 const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: string}> = ({
     firstName,
     lastName,
@@ -92,6 +96,13 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                 iana: "America/New_York"
             },
         }
+=======
+const BookingForm = () => {
+
+    const handleBookingForm = async (form: FormData) => {
+        'use server'
+        const formObj = formDataToObject(form)
+>>>>>>> 6228a1b27f2684d04e6c73d58703599e57733824
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_API!}/api/bookings`, {
             method: 'POST',
@@ -99,8 +110,12 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+<<<<<<< HEAD
 
             body: JSON.stringify(body as BookingRequestBody)
+=======
+            body: JSON.stringify(formObj)
+>>>>>>> 6228a1b27f2684d04e6c73d58703599e57733824
         })
 
         const data = await response.json() as ApiResponse
@@ -117,12 +132,17 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
             }
             return
         }
+<<<<<<< HEAD
 
         console.log("data: ", data)
     }
 
     console.log('pickupAddress', pickupAddress || 'nothin')
 
+=======
+    }
+
+>>>>>>> 6228a1b27f2684d04e6c73d58703599e57733824
     return (
         <section className="my-6 mx-3 md:mx-auto max-w-[800px] rounded-2xl shadow-[0px_0px_12px_3px] py-8 shadow-neutral-500">
             <h2 className="text-center text-3xl">
@@ -131,6 +151,7 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
             <form 
                 action={handleBookingForm}
                 className=" mx-auto mt-2 flex flex-col gap-6 px-10"
+<<<<<<< HEAD
             >   
                 <div>
                     <h3
@@ -142,6 +163,14 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                         *First and last name should
                     </p>
                 </div>
+=======
+            >
+                <h3
+                    className="font-extrabold"
+                >
+                    Personal Information
+                </h3>
+>>>>>>> 6228a1b27f2684d04e6c73d58703599e57733824
                 <div className="w-full flex flex-col lg:flex-row justify-between gap-5">
                     <Input 
                         labelName="First Name"
@@ -180,6 +209,7 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                         "aria-required": true
                     }}
                 />
+<<<<<<< HEAD
                 <div>
                     <h3
                         className="font-extrabold"
@@ -188,10 +218,18 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                     </h3>
                     <p>*The timezone is EST</p>
                 </div>
+=======
+                <h3
+                    className="font-extrabold"
+                >
+                    Schedule
+                </h3>
+>>>>>>> 6228a1b27f2684d04e6c73d58703599e57733824
                 <div className="w-full flex flex-col lg:flex-row justify-between gap-5">
                     <Input 
                         labelName="Pickup Date"
                         inputProps={{
+<<<<<<< HEAD
                             name:"startDate",
                             required: true,
                             type: "date",
@@ -229,6 +267,21 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                             type: "time",
                             "aria-required": true,
                             defaultValue:"12:00"
+=======
+                            name:"pickupDate",
+                            required: true,
+                            type: "date",
+                            "aria-required": true
+                        }}
+                    />
+                    <Input 
+                        labelName="Dropoff Date"
+                        inputProps={{
+                            name:"dropoffDate",
+                            required: true,
+                            type: "date",
+                            "aria-required": true
+>>>>>>> 6228a1b27f2684d04e6c73d58703599e57733824
                         }}
                     />
                 </div>
@@ -246,8 +299,12 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                         name:"pickupAddress",
                         required: true,
                         type: "text",
+<<<<<<< HEAD
                         "aria-required": true,
                         defaultValue: pickupAddress === 'Delivery' ? '' : pickupAddress
+=======
+                        "aria-required": true
+>>>>>>> 6228a1b27f2684d04e6c73d58703599e57733824
                     }}
                 />
                 <Input 
@@ -256,11 +313,18 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                         name:"dropoffAddress",
                         required: true,
                         type: "text",
+<<<<<<< HEAD
                         "aria-required": true,
                         defaultValue: dropoffAddress === 'Delivery' || !dropoffAddress ? '' : dropoffAddress
                     }}
                 />
                 {/* <div>
+=======
+                        "aria-required": true
+                    }}
+                />
+                <div>
+>>>>>>> 6228a1b27f2684d04e6c73d58703599e57733824
                     <h3
                         className="font-extrabold"
                     >
@@ -283,8 +347,12 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                         required: true,
                         type: "text"
                     }}
+<<<<<<< HEAD
                 /> */}
                 
+=======
+                />
+>>>>>>> 6228a1b27f2684d04e6c73d58703599e57733824
                 <button 
                     type="submit"
                     className="w-full p-5 bg-orange-500 rounded-lg"
