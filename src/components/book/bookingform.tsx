@@ -56,7 +56,6 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
             "phoneNumber",
             parsePhoneNumber(phoneNumber, 'US').format('E.164')
         )
-        // const formObj = formDataToObject(form)
 
         const startDate = form.get("startDate")
         const endDate = form.get("endDate")
@@ -109,7 +108,8 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
         }
 
         if (response.status === 400) {
-            if(data.code === 'FIELD_VALIDATION_ERROR') {
+            if(data.code === 'FIELD_VALIDATION_ERROR' && Array.isArray(data.Data) ) {
+
                 data.Data.forEach(error => {
                     console.log(`Field: ${error.field}, Error: ${error.error}`); 
                 })
