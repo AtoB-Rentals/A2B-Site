@@ -51,6 +51,7 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
             return
         }
 
+
         form.set(
             "phoneNumber",
             parsePhoneNumber(phoneNumber, 'US').format('E.164')
@@ -71,8 +72,6 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
             endDate + " " + endTime,
             fmt
         )
-
-        console.log("startTime: ", startDate + " " + startTime)
 
         const body = {
             firstName: form.get("firstName"),
