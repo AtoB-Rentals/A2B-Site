@@ -1,11 +1,8 @@
-import { formDataToObject } from "@/constants/form"
 import { BookingRequestBody } from "@/interface/api/booking"
 import { parsePhoneNumber } from "libphonenumber-js"
 import { DateTime } from "luxon"
 import { redirect } from "next/navigation"
-import { HTMLAttributes, InputHTMLAttributes } from "react"
-import { InputType } from "zlib"
-
+import { InputHTMLAttributes } from "react"
 
 const Input = ({
     labelName,
@@ -66,11 +63,11 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
         const startDT = DateTime.fromFormat(
             startDate + " " + startTime,
             fmt
-        )
+        ).setZone("UTC")
         const endDT = DateTime.fromFormat(
             endDate + " " + endTime,
             fmt
-        )
+        ).setZone("UTC")
 
         const body = {
             firstName: form.get("firstName"),
@@ -83,11 +80,11 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
             policyNumber: form.get("policyNumber"),
             startTime: {
                 local: startDT.toISO(),
-                iana: "America/New_York"
+                iana: "UTC"
             },
             endTime: {
                 local: endDT.toISO(),
-                iana: "America/New_York"
+                iana: "UTC"
             },
         }
 
@@ -114,13 +111,11 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                     console.log(`Field: ${error.field}, Error: ${error.error}`); 
                 })
             }
+
+            alert('Something went wrong please try again later')
             return
         }
-
-        console.log("data: ", data)
     }
-
-    console.log('pickupAddress', pickupAddress || 'nothin')
 
     return (
         <section className="my-6 mx-3 md:mx-auto max-w-[800px] rounded-2xl shadow-[0px_0px_12px_3px] py-8 shadow-neutral-500">
