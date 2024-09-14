@@ -88,6 +88,8 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
             },
         }
 
+        console.log(body)
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_API!}/api/bookings`, {
             method: 'POST',
             headers: {

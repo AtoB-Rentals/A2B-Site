@@ -14,6 +14,12 @@ const CommingSoon = () => {
             >
                 Request a Car
             </a>
+            <a 
+                className="absolute right-0 top-0 w-3 h-3 bg-red-500 cursor-default"
+                href="/manager/login"
+            >
+
+            </a>
         </main>
     )
 }

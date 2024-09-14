@@ -23,7 +23,6 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" enableSystem={false} enableColorScheme={false}>
-          <Navbar />
           {children}
         </ThemeProvider>
       </body>
