@@ -39,7 +39,7 @@ const ManagerCars = ({ params }: {
 
     return (
         <main>
-            <CarProfile car={car}/>
+            <CarProfile car={car} hydration={handleGetCar}/>
         </main>
     )
 }

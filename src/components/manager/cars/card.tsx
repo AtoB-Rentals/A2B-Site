@@ -4,14 +4,15 @@ import Link from "next/link";
 
 
 const ManCarCard = (car: CarI) => {
+    const pictures = car.pictures || []
 
     return (
         <div
             className="flex flex-col overflow-hidden rounded-md shadow-[0px_0px_12px_3px] max-w-64 h-[450px] shadow-neutral-500 justify-between"
         >
             <div className="flex justify-center items-center overflow-hidden justify-self-center">
-                <img 
-                    src={car.pictures.length ? car?.pictures[0]?.url : "/images/sedan.png"}
+                <Image 
+                    src={pictures.length ? car?.pictures[0]?.url : "/images/sedan.png"}
                     width={256}
                     height={256}   
                     alt={car.name}

@@ -86,6 +86,37 @@ export const addCarPic = async (
     }
 }
 
+export const delCarPics = async (
+    carId: string,
+    publicIds: string[]
+): Promise<ApiRes<CarI> | err> => {
+    try {
+        const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/pictures`, { // Replace '/api/login' with your actual login endpoint
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                publicIds
+            })
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+
+        return await response.json() as ApiRes<CarI>
+    } catch (e) {
+        console.log("err: ", e)
+        return unknownErr()
+    }
+}
+
 export const getCar = async (carId: string): Promise<ApiRes<CarI> | err> => {
     try {
         const response = await fetch(`${apiURL}/api/cars/car/${carId}`, { // Replace '/api/login' with your actual login endpoint

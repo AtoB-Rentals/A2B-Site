@@ -8,6 +8,7 @@ type Props = {
     onOk: () => Promise<boolean> | boolean,
     children: React.ReactNode,
     paramKey: string
+    loading: boolean
 }
 
 export default function FormModal({ 
@@ -15,7 +16,8 @@ export default function FormModal({
     onClose, 
     onOk, 
     children,
-    paramKey
+    paramKey,
+    loading
 }: Props) {
     const searchParams = useSearchParams()
     const dialogRef = useRef<null | HTMLDialogElement>(null)
@@ -39,9 +41,9 @@ export default function FormModal({
         onClose && onClose()
     }
 
-    const clickOk = () => {
+    const clickOk = async () => {
         try {
-            const res = onOk()
+            const res = await onOk()
             if (res === true || res === undefined) {
                 closeDialog()
             }
@@ -49,6 +51,8 @@ export default function FormModal({
             return
         }
     }
+
+    console.log('loading: ', loading)
 
     const dialog: JSX.Element | null = showDialog === 'y'
         ? (
@@ -64,7 +68,11 @@ export default function FormModal({
                             <span className='bg-red-500 w-5 h-1 rounded-full block ${spanOne} transition-all -rotate-45 translate-y-[-2px]'></span>
                         </button>
                     </div>
-                    <form className='overflow-y-auto h-64'>
+                    <form className='relative overflow-y-auto h-64'>
+                        {loading && <div className='w-full h-full bg-slate-500/90 flex items-center justify-center'>
+                            <p>Loading...</p>
+                        </div>
+                        }
                         {children}
                     </form>
                     <div className="flex flex-row justify-center gap-x-5 bg-neutral-800 py-2">

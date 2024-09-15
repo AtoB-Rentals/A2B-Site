@@ -3,8 +3,7 @@ import FormModal from "@/components/modals/formModal"
 import { addCar } from "@/constants/requests/cars";
 import useBasicFormHook from "@/hooks/useForm";
 import { AddCarI, AddCarSchema, carTypeList, CarTypeT } from "@/interface/api/car";
-import { useEffect } from "react";
-import { z } from "zod";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
@@ -14,6 +13,7 @@ const AddCarModal = ({
     onSuccess: () => void
 }) => {
     const router = useRouter()
+    const [ loading, setLoading ] = useState<boolean>(false)
     const {
         updateParams,
         updateValues,
@@ -27,6 +27,7 @@ const AddCarModal = ({
     }, undefined, "add_Car")
 
     const handleAddCar = async (): Promise<boolean> => {
+        setLoading(true)
         const res = await addCar(values as AddCarI)
 
         if(res.isErr) {
@@ -43,11 +44,13 @@ const AddCarModal = ({
             if (res.status === 500) {
                 alert('something wrong please try again later')
             }
-
+            setLoading(false)
+            
             return false
         }
-
         
+        
+        setLoading(false)
         onSuccess()
         return true
     }
@@ -61,6 +64,7 @@ const AddCarModal = ({
             title="Add Car"
             paramKey="addCarModal"
             onOk={handleAddCar}
+            loading={loading}
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-7 px-4 pb-4 overflow-x-hidden">
                 <Input2 
@@ -106,7 +110,6 @@ const AddCarModal = ({
                                     {type}
                                 </option>
                             ))
-                        
                         }
                     </select>
                     <p className='font-bold text-red-500'>{errs.chargeType}</p>

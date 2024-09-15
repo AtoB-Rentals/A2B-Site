@@ -1,5 +1,3 @@
-
-
 interface ServerError {
     Status: 'error';
     code: 'SERVER_ERROR';

@@ -38,7 +38,8 @@ export const AddCarSchema = z.object({
 export interface PictureI {
     type: PictureTypeT
     url: string
-    pubicId: string
+    publicId: string
+    folder: string
 }
 
 export interface AddCarI {

@@ -14,7 +14,6 @@ const ListCars = () => {
     const router = useRouter()
     
     const handleGetCars = () => {
-        console.log("the function ran")
         getCars()
             .then(res => {
                 console.log("it got here one")

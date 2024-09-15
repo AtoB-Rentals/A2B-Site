@@ -1,7 +1,7 @@
 'use client'
 
 import FormModal from "@/components/modals/formModal"
-import { addCarPic } from "@/constants/requests/cars"
+import { addCarPic, delCarPics } from "@/constants/requests/cars"
 import { CarI, pictureTypes, PictureTypeT } from "@/interface/api/car"
 import Image from "next/image"
 import Link from "next/link"
@@ -10,6 +10,7 @@ import Cookies from "js-cookie"
 
 interface ManCarProfileI {
     car: CarI
+    hydration: () => any
 }
 
 const DetailCard = ({
@@ -28,11 +29,14 @@ const DetailCard = ({
 }
 
 const CarProfile = ({
-    car
+    car,
+    hydration
 }: ManCarProfileI) => {
     const [ picType, setPicType ] = useState<PictureTypeT>()
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const [preview, setPreview] = useState<string | null>(null)
+    const [ loading, setLoading ] = useState<boolean>(false)
+    const [ selImages, setSelImages ] = useState<string[]>([])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
@@ -53,34 +57,66 @@ const CarProfile = ({
             return false
         }
 
+        setLoading(true)
         const res = await addCarPic(
             car.id,
             selectedFile,
             picType
         )
-
+        setLoading(false)
         if (res.isErr) return false
+        hydration()
 
         return true
     }
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setPicType(e.target.value as PictureTypeT);
-    };
+    }
+    const pictures = car.pictures || []
+
+    const handlePicPress = (id: string) => {
+        if (selImages.includes(id)) {
+            setSelImages(prev => prev.filter(p => p !== id))
+            return
+        }
+
+        setSelImages(prev => [...prev, id])
+    }
+
+    const handleDelPics = async (): Promise<boolean> => {
+        setLoading(true)
+        const res = await delCarPics(car.id, selImages)
+
+        if (res.isErr) {
+            alert('something went wrong please try again later')
+            return false
+        }
+
+        hydration()
+        setSelImages(prev => prev.filter(p => !prev.includes(p)))
+
+        return true
+    }
+
+    
+    console.log('pictures: ', pictures)
 
     return (
         <>
             <div
                 className="max-w-[1000px] mx-3 lg:mx-auto rounded-md shadow-[0px_0px_4px_1px] shadow-gray-400 overflow-hidden pb-3 mb-56"
             >
-                <div className="flex flex-col w-full justify-around items-center bg-blue-500 h-52 text-white">
-                    <Image 
-                        src={car.pictures.length ? car.pictures[0].url : "/images/sedan.png"} 
-                        alt={car.name}
-                        width={200}
-                        height={200}
-                        className="rounded-full"
-                    />
+                <div className="flex flex-col w-full justify-around items-center bg-blue-500 h-60 text-white">
+                    <div className="flex justify-center items-center rounded-full w-40 h-40 overflow-hidden">
+                        <Image 
+                            src={pictures.length ? car.pictures[0].url : "/images/sedan.png"} 
+                            alt={car.name}
+                            width={200}
+                            height={200}
+                            className="rounded-full"
+                        />
+                    </div>
                     <div className="text-center">
                         <h3 className="font-bold">{car.name}</h3>
                         <p>{car.type}</p>
@@ -116,29 +152,46 @@ const CarProfile = ({
                 <div className="px-3">
                     <div className="flex justify-between items-center mb-3">
                         <h3 className="font-bold text-xl">Gallery</h3>
-                        <Link 
-                            className="bg-blue-500 text-white font-bold py-1 px-2 rounded-md"
-                            href={`/manager/cars/${car.id}?add_picture=y`}
-                        >
-                            Add Picture
-                        </Link>
+                        <div className="flex items-center justify-between gap-x-3">
+                            <div>
+                               {selImages.length} / {pictures.length}
+                            </div>
+                            {!!selImages.length && <button
+                                className="bg-red-500 text-white font-bold py-1 px-2 rounded-md"
+                                onClick={() => handleDelPics()}
+                            >
+                                Delete
+                            </button>}
+                            <Link 
+                                className="bg-blue-500 text-white font-bold py-1 px-2 rounded-md"
+                                href={`/manager/cars/${car.id}?add_picture=y`}
+                            >
+                                Add Picture
+                            </Link>
+                        </div>
                     </div>
                     <div className="grid grid-cols-2 p-3 gap-1 mx-auto md:grid-cols-3 lg:grid-cols-5">
-                        {car.pictures.map((pic, index) => (
-                            <div
-                                key={pic.pubicId}
-                                className="overflow-hidden"
-                            >
-                                <Image
-                                    
-                                    src={pic.url}
-                                    alt={`${car.name} picture number ${index}`}
-                                    width={200}
-                                    height={150}
-                                    className="block rounded-md"
-                                />
-                            </div>
-                        ))}
+                        {pictures.map((pic, index) => {
+                            const selected = selImages.includes(pic.publicId)
+                            return (
+                                <div
+                                    key={pic.publicId}
+                                    className={`
+                                        flex justify-center items-center overflow-hidden my-auto w-40 h-fit max-h-36 rounded-md cursor-pointer
+                                        ${selected && 'border-4 border-blue-600'}
+                                    `}
+                                    onClick={() => handlePicPress(pic.publicId)}
+                                >
+                                    <Image
+                                        
+                                        src={pic.url}
+                                        alt={`${car.name} picture number ${index}`}
+                                        width={200}
+                                        height={150}
+                                    />
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             </div>
@@ -146,6 +199,7 @@ const CarProfile = ({
                 title={"Add Picture"} 
                 onOk={() => handleAddPic()}
                 paramKey={"add_picture"}
+                loading={loading}
             >
                 <div className="">
                     <div>
