@@ -47,10 +47,10 @@ const ManagerLogin = () => {
             const data = await response.json()
 
             const token = data.data as string
-            Cookies.set("token", token, {expires: 1})
+            Cookies.set("tokenX", token, {expires: 1})
 
             setError("")
-            router.push('/manager')
+            // router.push('/manager')
 
 
             // You can store the token in localStorage, cookies, or context here if needed

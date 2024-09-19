@@ -174,7 +174,7 @@ const CarProfile = ({
                         title="Passengers"
                         inputType="select"
                         options={Array.from({ length: 12 }, (_, i) => (i + 1).toString())}
-                        preValue={carInfo.passengers.toString()}
+                        preValue={carInfo.passengers ? carInfo.passengers.toString() : "0"}
                         onSave={async value => {
                             const passengers = parseInt(value) as number
                             const res = await UpatePassengers(car.id, passengers)
@@ -200,7 +200,7 @@ const CarProfile = ({
                     <DetailCard 
                         title="Address"
                         customClick={() => router.push(`/manager/cars/${car.id}?set_address=y`)}
-                        link={carInfo.address.url || "#"}
+                        link={carInfo.address ? carInfo.address.url : "#"}
                     >
                         <Link 
                             onClick={(e: any) => e.preventDefault()}

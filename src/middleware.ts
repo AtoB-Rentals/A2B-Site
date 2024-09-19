@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(req: NextRequest) {
-    const token = req.cookies.get('token')
+    const token = req.cookies.get('tokenX')
     const url = req.nextUrl
 
     // If the token is missing, redirect to the login page
