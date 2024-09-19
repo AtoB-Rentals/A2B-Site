@@ -1,3 +1,4 @@
+"use client"
 // import ListCars from "@/components/manager/cars/listCars"
 import dynamic from "next/dynamic"
 
