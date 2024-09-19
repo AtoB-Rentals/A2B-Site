@@ -44,8 +44,8 @@ const AddPicture = ({
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
-        /**2MB */
-        const maxSize = 2 * 1024 * 1024
+        /**5MB */
+        const maxSize = 5 * 1024 * 1024
 
         if (!file) return; // If no file is selected, exit early
 
@@ -58,7 +58,7 @@ const AddPicture = ({
 
         // File size validation (size is in bytes, so 2MB = 2 * 1024 * 1024)
         if (file.size > maxSize) {
-            alert("File size should not exceed 2MB.");
+            alert("File size should not exceed 5MB.");
             return;
         }
 
