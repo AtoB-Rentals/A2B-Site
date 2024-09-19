@@ -97,6 +97,10 @@ const useBasicFormHook = <T extends FormValues>(
         }
     }
 
+    function clearValues() {
+        setValues(prev => ({ ...initialValues }))
+    }
+
     return {
         values,
         updateValues,
@@ -105,7 +109,8 @@ const useBasicFormHook = <T extends FormValues>(
         validateValues,
         updateParams,
         isValid,
-        setValues
+        setValues,
+        clearValues
     }
 }
 

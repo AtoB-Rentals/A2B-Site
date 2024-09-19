@@ -52,8 +52,6 @@ export default function FormModal({
         }
     }
 
-    console.log('loading: ', loading)
-
     const dialog: JSX.Element | null = showDialog === 'y'
         ? (
             <dialog ref={dialogRef} className="fixed top-50 left-50 -translate-x-50 -translate-y-50 z-50 rounded-xl backdrop:bg-gray-800/50 border border-blue-500 w-full md:w-[100vh] max-h-[75vh]">

@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import { CarI } from '../../../../../interface/api/car';
 import { getCar } from "@/constants/requests/cars";
 import { useRouter } from "next/navigation";
-import CarProfile from "@/components/manager/cars/carId/profile";
+import CarProfile from "@/components/manager/cars/carId/profileCard/profile";
+import AddPicture from "@/components/manager/cars/carId/AddPictureModal";
 
 const ManagerCars = ({ params }: {
     params: { 
@@ -13,7 +14,6 @@ const ManagerCars = ({ params }: {
 }) => {
     const [ car, setCar ] = useState<CarI>()
     const router = useRouter()
-
 
     const handleGetCar = async () => {
         const res = await getCar(params.carId)
@@ -38,9 +38,15 @@ const ManagerCars = ({ params }: {
     }
 
     return (
-        <main>
-            <CarProfile car={car} hydration={handleGetCar}/>
-        </main>
+        <>
+            <main>
+                <CarProfile car={car} hydration={handleGetCar}/>
+            </main>
+            <AddPicture 
+                car={ car }
+                onSuccess={ handleGetCar }
+            />
+        </>
     )
 }
 

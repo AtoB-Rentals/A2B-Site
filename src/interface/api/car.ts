@@ -1,4 +1,12 @@
 import { z } from "zod"
+import { AddressI } from "./address"
+
+export type PictureTypeT = "Driver Side" |
+    "Front" |
+    "Back" |
+    "Interior" |
+    "Passenger side" |
+    "Other"
 
 export const pictureTypes: PictureTypeT[] = [
     'Back',
@@ -9,12 +17,16 @@ export const pictureTypes: PictureTypeT[] = [
     'Passenger side'
 ]
 
-export type PictureTypeT = "Driver Side" |
-    "Front" |
-    "Back" |
-    "Interior" |
-    "Passenger side" |
-    "Other"
+export type CarStatusT =
+    | "available"
+    | "obligations only"
+    | "unavailable"
+
+export const carStatusList: CarStatusT[] = [
+    "available",
+    "obligations only",
+    "unavailable"
+]
 
 export type CarTypeT = "SUV" |
     "Truck" |
@@ -24,6 +36,15 @@ export const carTypeList: CarTypeT[] = [
     "SUV",
     "Sedan",
     "Truck"
+]
+
+export type TransmissionT =
+    | "automatic"
+    | "manual"
+
+export const transmissions: TransmissionT[] = [
+    'automatic',
+    'manual'
 ]
 
 export const AddCarSchema = z.object({
@@ -60,5 +81,11 @@ export interface CarI {
     pictures: PictureI[]
     name: string
     tags: string[]
-    mainPicture: string
+    profilePicture: PictureI
+    status: CarStatusT
+    price: number
+    transmission: TransmissionT
+    passengers: number
+
+    address: AddressI
 }

@@ -2,7 +2,7 @@ import Input2 from "@/components/assets/formInput2"
 import FormModal from "@/components/modals/formModal"
 import { addCar } from "@/constants/requests/cars";
 import useBasicFormHook from "@/hooks/useForm";
-import { AddCarI, AddCarSchema, carTypeList, CarTypeT } from "@/interface/api/car";
+import { AddCarI, AddCarSchema, CarI, carTypeList } from "@/interface/api/car";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 const AddCarModal = ({
     onSuccess
 }: {
-    onSuccess: () => void
+    onSuccess: (car: CarI) => void
 }) => {
     const router = useRouter()
     const [ loading, setLoading ] = useState<boolean>(false)
@@ -48,10 +48,10 @@ const AddCarModal = ({
             
             return false
         }
-        
-        
         setLoading(false)
-        onSuccess()
+
+        onSuccess(res.data)
+
         return true
     }
 
