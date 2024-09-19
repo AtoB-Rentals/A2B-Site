@@ -12,7 +12,7 @@ const ManCarCard = (car: CarI) => {
         >
             <div className="flex justify-center items-center overflow-hidden justify-self-center">
                 <Image 
-                    src={pictures.length ? car?.pictures[0]?.url : "/images/sedan.png"}
+                    src={car.profilePicture ? car.profilePicture.url : "/images/sedan.png"}
                     width={256}
                     height={256}   
                     alt={car.name}
