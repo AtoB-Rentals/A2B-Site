@@ -200,7 +200,7 @@ const CarProfile = ({
                     <DetailCard 
                         title="Address"
                         customClick={() => router.push(`/manager/cars/${car.id}?set_address=y`)}
-                        link={carInfo.address.url}
+                        link={carInfo.address.url || "#"}
                     >
                         <Link 
                             onClick={(e: any) => e.preventDefault()}
