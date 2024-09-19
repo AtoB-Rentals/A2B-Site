@@ -50,7 +50,7 @@ const ManagerLogin = () => {
             Cookies.set("tokenX", token, {expires: 1})
 
             setError("")
-            // router.push('/manager')
+            router.push('/manager/cars')
 
 
             // You can store the token in localStorage, cookies, or context here if needed
