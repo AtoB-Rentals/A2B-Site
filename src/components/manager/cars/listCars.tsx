@@ -16,7 +16,6 @@ const ListCars = () => {
     const handleGetCars = () => {
         getCars()
             .then(res => {
-                console.log("it got here one")
                 if(res.isErr) {
                     if (res.status === 401 || res.status === 403) {
                         Cookies.remove("token")
