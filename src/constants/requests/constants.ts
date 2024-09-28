@@ -45,3 +45,19 @@ export const unknownErr = (msg?: string): err => ({
     data: {},
     isErr: true,
 })
+
+export type QueryParams = Record<string, string | number | boolean | undefined | null>;
+
+export const objectToQueryString = (params: QueryParams): string => {
+    const query = new URLSearchParams();
+
+    // Iterate over each key in the object
+    Object.entries(params).forEach(([key, value]) => {
+        // Add the key-value pair to the query string if the value is not undefined or null
+        if (value !== undefined && value !== null) {
+            query.append(key, String(value)); // Ensure value is converted to a string
+        }
+    });
+
+    return query.toString();
+}

@@ -14,10 +14,10 @@ const ListCars = () => {
     const router = useRouter()
     
     const handleGetCars = () => {
-        getCars()
+        getCars({city: "Charlotte"})
             .then(res => {
                 if(res.isErr) {
-                    if (res.status === 401 || res.status === 403) {
+                    if (res.status === 401) {
                         Cookies.remove("token")
                         router.push('/manager/login')
                     }

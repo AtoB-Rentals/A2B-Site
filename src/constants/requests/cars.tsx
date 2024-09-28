@@ -1,15 +1,19 @@
 'use client'
-import { ApiRes, apiURL, err, throwError, unknownErr } from "./constants";
-import { AddCarI, CarI, CarStatusT, PictureTypeT, transmissions, TransmissionT } from '../../interface/api/car';
+import { ApiRes, apiURL, err, objectToQueryString, QueryParams, throwError, unknownErr } from "./constants";
+import { AddCarI, CarI, CarStatusT, PictureTypeT, TransmissionT } from '../../interface/api/car';
 import { ReqAddressI } from "@/interface/api/address";
 
-export const getCars = async (): Promise<ApiRes<CarI[]> | err> => {
+export const getCars = async (params?: QueryParams): Promise<ApiRes<CarI[]> | err> => {
+
+    const queryString = params !== undefined ? objectToQueryString(params) : ""
+
     try {
-        const response = await fetch(`${apiURL}/api/cars`, { // Replace '/api/login' with your actual login endpoint
+        const response = await fetch(`${apiURL}/api/cars/?${queryString}`, { // Replace '/api/login' with your actual login endpoint
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include'
         });
 
         if (!response.ok) {
@@ -28,7 +32,7 @@ export const getCars = async (): Promise<ApiRes<CarI[]> | err> => {
 
 export const addCar = async (newCar: AddCarI): Promise<ApiRes<CarI> | err> => {
     try {
-        const response = await fetch(`${apiURL}/api/manager/cars/add`, {
+        const response = await fetch(`${apiURL}/api/cars/add`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -58,7 +62,7 @@ export const setProfilePic = async (
 ): Promise<ApiRes<CarI> | err> => {
     try {
         publicId = encodeURIComponent(publicId)
-        const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/picture/${publicId}/set_profile_pic`, {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/picture/${publicId}/set_profile_pic`, {
             method: 'POST',
             credentials: 'include',
         })
@@ -90,7 +94,7 @@ export const addCarPic = async (
         const fileBlob = new Blob([image])
         formData.append("image", fileBlob, image.name);
 
-        const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/add_picture`, {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/pictures`, {
             method: 'POST',
             credentials: 'include',
             body: formData
@@ -116,7 +120,7 @@ export const delCarPics = async (
     publicIds: string[]
 ): Promise<ApiRes<CarI> | err> => {
     try {
-        const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/pictures`, {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/pictures`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {
@@ -143,7 +147,7 @@ export const delCarPics = async (
 
 export const getCar = async (carId: string): Promise<ApiRes<CarI> | err> => {
     try {
-        const response = await fetch(`${apiURL}/api/cars/car/${carId}`, {
+        const response = await fetch(`${apiURL}/api/cars/${carId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -166,7 +170,7 @@ export const getCar = async (carId: string): Promise<ApiRes<CarI> | err> => {
 
 export const upateCarStatus = async (carId: string, status: CarStatusT): Promise<ApiRes<CarI> | err> => {
     try {
-        const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/status/${status}`, {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/status/${status}`, {
             method: 'POST',
             credentials: 'include',
         })
@@ -187,7 +191,7 @@ export const upateCarStatus = async (carId: string, status: CarStatusT): Promise
 
 export const upateTransmission = async (carId: string, transmission: TransmissionT): Promise<ApiRes<CarI> | err> => {
     try {
-        const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/transmission/${transmission}`, {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/transmission/${transmission}`, {
             method: 'POST',
             credentials: 'include',
         })
@@ -208,7 +212,7 @@ export const upateTransmission = async (carId: string, transmission: Transmissio
 
 export const UpatePassengers = async (carId: string, passengers: number): Promise<ApiRes<CarI> | err> => {
     try {
-        const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/passengers`, {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/passengers`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -233,7 +237,7 @@ export const UpatePassengers = async (carId: string, passengers: number): Promis
 
 export const updateCarAddress = async (carId: string, address: ReqAddressI): Promise<ApiRes<CarI> | err> => {
     try {
-        const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/address`, {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/address`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -255,6 +259,7 @@ export const updateCarAddress = async (carId: string, address: ReqAddressI): Pro
         return unknownErr()
     }
 }
+
 export const updateCarPrice = async (carId: string, price: number): Promise<ApiRes<CarI> | err> => {
     try {
         const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/price`, {
