@@ -1,4 +1,8 @@
 import { z } from "zod"
+import { AddressI, ReqAddressI } from "./address"
+import { CarI } from "./car"
+import { TimeI } from "./time"
+import { UserI } from "./user"
 
 
 export interface BookingRequestBody {
@@ -6,9 +10,8 @@ export interface BookingRequestBody {
     lastName: string
     phone: string
     email: string
-    insuranceProvider: string
     phoneNumber: string
-    policyNumber: string
+    vehicleId: CarI["id"]
     startTime: {
         local: string
         iana: string
@@ -17,27 +20,26 @@ export interface BookingRequestBody {
         local: string
         iana: string
     }
-    dropoffAddress: string
-    pickupAddress: string
+    dropoffAddress: ReqAddressI
+    pickupAddress: ReqAddressI
 }
 export interface BookingI {
+    id: string
     firstName: string
     lastName: string
     phone: string
     email: string
+    renter: UserI
     insuranceProvider: string
     phoneNumber: string
     policyNumber: string
-    startTime: {
-        local: string
-        iana: string
-    }
-    endTime: {
-        local: string
-        iana: string
-    }
-    dropoffAddress: string
-    pickupAddress: string
+    startTime: TimeI
+    endTime: TimeI
+
+    vehicle: CarI
+
+    dropoffAddress: AddressI
+    pickupAddress: AddressI
 }
 
 // type PostTime struct {

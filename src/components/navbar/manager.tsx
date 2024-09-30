@@ -1,6 +1,19 @@
+'use client'
+import { logout } from "@/constants/requests/users"
 import Link  from "next/link"
+import { useRouter } from "next/navigation"
 
 const ManNavbar = () => {
+    const router = useRouter()
+
+    const handleLogout = async () => {
+        const res = await logout()
+        if (res.isErr) {
+            return
+        }
+        
+        router.push('/manager/login')
+    }
 
     return (
         <div className="w-full py-8 px-14 text-neutral-900">
@@ -31,19 +44,19 @@ const ManNavbar = () => {
                                 Cars
                             </Link>
                         </li>
-                        {/* <li>
+                        <li>
                             <Link
-                                href='/book'
+                                href='/manager/bookings'
                             >
                                 Bookings
                             </Link>
-                        </li> */}
+                        </li>
                         <li>
-                            <Link
-                                href='/coming-soon'
+                            <button
+                                onClick={() => handleLogout()}
                             >
-                                Test
-                            </Link>
+                                Logout
+                            </button>
                         </li>
                     </ul>
                 </div>
