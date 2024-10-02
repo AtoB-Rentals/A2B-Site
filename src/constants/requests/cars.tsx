@@ -62,7 +62,7 @@ export const setProfilePic = async (
 ): Promise<ApiRes<CarI> | err> => {
     try {
         publicId = encodeURIComponent(publicId)
-        const response = await fetch(`${apiURL}/api/cars/${carId}/picture/${publicId}/set_profile_pic`, {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/profile_pic/${publicId}`, {
             method: 'POST',
             credentials: 'include',
         })

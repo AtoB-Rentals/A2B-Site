@@ -90,13 +90,12 @@ const CarProfile = ({
                 className="max-w-[1000px] mx-3 lg:mx-auto rounded-md shadow-[0px_0px_4px_1px] shadow-gray-400 overflow-hidden pb-3 mb-56"
             >
                 <div className="flex flex-col w-full justify-around items-center bg-blue-500 h-60 text-white">
-                    <div className="flex justify-center items-center rounded-full w-40 h-40 overflow-hidden">
+                    <div className="relative w-32 h-32 overflow-hidden rounded-full">
                         <Image 
                             src={!!car.profilePicture.url ? car.profilePicture.url : "/images/sedan.png"} 
                             alt={car.name}
-                            width={200}
-                            height={200}
-                            className="rounded-full"
+                            layout="fill"
+                            className=" object-cover"
                         />
                     </div>
                     <div className="text-center">

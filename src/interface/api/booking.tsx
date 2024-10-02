@@ -4,6 +4,18 @@ import { CarI } from "./car"
 import { TimeI } from "./time"
 import { UserI } from "./user"
 
+export type BookingStatusT = 
+    | "Scheduled"
+    | "In Progress"
+    | "Cancelled"
+    | "Complete"
+
+export const BookingStatuses: BookingStatusT[] = [
+    'Cancelled',
+    'Complete',
+    'In Progress',
+    'Scheduled'
+]
 
 export interface BookingRequestBody {
     firstName: string
@@ -38,8 +50,10 @@ export interface BookingI {
 
     vehicle: CarI
 
-    dropoffAddress: AddressI
+    dropOffAddress: AddressI
     pickupAddress: AddressI
+
+    status: BookingStatusT
 }
 
 // type PostTime struct {

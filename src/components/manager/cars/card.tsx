@@ -8,7 +8,7 @@ const ManCarCard = (car: CarI) => {
 
     return (
         <div
-            className="flex flex-col overflow-hidden rounded-md shadow-[0px_0px_12px_3px] max-w-64 h-[450px] shadow-neutral-500 justify-between"
+            className="flex flex-col overflow-hidden rounded-md shadow-[0px_0px_12px_3px] max-w-64 h-80 shadow-neutral-500 justify-between"
         >
             <div className="flex justify-center items-center overflow-hidden justify-self-center">
                 <Image 
@@ -16,7 +16,7 @@ const ManCarCard = (car: CarI) => {
                     width={256}
                     height={256}   
                     alt={car.name}
-                    className="min-w-full min-h-full"
+                    className="object-cover"
                 />
             </div>
             <div className="flex justify-between flex-col p-2 justify-self-end">

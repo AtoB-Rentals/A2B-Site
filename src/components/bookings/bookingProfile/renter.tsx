@@ -4,25 +4,25 @@ import { BookingI } from "@/interface/api/booking"
 const Renter = (renter: BookingI['renter']) => {
 
     return (
-        <div>
+        <div className="bg-slate-100 p-2 rounded-md text-md md:text-lg col-span-4">
             <h3
-                className="font-bold text-2xl text-blue-600"
+                className="text-xl md:text-2xl text-blue-600"
             >
                 Renter
             </h3>
-            <div className="flex justify-between text-lg">
+            <div className="flex justify-between">
                 <p
                     className="font-bold"
                 >Name:</p>
                 <p>{`${renter.firstName} ${renter.lastName}`}</p>
             </div>
-            <div className="flex justify-between text-lg">
+            <div className="flex justify-between">
                 <p
                     className="font-bold"
                 >Email:</p>
                 <p>{renter.email}</p>
             </div>
-            <div className="flex justify-between text-lg">
+            <div className="flex justify-between">
                 <p
                     className="font-bold"
                 >Phone Number:</p>

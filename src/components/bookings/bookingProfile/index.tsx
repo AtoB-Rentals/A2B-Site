@@ -1,8 +1,10 @@
 'use client'
-import { BookingI } from "@/interface/api/booking"
+import { BookingI, BookingStatusT } from "@/interface/api/booking"
 import { useState } from "react"
-import Renter from "./renter"
-import Schedule from "./schedule"
+import Schedule from "./Schedule"
+import Location from "./Location"
+import Vehicle from "./Vehicle"
+import Renter from "./Renter"
 
 
 const BookingProfile = ({
@@ -12,15 +14,39 @@ const BookingProfile = ({
 }) => {
     const [booking, setBooking] = useState<BookingI>(b)
 
+    const statusColors: {[key in BookingStatusT]: string} = {
+        Scheduled: "gray",
+        "In Progress": "blue",
+        Cancelled: "red",
+        Complete: "green",
+    }
+
     return (
         <section
-            className="max-w-[1000px] mx-3 lg:mx-auto rounded-md shadow-[0px_0px_4px_1px] shadow-gray-400 overflow-hidden p-3 mb-56"
+            className="mx-3 md:mx-auto max-w-[1000px]"
         >
-            <Schedule 
-                startTime={booking.startTime}
-                endTime={booking.endTime}
-            />
-            <Renter {...booking.renter}/>
+            <h1 className="text-xl md:text-2xl mb-4">
+                Booking Details {" "}
+                <span
+                    className={`text-bold text-white bg-${statusColors[booking.status]}-500 rounded-full py-2 px-2`}
+                >
+                    {booking.status}
+                </span>
+            </h1>
+            <div
+                className="rounded-md shadow-[0px_0px_4px_1px] shadow-gray-400 overflow-hidden p-3 mb-56 md:grid grid-cols-8 gap-y-8 gap-x-2"
+            >
+                <Schedule 
+                    startTime={booking.startTime}
+                    endTime={booking.endTime}
+                />
+                <Renter {...booking.renter}/>
+                <Location 
+                    pA={booking.pickupAddress}
+                    dA={booking.dropOffAddress}
+                />
+                <Vehicle {...booking.vehicle}/>
+            </div>
         </section>
     )
 }
