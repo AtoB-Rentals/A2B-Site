@@ -1,3 +1,4 @@
+import { numToDallor } from "@/constants/formatting/money";
 import { CarI } from "@/interface/api/car"
 import Image from 'next/image';
 import Link from "next/link";
@@ -26,7 +27,7 @@ const ManCarCard = (car: CarI) => {
                     </p>
                     <p>{car.type}</p>
                     <p className="text-lg text-green-600 font-bold">
-                        $50/day{/* car.price */}
+                        ${numToDallor(car.price)}/day{/* car.price */}
                     </p>
                 </div>
                 <div className="justify-self-end">

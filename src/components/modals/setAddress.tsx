@@ -26,6 +26,9 @@ const SetAddressModal = ({
     // }, [values])
 
     const handleCallback = async (): Promise<boolean> => {
+        if (Object.keys(errs).length !== 0) {
+            return false
+        }
         const res = await callback(values as ReqAddressI)
         
         res && clearValues()
@@ -36,7 +39,7 @@ const SetAddressModal = ({
     return (
         <FormModal 
             title={title}
-            onOk={() => !!errs.length || handleCallback()}
+            onOk={() => handleCallback()}
             paramKey="set_address"
             loading={false}         
         >

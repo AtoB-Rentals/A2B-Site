@@ -43,6 +43,7 @@ export default function FormModal({
 
     const clickOk = async () => {
         try {
+            console.log("it got here") 
             const res = await onOk()
             if (res === true || res === undefined) {
                 closeDialog()

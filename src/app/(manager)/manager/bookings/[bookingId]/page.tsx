@@ -46,7 +46,7 @@ const Booking = ({ params }: {
 
     return (
         <main>
-            <BookingProfile b={booking}/>
+            <BookingProfile b={booking} hydration={handleGetBookings}/>
         </main>
     )
 }

@@ -8,9 +8,11 @@ import Renter from "./Renter"
 
 
 const BookingProfile = ({
-    b
+    b,
+    hydration
 }: {
     b: BookingI
+    hydration: () => void
 }) => {
     const [booking, setBooking] = useState<BookingI>(b)
 
@@ -44,6 +46,8 @@ const BookingProfile = ({
                 <Location 
                     pA={booking.pickupAddress}
                     dA={booking.dropOffAddress}
+                    bId={booking.id}
+                    hydration={hydration}
                 />
                 <Vehicle {...booking.vehicle}/>
             </div>

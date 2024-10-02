@@ -16,6 +16,7 @@ const ManagerCars = ({ params }: {
     const router = useRouter()
 
     const handleGetCar = async () => {
+        console.log('hydrating')
         const res = await getCar(params.carId)
         
         if (res.isErr) {
