@@ -11,10 +11,12 @@ import AddCarModal from '../../modals/cars/addCarModal';
 
 const ListCars = () => {
     const [cars, setCars] = useState<CarI[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
     const router = useRouter()
     
     const handleGetCars = () => {
-        getCars({city: "Charlotte"})
+        setLoading(true)
+        getCars({state: "NC"})
             .then(res => {
                 if(res.isErr) {
                     if (res.status === 401) {
@@ -26,6 +28,7 @@ const ListCars = () => {
                     console.log("should have updated")
                 }
             })
+            .finally(() => setLoading(false))
     }
 
     useEffect(() => {
@@ -46,6 +49,16 @@ const ListCars = () => {
                         </Link>
                     </div>
                 </div>
+                {cars.length === 0 && !loading && <div className="text-center">
+                    <p className="font-bold text-lg text-blue-500">
+                        No Cars Found
+                    </p>
+                </div>}
+                {loading && <div className="text-center">
+                    <p className="font-bold text-lg text-blue-500">
+                        Loading...
+                    </p>
+                </div>}
                 <div 
                     className="flex flex-wrap gap-12 max-w-4xl mx-3 md:mx-auto justify-center"
                 >

@@ -15,7 +15,7 @@ const BookNow = () => {
     }
 
     return (
-        <section className="bg-[#1F6FE6] w-full p-10">
+        <section className="w-full p-10">
             <div className="text-center mb-8">
                 <h2 className="text-4xl">
                     Make A Booking

@@ -4,6 +4,8 @@ import { FormEvent, useState } from "react";
 import {isEmail} from "validator"
 import Cookies from 'js-cookie'
 import { useRouter } from "next/navigation";
+import { DecodedTokenI } from "@/interface/api";
+import { jwtDecode } from "jwt-decode";
 
 
 
@@ -48,6 +50,9 @@ const ManagerLogin = () => {
 
             const token = data.data as string
             Cookies.set("tokenX", token, {expires: 1})
+
+            const decodedToken = jwtDecode<DecodedTokenI>(token)
+            localStorage.setItem("role", decodedToken.role)
 
             setError("")
             router.push('/manager/cars')

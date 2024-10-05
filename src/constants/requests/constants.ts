@@ -1,4 +1,6 @@
-
+import jwt, { JwtPayload } from 'jsonwebtoken'
+import { roles, roleT } from '../../interface/api'
+import { jwtDecode } from 'jwt-decode'
 
 export const apiURL = process.env.NEXT_PUBLIC_API!
 
@@ -60,4 +62,9 @@ export const objectToQueryString = (params: QueryParams): string => {
     });
 
     return query.toString();
-}
+} // make sure to load your secret from .env
+
+/**valid roles */
+export const vR = (...roles: roleT[]): boolean => {
+    return roles.includes(localStorage.getItem("role") as roleT);
+};
