@@ -47,25 +47,28 @@ const Book = ({
     }
 
     return (
-        <BookingForm 
-            firstName={searchData.firstName}
-            lastName={searchData.lastName}
-            phone={searchData.phone}
-            email={searchData.email}
-            insuranceProvider={searchData.insuranceProvider}
-            policyNumber={searchData.policyNumber}
-            startDate={searchData.startDate}
-            endDate={searchData.endDate}
-            dropoffAddress={searchData.dropoffAddress}
-            pickupAddress={searchData.pickupAddress} phoneNumber={""} startTime={{
-                local: "",
-                iana: ""
-            }} endTime={{
-                local: "",
-                iana: ""
-            }}            
-        />
-    );
+        <h1>Booking page is gonna need some work</h1>
+        // <BookingForm 
+        //     firstName={searchData.firstName}
+        //     lastName={searchData.lastName}
+        //     phone={searchData.phone}
+        //     email={searchData.email}
+        //     insuranceProvider={searchData.insuranceProvider}
+        //     policyNumber={searchData.policyNumber}
+        //     startDate={searchData.startDate}
+        //     endDate={searchData.endDate}
+        //     dropoffAddress={searchData.dropoffAddress}
+        //     pickupAddress={searchData.pickupAddress} 
+        //     phoneNumber={""} 
+        //     startTime={{
+        //         local: "",
+        //         iana: ""
+        //     }} endTime={{
+        //         local: "",
+        //         iana: ""
+        //     }}            
+        // />
+    )
 }
 
 export default Book;

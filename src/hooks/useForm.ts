@@ -77,7 +77,7 @@ const useBasicFormHook = <T extends FormValues>(
         }))
     }
 
-    const updateParams = () => {
+    const updateParamsJSON = () => {
         const urlParams = new URLSearchParams(searchParams.toString())
         const formDataString = urlParams.get(queryKey)
 
@@ -96,6 +96,23 @@ const useBasicFormHook = <T extends FormValues>(
             return urlParams.toString()
         }
     }
+
+    const updateParams = () => {
+        const urlParams = new URLSearchParams(searchParams.toString());
+
+        // Iterate over the 'values' object and update query parameters accordingly
+        Object.keys(values).forEach((key) => {
+            if (values[key] !== undefined && values[key] !== null) {
+                urlParams.set(key, values[key]);
+            } else {
+                urlParams.delete(key); // Remove the key if the value is null/undefined
+            }
+        });
+
+        // Update the URL without refreshing the page
+        window.history.replaceState({}, '', `?${urlParams.toString()}`);
+        return urlParams.toString();
+    };
 
     function clearValues() {
         setValues(() => ({ ...initialValues }))

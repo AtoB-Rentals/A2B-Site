@@ -1,9 +1,6 @@
-import jwt, { JwtPayload } from 'jsonwebtoken'
-import { roles, roleT } from '../../interface/api'
-import { jwtDecode } from 'jwt-decode'
+import { roleT } from '../../interface/api'
 
 export const apiURL = process.env.NEXT_PUBLIC_API!
-
 
 export interface ApiRes<T> {
     status: string; // or whatever type response.Success is

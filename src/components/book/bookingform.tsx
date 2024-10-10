@@ -34,8 +34,6 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
     lastName,
     phone,
     email,
-    policyNumber,
-    insuranceProvider,
     startDate,
     endDate,
     pickupAddress,
@@ -97,7 +95,7 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                 'Content-Type': 'application/json'
             },
 
-            body: JSON.stringify(body as BookingRequestBody)
+            body: JSON.stringify(body as unknown as BookingRequestBody)
         })
 
         const data = await response.json() as ApiResponse
@@ -243,7 +241,7 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                         required: true,
                         type: "text",
                         "aria-required": true,
-                        defaultValue: pickupAddress === 'Delivery' ? '' : pickupAddress
+                        // defaultValue: pickupAddress === 'Delivery' ? '' : pickupAddress
                     }}
                 />
                 <Input 
@@ -253,7 +251,7 @@ const BookingForm: React.FC<BookingRequestBody & {startDate: string, endDate: st
                         required: true,
                         type: "text",
                         "aria-required": true,
-                        defaultValue: dropoffAddress === 'Delivery' || !dropoffAddress ? '' : dropoffAddress
+                        // defaultValue: dropoffAddress === 'Delivery' || !dropoffAddress ? '' : dropoffAddress
                     }}
                 />
                 {/* <div>

@@ -16,7 +16,7 @@ const ListCars = () => {
     
     const handleGetCars = () => {
         setLoading(true)
-        getCars({state: "NC"})
+        getCars()
             .then(res => {
                 if(res.isErr) {
                     if (res.status === 401) {
