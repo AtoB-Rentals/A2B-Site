@@ -6,17 +6,18 @@ import { useEffect, useRef, useState } from 'react'
 import AutoComplete from 'react-google-autocomplete'
 import { inThirty } from '../../../constants/formatting/time';
 import { useSearchParams } from 'next/navigation';
-import { z } from 'zod';
+import { object, z } from 'zod';
 import { DateTime } from 'luxon';
 import useBasicFormHook from '@/hooks/useForm';
+import { gAddress, GeocodeResultI, parseGeocodeResult } from '@/constants/location/googleRequest';
 
 export const FilterShema = z.object({
     address: z.string().optional(),
     "start_date": z.string().refine(value => {
-        return DateTime.fromFormat("YYYY-MM-dd", value).isValid
+        return DateTime.fromFormat("yyyy-MM-dd", value).isValid
     }).optional(),
     "end_date": z.string().refine(value => {
-        return DateTime.fromFormat("YYYY-MM-dd", value).isValid
+        return DateTime.fromFormat("yyyy-MM-dd", value).isValid
     }).optional(),
     "start_time": z.string().refine(value => {
         return DateTime.fromFormat("T", value).isValid
@@ -28,15 +29,6 @@ export const FilterShema = z.object({
         return carTypeList.includes(value as CarTypeT)
     }).optional()
 })
-
-interface ParsedLocation {
-  type: 'state' | 'city' | 'country' | 'zipcode' | 'airport';
-  value: string;
-}
-
-const capitalize = (word: string): string => {
-  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-}
 
 const Filter = ({
     initialLocStr,
@@ -52,6 +44,7 @@ const Filter = ({
     }
 }) => {
     const [searchAiport, setSearchAirport] = useState<boolean>(false)
+    const [ selAddress, setSelAddress ] = useState<GeocodeResultI>()
     const autoCompleteRef = useRef<any>(null)
 
     const q = useSearchParams()
@@ -71,13 +64,44 @@ const Filter = ({
         type: q.get("type") || undefined
     }, undefined, "filter")
 
-    const init = async () => {
+    const initAddress = async () => {
         const d: {[key: string]: any} = {}
 
         d.address = q.get("address") || initialLocStr
         if (!d.address) {
             alert("Bad params provided")
         }
+        
+        let resAddress = await gAddress(d.address)
+        if (resAddress === null && initialLocStr) {
+            resAddress = await gAddress(initialLocStr)
+        }
+
+        if (resAddress === null) {
+            alert("unable to find a location")
+            d.Address = ""
+        } else {
+            d.address = resAddress.results[0].formatted_address
+            const pGeoRes = parseGeocodeResult(resAddress.results[0])
+            if (pGeoRes !== null) {
+                const params = new URLSearchParams(q.toString())
+                Object.keys(pGeoRes).forEach(key => {
+                    //@ts-ignore
+                    let value = pGeoRes[key]
+                    if (typeof value === 'object') {
+                        value = JSON.stringify(value)
+                    } else if (typeof value === 'number') {
+                        value = value.toString()
+                    }
+
+                    params.set(key, value)
+                })
+                window.history.replaceState({}, '', `?${params.toString()}`)
+                
+                setSelAddress(pGeoRes)
+            }
+        }
+
 
         setValues(prev => ({
             ...prev,
@@ -85,13 +109,72 @@ const Filter = ({
         }))
     }
 
-    useEffect(() => {
-        init()
-    }, [])
+    const initSchedule = () => {
+        const qStartDate = q.get("start_date")
+        /**Start time */
+        let sDate = DateTime.fromFormat("yyyy-MM-dd", qStartDate || "")
+        if (!sDate.isValid) {
+            sDate = DateTime.now().plus({ days: 4 })
+        }
+
+        const qEndDate = q.get("end_date")
+        let eDate = DateTime.fromFormat("yyyy-MM-dd", qEndDate || "")
+        if (!eDate.isValid) {
+            eDate = sDate.plus({ days: 3 })
+        }
+
+        setValues(prev => ({
+            ...prev,
+            "start_date": sDate.toFormat("yyyy-MM-dd"),
+            "end_date": eDate.toFormat("yyyy-MM-dd")
+        }))
+
+        console.log("values3: ", values)
+
+        const params = new URLSearchParams(q.toString())
+        params.set("start_date", sDate.toFormat("yyyy-MM-dd"))
+        params.set("end_date", eDate.toFormat("yyyy-MM-dd"))
+
+        console.log("log: ", params.toString())
+
+        window.history.replaceState({}, '', `?${params.toString()}`)
+    }
+
+    const applyFilter = () => {
+        if (!selAddress) {
+            alert("Must provide address")
+            return
+        }
+
+        updateParams()
+
+        const params = new URLSearchParams(q.toString())
+
+        Object.keys(selAddress).forEach(key => {
+            //@ts-ignore
+            let value = selAddress[key]
+            if (typeof value === 'object') {
+                value = JSON.stringify(value)
+            } else if (typeof value === 'number') {
+                value = value.toString()
+            }
+
+            params.set(key, value)
+        })
+
+        // window.history.replaceState({}, '', `?${params.toString()}`)
+    }
 
     useEffect(() => {
-        updateParams()
-    }, [values])
+        (async () => {
+            await initAddress()
+            await initSchedule()
+            console.log('values2: ', values)
+        })()
+        .finally(() => {
+            updateParams()
+        })
+    }, [])
 
     return (
         <div
@@ -113,7 +196,20 @@ const Filter = ({
                     options={{
                         types: ["(regions)"]
                     }}
-                    onPlaceSelected={(data) => {console.log('place data: ', data)}}
+                    onPlaceSelected={(data) => {
+                        const res = parseGeocodeResult(data)
+                        if (res === null) {
+                            alert("something went wrong. Please try again later")
+                            return
+                        }
+
+                        setValues(prev => ({
+                            ...prev,
+                            address: data.formatted_address
+                        }))
+
+                        setSelAddress(res)
+                    }}
                 />}
                 {searchAiport && <AutoComplete 
                     className="border rounded-md border-gray-600 p-1 w-full"
@@ -144,9 +240,11 @@ const Filter = ({
                 <div className='flex flex-col gap-3 w-full'>
                     <input 
                         type="date" 
-                        name="startDate" 
-                        id="startDate"
+                        name="start_date" 
+                        id="start_date"
                         className="w-full p-1 rounded-md border border-gray-600"
+                        onChange={updateValues}
+                        value={values.start_date}
                     />
                     <select 
                         name="startTime" 
@@ -163,9 +261,11 @@ const Filter = ({
                 <div className='flex flex-col gap-3 w-full'>
                     <input 
                         type="date" 
-                        name="endTime" 
-                        id="endTime" 
+                        name="end_date" 
+                        id="end_date" 
                         className="w-full p-1 rounded-md border border-gray-600"
+                        onChange={updateValues}
+                        value={values.end_date}
                     />
                     <select 
                         name="startTime" 
@@ -179,6 +279,14 @@ const Filter = ({
                         ))}
                     </select>
                 </div>
+            </div>
+            <div>
+                <button
+                    className='text-white font-bold text-lg bg-blue-700 w-full p-2 rounded-full'
+                    onClick={() => applyFilter()}
+                >
+                    Apply Filter
+                </button>
             </div>
         </div>
     )

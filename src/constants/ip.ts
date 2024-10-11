@@ -26,7 +26,8 @@ export const getIPData = async (ip: string): Promise<IPDataI | null> => {
 
         const res = await fetch(`https://ipinfo.io/${ip}?token=${key}`)
         if (!res.ok) {
-            return null
+            console.error("ip request went wrong: ", res)
+            throw res
         }
 
         const data = await res.json() as IPDataI

@@ -107,7 +107,7 @@ const useBasicFormHook = <T extends FormValues>(
             } else {
                 urlParams.delete(key); // Remove the key if the value is null/undefined
             }
-        });
+        })
 
         // Update the URL without refreshing the page
         window.history.replaceState({}, '', `?${urlParams.toString()}`);
