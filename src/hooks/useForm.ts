@@ -97,7 +97,7 @@ const useBasicFormHook = <T extends FormValues>(
         }
     }
 
-    const updateParams = () => {
+    const updateParams = (updateURL: boolean = true) => {
         const urlParams = new URLSearchParams(searchParams.toString());
 
         // Iterate over the 'values' object and update query parameters accordingly
@@ -110,7 +110,7 @@ const useBasicFormHook = <T extends FormValues>(
         })
 
         // Update the URL without refreshing the page
-        window.history.replaceState({}, '', `?${urlParams.toString()}`);
+        updateURL && window.history.replaceState({}, '', `?${urlParams.toString()}`);
         return urlParams.toString();
     };
 
