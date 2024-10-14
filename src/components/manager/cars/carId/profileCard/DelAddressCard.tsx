@@ -2,9 +2,11 @@ import { AddressI } from '../../../../../interface/api/address';
 
 
 const DeliverAddressCard = ({
-    a
+    a,
+    remove
 }: {
     a: AddressI
+    remove: (placeId: string) => void
 }) => {
 
     return (
@@ -15,9 +17,12 @@ const DeliverAddressCard = ({
             <p className=''>
                 {a.formatted}
             </p>
-            <div className='absolute top-3 right-3 text-red-600 font-bold text-xl'>
+            <button 
+                className='absolute top-3 right-3 text-red-600 font-bold text-xl'
+                onClick={() => remove(a.placeId)}
+            >
                 X
-            </div>
+            </button>
         </div>
     )
 }

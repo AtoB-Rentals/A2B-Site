@@ -1,3 +1,4 @@
+import { addressTypes, AddressI, AddressType } from '../../interface/api/address';
 
 const googleKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!
 
@@ -75,6 +76,7 @@ export const gAddress = async (address: string): Promise<google.maps.GeocoderRes
 
 export interface GeocodeResultI {
     placeId: string
+    address: string
     city: string;
     region: string;
     country: string;
@@ -89,11 +91,13 @@ export interface GeocodeResultI {
         northeast: { lat: number; lng: number };
         southwest: { lat: number; lng: number };
     }
+    index?: string
+    type?: AddressType
 }
 
 export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
-    if (!result?.address_components) {
-        return null;
+    if (!result && !result?.address_components.length) {
+        return null
     }
 
     let placeId = result.place_id as string
@@ -101,6 +105,8 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
     let region = ""
     let country = ""
     let zipcode = ""
+    let route = ""
+    let streetNumber = ""
 
     result.address_components.forEach((component: any) => {
         if (component.types.includes("locality")) {
@@ -113,10 +119,15 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
             country = component.short_name;
         }
         if (component.types.includes("postal_code")) {
-            console.log("it got here")
             zipcode = component.short_name;
         }
-    });
+        if (component.types.includes("route")) {
+            route = component.long_name
+        }
+        if (component.types.includes("street_number")) {
+            streetNumber = component.long_name
+        }
+    })
 
     const geolocation = {
         lat: result.geometry.location.lat,
@@ -151,6 +162,7 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
         latitude,
         longitude,
         bounds,
-        zipcode
+        zipcode,
+        address: `${streetNumber} ${route}`
     };
 };

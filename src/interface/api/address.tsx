@@ -25,7 +25,7 @@ export type GeoT =
     | "Polygon"
     | "center"
 
-type AddressType = 
+export type AddressType = 
     | "Airport"
     | "Default"
 
@@ -42,6 +42,7 @@ export interface ReqAddressI {
     zipcode: string
     country: string
     type: AddressType
+    index: string
 }
 
 export const ReqAddressSchema = z.object({
@@ -53,7 +54,8 @@ export const ReqAddressSchema = z.object({
     country: z.string().min(1, "Country is required"),     // Must be a non-empty string
     type: z.string().refine(value => {
         return value.includes(value)
-    }, "Invalid address type").optional()
+    }, "Invalid address type").optional(),
+    index: z.string().optional()
 })
 
 export const reqAddressEmpty: ReqAddressI = {
@@ -63,7 +65,8 @@ export const reqAddressEmpty: ReqAddressI = {
     state: "",
     zipcode: "",
     country: "",
-    type: "Default"
+    type: "Default",
+    index: ""
 }
 
 export interface AddressI {
@@ -81,4 +84,6 @@ export interface AddressI {
     }
     url: string
     type: AddressType
+    /**Store things like the airport id here */
+    index?: string
 } 

@@ -64,4 +64,17 @@ export const objectToQueryString = (params: QueryParams): string => {
 /**valid roles */
 export const vR = (...roles: roleT[]): boolean => {
     return roles.includes(localStorage.getItem("role") as roleT);
-};
+}
+
+export const extractFirstParenthesesValue = (input: string): string | null => {
+    console.log("input: ", input)
+    const openIndex = input.indexOf('(');
+    const closeIndex = input.indexOf(')', openIndex);
+
+    if (openIndex !== -1 && closeIndex !== -1 && closeIndex > openIndex) {
+        return input.substring(openIndex + 1, closeIndex);
+    }
+
+    // Return null if no valid parentheses pair is found
+    return null;
+}

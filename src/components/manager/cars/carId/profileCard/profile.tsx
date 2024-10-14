@@ -1,6 +1,6 @@
 'use client'
 
-import { delCarPics, setProfilePic, upateCarStatus, UpatePassengers, upateTransmission, updateCarAddress, updateCarPrice } from "@/constants/requests/cars"
+import { addDeliveryAddress, delCarPics, RemDeliveryAddress, setProfilePic, upateCarStatus, UpatePassengers, upateTransmission, updateCarAddress, updateCarPrice } from "@/constants/requests/cars"
 import { CarI, carStatusList, CarStatusT, transmissions, TransmissionT } from "@/interface/api/car"
 import Image from "next/image"
 import Link from "next/link"
@@ -74,6 +74,34 @@ const CarProfile = ({
 
     const handleUpdateCarAddreess = async (req: ReqAddressI): Promise<boolean> => {
         const res = await updateCarAddress(car.id, req)
+
+        if (res.isErr) {
+            if (res.status === 400) {
+                alert(res.message)
+            }
+        }
+
+        setCarInfo(res.data)
+
+        return true
+    }
+
+    const handleAddDelAddress = async (req: ReqAddressI): Promise<boolean> => {
+        const res = await addDeliveryAddress(car.id, req)
+
+        if (res.isErr) {
+            if (res.status === 400) {
+                alert(res.message)
+            }
+        }
+
+        setCarInfo(res.data)
+
+        return true
+    }
+
+    const handleDeleteDelAddress = async (placeId: string) => {
+        const res = await RemDeliveryAddress(car.id, placeId)
 
         if (res.isErr) {
             if (res.status === 400) {
@@ -233,12 +261,13 @@ const CarProfile = ({
                             Add Address
                         </button>
                     </div>
-                    <div className={`flex flex-col gap-3 overflow-auto transition-all ease-linear ${exDelAddys ? "h-60" : "h-0"}`}>
+                    <div className={`flex flex-col gap-3 overflow-auto transition-all ease-linear cursor-pointer ${exDelAddys ? "h-60" : "h-0"}`}>
                         {carInfo.deliveryAddresses && carInfo.deliveryAddresses.map(a => (
                             <>
                                 <DeliverAddressCard
                                     a={a}
                                     key={a.placeId}
+                                    remove={placeId => handleDeleteDelAddress(placeId)}
                                 />
                             </>
                         ))}
@@ -300,11 +329,14 @@ const CarProfile = ({
                 title="Update Address" 
                 callback={(req) => handleUpdateCarAddreess(req)}
                 searchTypes={['Address']}
+                paramKey="set_address"
+
             />
             <SetAddressModal 
                 title="Add Delivery Address" 
-                callback={(req) => handleUpdateCarAddreess(req)}
-                searchTypes={['Address', 'Airport']}  
+                callback={(req) => handleAddDelAddress(req)}
+                searchTypes={['Address', 'Airport']}
+                paramKey="set_delivery_address"
             />
         </>
     )

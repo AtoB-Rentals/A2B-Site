@@ -74,10 +74,6 @@ const Location = ({
                     </div>
                 </div>
             </div>
-            <SetAddressModal 
-                title={`Update ${updateDropoff ? "Pickup Address" : "Drop-off Address"}`}
-                callback={req => handleUpdate(req)}
-            />
         </>
     )
 }

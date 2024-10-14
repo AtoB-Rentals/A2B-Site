@@ -7,6 +7,7 @@ import useBasicFormHook from "@/hooks/useForm";
 import Input2 from "../assets/formInput2";
 import { GeocodeResultI, parseGeocodeResult } from "@/constants/location/googleRequest"
 import AutoComplete from 'react-google-autocomplete'
+import { extractFirstParenthesesValue } from "@/constants/requests/constants";
 
 
 type searchTypeT = 
@@ -23,11 +24,13 @@ const searchTypeMap = {
 const SetAddressModal = ({
     title,
     callback,
-    searchTypes = ["Address"]
+    searchTypes = ["Address"],
+    paramKey
 }: {
     title: string
     callback: (req: ReqAddressI) => Promise<boolean> | boolean
     searchTypes?: searchTypeT[]
+    paramKey: string
 }) => {
     const [ selAddress, setSelAddress ] = useState<GeocodeResultI>()
     const [ currentSearchType, setCurrentSearchType ] = useState<searchTypeT>(searchTypes[0])
@@ -55,16 +58,22 @@ const SetAddressModal = ({
         return res
     }
 
-    const handleGoogleSel = (data: google.maps.places.PlaceResult) => {
+    const handleGoogleSel = (data: google.maps.places.PlaceResult, index?: string) => {
         const res = parseGeocodeResult(data)
         if (res === null) {
             alert("something went wrong. Please try again later")
             return
         }
+        res.index = index
+        if (currentSearchType === 'Airport') {
+            res.type = 'Airport'
+        } 
+
+        console.log('res.type', res.type)
 
         setValues(prev => ({
             ...prev,
-            address: data.formatted_address
+            address: res.address
         }))
 
         setSelAddress(res)
@@ -77,7 +86,10 @@ const SetAddressModal = ({
             state: selAddress?.region || "",
             country: selAddress?.country || "",
             city: selAddress?.city || "",
-            zipcode: selAddress?.zipcode || ""
+            zipcode: selAddress?.zipcode || "",
+            index: selAddress?.index || "",
+            type: selAddress?.type || "Default",
+            street1: selAddress?.address || ""
         }))
     }, [selAddress])
 
@@ -85,7 +97,7 @@ const SetAddressModal = ({
         <FormModal 
             title={title}
             onOk={() => handleCallback()}
-            paramKey="set_delivery_address"
+            paramKey={paramKey}
             loading={false}         
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-7 px-4 pb-4 p-2">
@@ -117,7 +129,7 @@ const SetAddressModal = ({
                             setValues(prev => ({...prev, address: e.target.value}))
                         }}
                         options={{
-                            types: ["(region)"]
+                            types: ["(regions)"]
                         }}
                         onPlaceSelected={data => {
                             handleGoogleSel(data)
@@ -129,14 +141,14 @@ const SetAddressModal = ({
                         Address Line 1
                     </label>
                     <AutoComplete
-                        className="border-2 rounded-md dark:border-lime-500 p-1 w-full overflow-visible z-[999999]"
+                        className="border-2 rounded-md dark:border-lime-500 p-1 w-full col-start-1 col-span-2"
                         apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!}
                         defaultValue={values.street1}
                         onFocus={e => e.target.select()}
                         onChange={e => {
                             e.preventDefault()
                             //@ts-ignore
-                            setValues(prev => ({...prev, address: e.target.value}))
+                            setValues(prev => ({...prev, street1: e.target.value}))
                         }}
                         options={{
                             types: ["address"]
@@ -158,13 +170,18 @@ const SetAddressModal = ({
                         onChange={e => {
                             e.preventDefault()
                             //@ts-ignore
-                            setValues(prev => ({...prev, address: e.target.value}))
+                            setValues(prev => ({...prev, street1: e.target.value}))
                         }}
                         options={{
                             types: ["airport"]
                         }}
-                        onPlaceSelected={data => {
-                            handleGoogleSel(data)
+                        onPlaceSelected={(data, t, y) => {
+                            //@ts-ignore
+                            const formattedAddress = y.gm_bindings_.fields['55'].vt.formattedPrediction
+                            //**airport id */
+                            const apId = extractFirstParenthesesValue(formattedAddress) || ""
+
+                            handleGoogleSel(data, apId)
                         }}
                     />
                 </div>}
