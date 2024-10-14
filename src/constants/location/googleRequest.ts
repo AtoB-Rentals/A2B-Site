@@ -78,6 +78,7 @@ export interface GeocodeResultI {
     city: string;
     region: string;
     country: string;
+    zipcode: string
     geolocation: {
         lat: number;
         lng: number;
@@ -91,14 +92,15 @@ export interface GeocodeResultI {
 }
 
 export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
-    if (!result.formatted_address) {
+    if (!result?.address_components) {
         return null;
     }
 
     let placeId = result.place_id as string
-    let city = "";
-    let region = "";
-    let country = "";
+    let city = ""
+    let region = ""
+    let country = ""
+    let zipcode = ""
 
     result.address_components.forEach((component: any) => {
         if (component.types.includes("locality")) {
@@ -109,6 +111,10 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
         }
         if (component.types.includes("country")) {
             country = component.short_name;
+        }
+        if (component.types.includes("postal_code")) {
+            console.log("it got here")
+            zipcode = component.short_name;
         }
     });
 
@@ -144,6 +150,7 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
         geolocation,
         latitude,
         longitude,
-        bounds
+        bounds,
+        zipcode
     };
 };

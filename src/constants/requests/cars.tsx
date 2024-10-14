@@ -259,6 +259,31 @@ export const updateCarAddress = async (carId: string, address: ReqAddressI): Pro
     }
 }
 
+export const addDeliveryAddress = async (carId: string, address: ReqAddressI): Promise<ApiRes<CarI> | err> => {
+    try {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/delivery_address`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({...address})
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+
+        return await response.json() as ApiRes<CarI>
+    } catch (e) {
+        return unknownErr()
+    }
+}
+
 export const updateCarPrice = async (carId: string, price: number): Promise<ApiRes<CarI> | err> => {
     try {
         const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/price`, {

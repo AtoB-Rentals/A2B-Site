@@ -71,9 +71,9 @@ const Filter = ({
 
         d.address = q.get("address") || initialLocStr
         const airport = q.get('airport')
-        if (airport && airport.length <= 4) {
+        if (airport) {
             d.address = airport + " airport"
-            setSearchAirport(true)
+            await setSearchAirport(true)
         }
 
         if (!d.address) {
@@ -84,8 +84,6 @@ const Filter = ({
         if (resAddress === null && initialLocStr) {
             resAddress = await gAddress(initialLocStr)
         }
-
-        console.log("address data", resAddress)
 
         if (resAddress === null) {
             alert("unable to find a location")
@@ -117,27 +115,32 @@ const Filter = ({
         let sDate = DateTime.fromFormat(qStartDate || "", dateFmt)
         if (!sDate.isValid) {
             sDate = DateTime.now().plus({ days: 4 })
-            d.start_date = sDate.toFormat(dateFmt)
         }
+        d.start_date = sDate.toFormat(dateFmt)
 
         const qEndDate = q.get("end_date")
         let eDate = DateTime.fromFormat(qEndDate || "", dateFmt)
         if (!eDate.isValid) {
             eDate = sDate.plus({ days: 3 })
-            d.end_date = eDate.toFormat(dateFmt)
         }
+        d.end_date = eDate.toFormat(dateFmt)
 
         const qStartTime = q.get("start_time")
         let sTime = DateTime.fromFormat(qStartTime || "", "t")
         if (!sTime.isValid) {
-            d.start_time = "12:00 PM"
+            sTime = DateTime.fromFormat("9:00 AM", "t")
         }
+        d.start_time = sTime.toFormat("t")
         
         const qEndTime = q.get("end_time")
         let eTime = DateTime.fromFormat(qEndTime || "", "t")
         if (!eTime.isValid) {
-            d.end_time = "12:00 PM"
+            eTime = DateTime.fromFormat("9:00 AM", "t")
         }
+        d.end_time = eTime.toFormat("t")
+
+        console.log("qStartTime", qStartTime)
+        console.log("d.start_time: ", d.start_time)
 
         params.set("address", d.address)
         params.set("start_date", d.start_date)
@@ -206,6 +209,7 @@ const Filter = ({
                     className="border rounded-md border-gray-600 p-1 w-full"
                     apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!}
                     defaultValue={values.address}
+                    onFocus={e => e.target.select()}
                     onChange={e => {
                         e.preventDefault()
                         //@ts-ignore

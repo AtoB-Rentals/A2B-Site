@@ -88,4 +88,5 @@ export interface CarI {
     passengers: number
 
     address: AddressI
+    deliveryAddresses: AddressI[]
 }

@@ -10,6 +10,7 @@ import { numToDallor } from "@/constants/formatting/money"
 import { useRouter } from "next/navigation"
 import SetAddressModal from "@/components/modals/setAddress"
 import { ReqAddressI } from "@/interface/api/address"
+import DeliverAddressCard from "./DelAddressCard"
 
 interface ManCarProfileI {
     car: CarI
@@ -23,6 +24,7 @@ const CarProfile = ({
     const [ loading, setLoading ] = useState<boolean>(false)
     const [ selImages, setSelImages ] = useState<string[]>([])
     const [ carInfo, setCarInfo ] = useState<CarI>(car)
+    const [ exDelAddys, setExDelAddys ] = useState<boolean>(false)
     const router = useRouter()
 
     const handleSetProPic = async (): Promise<boolean> => {
@@ -209,6 +211,39 @@ const CarProfile = ({
                         </Link>
                     </DetailCard>
                 </div>
+                {/* DELIVERY ADDRESSES SECTION */}
+                <div className="text-lg px-3">
+                    <div className="flex justify-between items-center mb-3">
+                        <div className="flex gap-3 items-center">
+                            <h3 className="font-bold text-xl">Delivery Addresses</h3>
+                            <div className="font-bold">
+                                {carInfo.deliveryAddresses ? carInfo.deliveryAddresses.length : 0}
+                            </div>
+                            <button
+                                className={`p-2 rounded-md w-24 text-white font-bold ${exDelAddys ? "bg-red-600" : "bg-blue-600"}`}
+                                onClick={() => setExDelAddys(!exDelAddys)}
+                            >
+                                {exDelAddys ? "Minimize" : "Expand"}
+                            </button>
+                        </div>
+                        <button
+                            className={`p-2 rounded-md text-white font-bold bg-blue-600`}
+                            onClick={() => router.push(`/manager/cars/${car.id}?set_delivery_address=y`)}
+                        >
+                            Add Address
+                        </button>
+                    </div>
+                    <div className={`flex flex-col gap-3 overflow-auto transition-all ease-linear ${exDelAddys ? "h-60" : "h-0"}`}>
+                        {carInfo.deliveryAddresses && carInfo.deliveryAddresses.map(a => (
+                            <>
+                                <DeliverAddressCard
+                                    a={a}
+                                    key={a.placeId}
+                                />
+                            </>
+                        ))}
+                    </div>
+                </div>
                 {/* GALLERY SECTION */}
                 <div className="px-3">
                     <div className="flex justify-between items-center mb-3">
@@ -263,7 +298,13 @@ const CarProfile = ({
             </div>
             <SetAddressModal 
                 title="Update Address" 
-                callback={(req) => handleUpdateCarAddreess(req)}    
+                callback={(req) => handleUpdateCarAddreess(req)}
+                searchTypes={['Address']}
+            />
+            <SetAddressModal 
+                title="Add Delivery Address" 
+                callback={(req) => handleUpdateCarAddreess(req)}
+                searchTypes={['Address', 'Airport']}  
             />
         </>
     )

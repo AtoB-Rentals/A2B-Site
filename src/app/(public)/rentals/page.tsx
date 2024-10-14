@@ -18,7 +18,6 @@ async function Rentals({
     const head = headers()
     const ip = head.get('X-Client-IP')
     let ipD: IPDataI | null = null
-    let cars: CarI[] = []
 
     let locationStr = ""
     
@@ -45,7 +44,6 @@ async function Rentals({
                         long: ipD.longitude
                     } : undefined}
                 />
-                {/* This below will be an indivual component */}
                 <section className="mt-5 flex flex-col gap-4">
                     <PubCarList />
                 </section>
