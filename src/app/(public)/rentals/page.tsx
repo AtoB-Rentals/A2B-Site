@@ -1,6 +1,6 @@
-import CarCard from "@/components/modals/public_cars/CarCard";
-import Filter from "@/components/modals/public_cars/filter"
-import PubCarList from "@/components/modals/public_cars/PubCarList";
+import CarCard from "@/components/public_cars/CarCard";
+import Filter from "@/components/public_cars/filter"
+import PubCarList from "@/components/public_cars/PubCarList";
 import { getIPData, IPDataI } from "@/constants/ip";
 import { getCar, getCars } from "@/constants/requests/cars";
 import { QueryParams } from "@/constants/requests/constants";

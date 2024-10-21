@@ -45,7 +45,10 @@ export const unknownErr = (msg?: string): err => ({
     isErr: true,
 })
 
-export type QueryParams = Record<string, string | number | boolean | undefined | null>;
+export type QueryParams<T extends Record<string, any> = Record<string, string | number | boolean | undefined | null>> = {
+    [K in keyof T]?: T[K] | string | number | boolean | undefined | null;
+};
+
 
 export const objectToQueryString = (params: QueryParams): string => {
     const query = new URLSearchParams();

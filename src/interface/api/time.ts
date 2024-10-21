@@ -5,3 +5,8 @@ export interface TimeI {
     iana: string
     goTime: Date
 }
+
+export interface RecordI {
+    startTime: TimeI
+    endTime: TimeI
+}

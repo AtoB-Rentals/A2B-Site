@@ -1,6 +1,7 @@
 import { ApiRes, apiURL, err, objectToQueryString, QueryParams, throwError, unknownErr } from "./constants";
 import { AddCarI, CarI, CarStatusT, PictureTypeT, TransmissionT } from '../../interface/api/car';
 import { ReqAddressI } from "@/interface/api/address";
+import { RecordI } from "@/interface/api/time";
 
 export const getCars = async (params?: QueryParams): Promise<ApiRes<CarI[]> | err> => {
 
@@ -162,6 +163,38 @@ export const getCar = async (carId: string): Promise<ApiRes<CarI> | err> => {
         }
 
         return await response.json() as ApiRes<CarI>
+    } catch (e) {
+        return unknownErr()
+    }
+}
+
+interface BookRecordsParamsI {
+    month: number
+    year: number
+    /**Range of months */
+    range: number
+}
+
+export const getCarSchedule = async (carId: string, params?: QueryParams<BookRecordsParamsI>): Promise<ApiRes<RecordI[]> | err> => {
+    const q: string = params !== undefined ? objectToQueryString(params) : ""
+
+    try {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/booking_records?${q}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+
+        return await response.json() as ApiRes<RecordI[]>
     } catch (e) {
         return unknownErr()
     }

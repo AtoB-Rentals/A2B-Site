@@ -1,7 +1,7 @@
-import Filter from "@/components/modals/public_cars/filter"
+import Filter from "@/components/public_cars/filter"
 import { getCars } from "@/constants/requests/cars"
 import { CarI } from '../../../../interface/api/car';
-import CarCard from "@/components/modals/public_cars/CarCard";
+import CarCard from "@/components/public_cars/CarCard";
 import { headers } from "next/headers";
 
 interface RentalsParamsI {

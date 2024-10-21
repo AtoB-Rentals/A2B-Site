@@ -1,14 +1,23 @@
 
 import { numToDallor } from "@/constants/formatting/money";
+import { QueryParams } from "@/constants/requests/constants";
 import { CarI } from "@/interface/api/car";
 import Image from 'next/image';
+import Link from "next/link";
 
 
-const CarCard = ({ c }:{ c: CarI }) => {
+interface CarCardI {
+    c: CarI,
+    qParams?: string
+}
+
+const CarCard = ({ c, qParams }: CarCardI) => {
+    qParams = qParams || ""
 
     return (
-        <div
+        <Link
             className='flex shadow-[0_4px_6px_#0000001A] rounded-md h-32 overflow-hidden border border-gray-600 w-full cursor-pointer transition ease hover:-translate-y-1'
+            href={`/rental/${c.id}?${qParams}`}
         >
             <div className="relative h-full w-32">
                 <Image 
@@ -33,7 +42,7 @@ const CarCard = ({ c }:{ c: CarI }) => {
                     ${numToDallor(c.price)}
                 </p>
             </div>
-        </div>
+        </Link>
     )
 }
 

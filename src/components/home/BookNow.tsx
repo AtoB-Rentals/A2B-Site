@@ -3,7 +3,7 @@ import Image from "next/image"
 import { DateTime } from 'luxon'
 import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import AutoComplete from 'react-google-autocomplete';
-import { FilterShema } from "../modals/public_cars/filter";
+import { FilterShema } from "../public_cars/filter";
 import useBasicFormHook from "@/hooks/useForm";
 import { useState } from "react";
 import { GeocodeResultI, parseGeocodeResult } from "@/constants/location/googleRequest";

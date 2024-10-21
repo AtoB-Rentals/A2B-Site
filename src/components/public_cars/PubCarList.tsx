@@ -5,36 +5,46 @@ import CarCard from './CarCard'
 import { useSearchParams } from 'next/navigation'
 import { getCars } from '@/constants/requests/cars'
 import { DateTime } from 'luxon'
+import { objectToQueryString } from '@/constants/requests/constants'
 
 const PubCarList = () => {
     const [ cars, setCars ] = useState<CarI[]>([])
-    const [loading, setLoading] = useState<boolean>(true);
-    const q = useSearchParams();
+    const [loading, setLoading] = useState<boolean>(true)
+    const q = useSearchParams()
 
-    const handleGetCars = async () => {
+    const handleQTime = (): {
+        start_time: DateTime,
+        end_time: DateTime,
+        isValid: boolean
+    } => {
         const timeFormat = "yyyy-MM-dd t"
         const start_time = DateTime.fromFormat(
             `${q.get("start_date")} ${q.get("start_time")}`,
             timeFormat
         )
-        console.log('test start_time: ', start_time.isValid)
 
         const end_time = DateTime.fromFormat(
             `${q.get("end_date")} ${q.get("end_time")}`,
             timeFormat
         )
 
-        console.log("start: ", `${q.get("start_date")} ${q.get("start_time")}`)
-        console.log("end: ", `${q.get("end_date")} ${q.get("end_time")}`)
+        return {
+            start_time,
+            end_time,
+            isValid: start_time.isValid && end_time.isValid
+        }
+    }
 
-        if (!start_time.isValid || !end_time.isValid) {
+    const { start_time, end_time, isValid } = handleQTime()
+    const handleGetCars = async () => {
+        console.log("it got to here")
+        if (!isValid) {
             console.log("fail")
             return
         }
 
-        console.log("pass")
-
         try {
+            setLoading(true)
             const res = await getCars({
                 city: q.get("city") || undefined,
                 state: q.get("state") || undefined,
@@ -50,6 +60,8 @@ const PubCarList = () => {
             setCars(res.data)
         } catch {
             alert("Something went wrong please try again later")
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -57,12 +69,21 @@ const PubCarList = () => {
         handleGetCars()
     }, [q])
 
+    let carParams = ""
+    if (isValid) {
+        carParams = objectToQueryString({
+            start_time: start_time.setZone('utc').toISO(),
+            end_time: end_time.setZone('utc').toISO()
+        }) || ""
+    }
+
     return (
         <>
             {cars.map(c => (
                 <CarCard
-                    c={c}
                     key={c.id}
+                    c={c}
+                    qParams={carParams}
                 />
             ))}
             {!cars.length && !loading && <p className="text-2xl font-bold text-center">

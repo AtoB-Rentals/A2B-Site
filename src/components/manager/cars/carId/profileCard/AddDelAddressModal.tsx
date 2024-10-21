@@ -1,6 +1,6 @@
 'use client'
 
-import { FilterShema } from "@/components/modals/public_cars/filter"
+import { FilterShema } from "@/components/public_cars/filter"
 import { GeocodeResultI } from "@/constants/location/googleRequest"
 import useBasicFormHook from "@/hooks/useForm"
 import { ReqAddressSchema } from "@/interface/api/address"

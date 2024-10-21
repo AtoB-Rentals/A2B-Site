@@ -4,7 +4,7 @@ import { QueryParams } from '@/constants/requests/constants';
 import { CarI, carTypeList, CarTypeT } from '@/interface/api/car';
 import { useEffect, useRef, useState } from 'react'
 import AutoComplete from 'react-google-autocomplete'
-import { inThirty, toAmPm } from '../../../constants/formatting/time';
+import { inThirty, toAmPm } from '../../constants/formatting/time';
 import { useSearchParams } from 'next/navigation';
 import { object, z } from 'zod';
 import { DateTime } from 'luxon';
@@ -139,9 +139,6 @@ const Filter = ({
         }
         d.end_time = eTime.toFormat("t")
 
-        console.log("qStartTime", qStartTime)
-        console.log("d.start_time: ", d.start_time)
-
         params.set("address", d.address)
         params.set("start_date", d.start_date)
         params.set("end_date", d.end_date)
@@ -162,7 +159,7 @@ const Filter = ({
             return
         }
 
-        const params = new URLSearchParams(`${q.toString()}}`)
+        const params = new URLSearchParams(`${q.toString()}`)
 
         Object.keys(selAddress).forEach(key => {
             //@ts-ignore
