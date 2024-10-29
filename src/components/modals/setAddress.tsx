@@ -2,29 +2,33 @@
 
 import FormModal from "./formModal"
 import { reqAddressEmpty, ReqAddressI, ReqAddressSchema } from '../../interface/api/address';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useBasicFormHook from "@/hooks/useForm";
 import Input2 from "../assets/formInput2";
-import { GeocodeResultI, parseGeocodeResult } from "@/constants/location/googleRequest"
+import { GeocodeResultI, gPlaceId, parseGeocodeResult } from "@/constants/location/googleRequest"
 import AutoComplete from 'react-google-autocomplete'
 import { extractFirstParenthesesValue } from "@/constants/requests/constants";
+import { autoComplete } from "@/constants/google/places";
+import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 
 
 type searchTypeT = 
     | "Airport"
     | "Region"
     | "Address"
+    | "Default"
 
 const searchTypeMap = {
     "Region": "(region)",
     "Address": "address",
-    "Airport": "airport"
+    "Airport": "airport",
+    "Default": "geocode"
 } as const
 
 const SetAddressModal = ({
     title,
     callback,
-    searchTypes = ["Address"],
+    searchTypes = ["Default"],
     paramKey
 }: {
     title: string
@@ -33,15 +37,18 @@ const SetAddressModal = ({
     paramKey: string
 }) => {
     const [ selAddress, setSelAddress ] = useState<GeocodeResultI>()
-    const [ currentSearchType, setCurrentSearchType ] = useState<searchTypeT>(searchTypes[0])
+    const [ currentSearchType, setCurrentSearchType ] = useState<searchTypeT>(searchTypes[0] || "Default")
+    const [ predictions, setPredictions ] = useState<PlaceAutocompleteResult[]>([])
     const {
-        updateParams,
         updateValues,
         setValues,
         values,
         errs,
         clearValues
     } = useBasicFormHook(ReqAddressSchema, reqAddressEmpty, undefined, "set_address_form")
+    const [debouncedStreet, setDebouncedStreet] = useState(values.street1)
+
+    const autoCompleteInputRef = useRef(null)
 
     // useEffect(() => {
     //     updateParams()
@@ -58,29 +65,40 @@ const SetAddressModal = ({
         return res
     }
 
-    const handleGoogleSel = (data: google.maps.places.PlaceResult, index?: string) => {
-        const res = parseGeocodeResult(data)
-        if (res === null) {
-            alert("something went wrong. Please try again later")
+    const handleGoogleSel = async (prediction: PlaceAutocompleteResult) => {
+        await setValues(prev => ({
+            ...prev,
+            street1: prediction.terms[0].value
+        }))
+
+        const googleAddresses = await gPlaceId(prediction.place_id)
+        if (googleAddresses === null) {
+            alert("something went wrong")
             return
         }
-        res.index = index
-        if (currentSearchType === 'Airport') {
-            res.type = 'Airport'
-        } 
 
-        console.log('res.type', res.type)
+        const geoCodeAddress = parseGeocodeResult(googleAddresses.results[0])
+        if (geoCodeAddress === null) {
+            alert("something went wrong")
+            return
+        }
+
+        /**@ts-ignore */
+        if (prediction.types.includes("airport")) {
+            console.log("aiport was found")
+            geoCodeAddress.type = "Airport"
+        }
 
         setValues(prev => ({
             ...prev,
-            address: res.address
+            address: geoCodeAddress.address
         }))
 
-        setSelAddress(res)
+        setSelAddress(geoCodeAddress)
     }
 
     useEffect(() => {
-        
+        console.log("the address type: ", selAddress)
         setValues(prev => ({
             ...prev,
             state: selAddress?.region || "",
@@ -92,6 +110,28 @@ const SetAddressModal = ({
             street1: selAddress?.address || ""
         }))
     }, [selAddress])
+
+    useEffect(() => {
+        // Create a timeout that updates the debouncedStreet after 300ms (or any other delay you prefer)
+        const handler = setTimeout(() => {
+            setDebouncedStreet(values.street1);
+        }, 300);
+
+        // Clear the timeout if the user is still typing (before 300ms passes)
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [values.street1])
+
+    useEffect(() => {
+        (async () => {
+            if (debouncedStreet.length > 2) {
+                const opts = await autoComplete(debouncedStreet, /*searchTypeMap[currentSearchType] */);
+
+                setPredictions([...opts]);
+            }
+        })();
+    }, [debouncedStreet])
 
     return (
         <FormModal 
@@ -114,77 +154,38 @@ const SetAddressModal = ({
                     ))}
                 </select>
 
-                {currentSearchType === 'Region' && <div className="col-start-1 col-span-2">
+                <div className="col-start-1 col-span-2 relative">
                     <label htmlFor="street1" className='mb-1 text-lg'>
                         Address Line 1
                     </label>
-                    <AutoComplete
+                    <input
                         className="border-2 rounded-md dark:border-lime-500 p-1 w-full col-start-1 col-span-2"
-                        apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!}
-                        defaultValue={values.street1}
+                        value={values.street1}
                         onFocus={e => e.target.select()}
-                        onChange={e => {
-                            e.preventDefault()
-                            //@ts-ignore
-                            setValues(prev => ({...prev, address: e.target.value}))
-                        }}
-                        options={{
-                            types: ["(regions)"]
-                        }}
-                        onPlaceSelected={data => {
-                            handleGoogleSel(data)
-                        }}
-                    />
-                </div>}
-                {currentSearchType === 'Address' && <div className="col-start-1 col-span-2">
-                    <label htmlFor="street1" className='mb-1 text-lg'>
-                        Address Line 1
-                    </label>
-                    <AutoComplete
-                        className="border-2 rounded-md dark:border-lime-500 p-1 w-full col-start-1 col-span-2"
-                        apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!}
-                        defaultValue={values.street1}
-                        onFocus={e => e.target.select()}
+                        ref={autoCompleteInputRef}
                         onChange={e => {
                             e.preventDefault()
                             //@ts-ignore
                             setValues(prev => ({...prev, street1: e.target.value}))
                         }}
-                        options={{
-                            types: ["address"]
-                        }}
-                        onPlaceSelected={data => {
-                            handleGoogleSel(data)
-                        }}
                     />
-                </div>}
-                {currentSearchType === 'Airport' && <div className="col-start-1 col-span-2">
-                    <label htmlFor="street1" className='mb-1 text-lg'>
-                        Address Line 1
-                    </label>
-                    <AutoComplete
-                        className="border-2 rounded-md dark:border-lime-500 p-1 w-full col-start-1 col-span-2"
-                        apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!}
-                        defaultValue={values.street1}
-                        onFocus={e => e.target.select()}
-                        onChange={e => {
-                            e.preventDefault()
-                            //@ts-ignore
-                            setValues(prev => ({...prev, street1: e.target.value}))
-                        }}
-                        options={{
-                            types: ["airport"]
-                        }}
-                        onPlaceSelected={(data, t, y) => {
-                            //@ts-ignore
-                            const formattedAddress = y.gm_bindings_.fields['55'].vt.formattedPrediction
-                            //**airport id */
-                            const apId = extractFirstParenthesesValue(formattedAddress) || ""
-
-                            handleGoogleSel(data, apId)
-                        }}
-                    />
-                </div>}
+                    <div 
+                        className="flex flex-col absolute bg-white border border-black w-full rounded-md"
+                    >
+                        {autoCompleteInputRef.current === document.activeElement && predictions.map(p => (
+                            <div 
+                                className="w-full hover:bg-gray-300 px-2 cursor-default"
+                                key={p.place_id}
+                                onClick={e => {
+                                    e.preventDefault()
+                                    handleGoogleSel(p)
+                                }}
+                            >
+                                {p.structured_formatting.main_text}
+                            </div>
+                        ))}
+                    </div>
+                </div>
                 {currentSearchType === 'Address' && <Input2 
                     name="Street Line 2"
                     id="street2"

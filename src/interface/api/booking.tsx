@@ -24,6 +24,7 @@ export interface BookingRequestBody {
     email: string
     phoneNumber: string
     vehicleId: CarI["id"]
+    sameAsPickup: boolean
     startTime: {
         local: string
         iana: string

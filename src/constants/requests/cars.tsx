@@ -1,3 +1,4 @@
+// "use server"
 import { ApiRes, apiURL, err, objectToQueryString, QueryParams, throwError, unknownErr } from "./constants";
 import { AddCarI, CarI, CarStatusT, PictureTypeT, TransmissionT } from '../../interface/api/car';
 import { ReqAddressI } from "@/interface/api/address";
@@ -5,10 +6,10 @@ import { RecordI } from "@/interface/api/time";
 
 export const getCars = async (params?: QueryParams): Promise<ApiRes<CarI[]> | err> => {
 
-    const queryString = params !== undefined ? objectToQueryString(params) : ""
-
+    const queryString = params !== undefined ? "?" + objectToQueryString(params) : ""
+    console.log(`${apiURL}/api/cars/${queryString}`)
     try {
-        const response = await fetch(`${apiURL}/api/cars/?${queryString}`, { // Replace '/api/login' with your actual login endpoint
+        const response = await fetch(`${apiURL}/api/cars/${queryString}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

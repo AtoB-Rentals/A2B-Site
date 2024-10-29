@@ -15,6 +15,8 @@ interface RentalScheduleI {
 
 const RentalSchedule = ({carId}: RentalScheduleI) => {
     const q = useSearchParams()
+
+    
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
     const [ records, setRecords ] = useState<RecordI[]>([])
     const [ dates, setDates ] = useState<DateRange>(() => {
@@ -27,6 +29,7 @@ const RentalSchedule = ({carId}: RentalScheduleI) => {
         }
     })
     const [ times, setTimes ] = useState<{start: string, end: string}>(() => {
+
         const sDT = DateTime.fromISO(q.get('start_time') || "").setZone(tz)
         const eDT = DateTime.fromISO(q.get('end_time') || "").setZone(tz)
 
@@ -74,7 +77,7 @@ const RentalSchedule = ({carId}: RentalScheduleI) => {
     })) : []
 
     return (
-        <div className="flex flex-col-reverse shadow-[0px_0px_5px_1px] shadow-blue-600 rounded-lg">
+        <div className="flex flex-col-reverse">
             <DayPicker 
                 mode="range" 
                 disabled={[

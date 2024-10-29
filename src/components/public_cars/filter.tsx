@@ -173,6 +173,8 @@ const Filter = ({
             params.set(key, value)
         })
 
+        console.log("selAddress", selAddress)
+
         Object.keys(values).forEach(key => {
             //@ts-ignore
             let value = values[key]
@@ -246,7 +248,7 @@ const Filter = ({
                     onPlaceSelected={(data) => {
                         const res = parseGeocodeResult(data)
                         if (res === null) {
-                            alert("something went wrong. Please try again later")
+                            alert("something went wrong. Please try again later 1")
                             return
                         }
 

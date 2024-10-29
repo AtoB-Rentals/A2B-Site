@@ -37,7 +37,6 @@ const PubCarList = () => {
 
     const { start_time, end_time, isValid } = handleQTime()
     const handleGetCars = async () => {
-        console.log("it got to here")
         if (!isValid) {
             console.log("fail")
             return
@@ -73,7 +72,9 @@ const PubCarList = () => {
     if (isValid) {
         carParams = objectToQueryString({
             start_time: start_time.setZone('utc').toISO(),
-            end_time: end_time.setZone('utc').toISO()
+            end_time: end_time.setZone('utc').toISO(),
+            address: q.get("address")
+            // place
         }) || ""
     }
 

@@ -73,6 +73,23 @@ export const gAddress = async (address: string): Promise<google.maps.GeocoderRes
         return null
     }
 }
+export const gPlaceId = async (placeId: string): Promise<google.maps.GeocoderResponse | null> => {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${encodeURIComponent(placeId)}&key=${googleKey}`
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json() as google.maps.GeocoderResponse;
+
+        if (data.results.length) {
+            return data
+        } else {
+            return null
+        }
+    } catch (error) {
+        console.error('Error fetching location data:', error);
+        return null
+    }
+}
 
 export interface GeocodeResultI {
     placeId: string
@@ -99,6 +116,8 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
     if (!result && !result?.address_components.length) {
         return null
     }
+
+    console.log("Geocode Result:", result)
 
     let placeId = result.place_id as string
     let city = ""

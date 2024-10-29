@@ -17,7 +17,7 @@ const capitalize = (word: string): string => {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 }
 
-const parseLocation = async (location: string): Promise<[CarI[], string]> => {
+const parseLocation = async (location: string): Promise<[CarI[], string, boolean?]> => {
     const parts = location.split('-');
     const type = parts.shift()?.toLowerCase(); // Get the type and remove it from the parts array
     let filter = {}
@@ -58,13 +58,16 @@ const parseLocation = async (location: string): Promise<[CarI[], string]> => {
         }
     }
 
-    return [res.data, locationString]
+    return [res.data, locationString, res.isErr]
 }
 
 const Rentals = async ({ params }: {params: RentalsParamsI}) => {
     const head = headers()
 
-    const [ cars, locStr ] = await parseLocation(params.loc)
+    const [ cars,   locStr ] = await parseLocation(params.loc)
+    // if (err) {
+    //     alert("something went wrong")
+    // }
 
     return (
         <main className="md:mx-auto max-w-[1000px]">
@@ -78,12 +81,12 @@ const Rentals = async ({ params }: {params: RentalsParamsI}) => {
             >
                 {/* <Filter initialLoc={locStr}/> */}
                 <section className="mt-5 flex flex-col gap-4">
-                    {cars.map(c => <CarCard 
+                    {cars.length && cars.map(c => <CarCard 
                         c={c}
                         key={c.id}
                     />)}
                     {!cars.length && <p className="text-2xl font-bold text-center">
-                        Available cars not found
+                        Available cars not found in this area
                     </p>}
                 </section>
             </section>

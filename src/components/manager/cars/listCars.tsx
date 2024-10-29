@@ -14,21 +14,44 @@ const ListCars = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const router = useRouter()
     
-    const handleGetCars = () => {
+    // const handleGetCars = () => {
+    //     setLoading(true)
+    //     console.log('it got here')
+    //     getCars()
+    //         .then(res => {
+    //             if(res.isErr) {
+    //                 if (res.status === 401) {
+    //                     Cookies.remove("token")
+    //                     router.push('/manager/login')
+    //                 }
+    //                 console.log('the error happened', res.data)
+    //             } else {
+    //                 setCars([...res.data])
+    //                 console.log("should have updated")
+    //             }
+    //         })
+    //         .finally(() => setLoading(false))
+    // }
+
+    const handleGetCars = async () => {
         setLoading(true)
-        getCars()
-            .then(res => {
-                if(res.isErr) {
-                    if (res.status === 401) {
-                        Cookies.remove("token")
-                        router.push('/manager/login')
-                    }
-                } else {
-                    setCars([...res.data])
-                    console.log("should have updated")
+        try {
+            const res = await getCars()
+            if(res.isErr) {
+                if (res.status === 401) {
+                    Cookies.remove("token")
+                    router.push('/manager/login')
                 }
-            })
-            .finally(() => setLoading(false))
+                console.log('the error happened', res.data)
+            } else {
+                setCars([...res.data])
+                console.log("should have updated")
+            } 
+        } catch(e) {
+            console.error(e)
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
