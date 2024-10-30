@@ -116,7 +116,6 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
     if (!result && !result?.address_components.length) {
         return null
     }
-
     console.log("Geocode Result:", result)
 
     let placeId = result.place_id as string
@@ -182,6 +181,6 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
         longitude,
         bounds,
         zipcode,
-        address: `${streetNumber} ${route}`
+        address: result.formatted_address || `${streetNumber} ${route}, ${city}, ${region}, ${country}`
     };
 };

@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { getCars } from '@/constants/requests/cars'
 import { DateTime } from 'luxon'
 import { objectToQueryString } from '@/constants/requests/constants'
+import { validateAddressType } from '@/interface/api/address'
 
 const PubCarList = () => {
     const [ cars, setCars ] = useState<CarI[]>([])
@@ -36,6 +37,7 @@ const PubCarList = () => {
     }
 
     const { start_time, end_time, isValid } = handleQTime()
+
     const handleGetCars = async () => {
         if (!isValid) {
             console.log("fail")
@@ -44,12 +46,25 @@ const PubCarList = () => {
 
         try {
             setLoading(true)
+            console.log('it has gotten to here')
             const res = await getCars({
                 city: q.get("city") || undefined,
-                state: q.get("state") || undefined,
+                state: q.get("region") || undefined,
                 start_time: start_time.toUTC().toISO(),
-                end_time: end_time.toUTC().toISO()
+                end_time: end_time.toUTC().toISO(),
+                type: validateAddressType(q.get("address") || ""),
+                // address: q.get('address') || undefined
             })
+
+            console.log("params: ", {
+                city: q.get("city") || undefined,
+                state: q.get("region") || undefined,
+                start_time: start_time.toUTC().toISO(),
+                end_time: end_time.toUTC().toISO(),
+                type: validateAddressType(q.get("address") || ""),
+                address: q.get('address') || undefined
+            })
+            console.log("res: ", res)
 
             if (res.isErr) {
                 alert("Something went wrong please try again later")

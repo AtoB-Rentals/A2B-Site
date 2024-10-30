@@ -1,12 +1,7 @@
-import CarCard from "@/components/public_cars/CarCard";
 import Filter from "@/components/public_cars/filter"
 import PubCarList from "@/components/public_cars/PubCarList";
 import { getIPData, IPDataI } from "@/constants/ip";
-import { getCar, getCars } from "@/constants/requests/cars";
-import { QueryParams } from "@/constants/requests/constants";
-import { CarI } from "@/interface/api/car";
-import { headers } from "next/headers";
-import { redirect, useSearchParams } from 'next/navigation';
+import { headers } from "next/headers"
 
 async function Rentals({
   params,

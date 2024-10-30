@@ -8,10 +8,10 @@ import useBasicFormHook from "@/hooks/useForm";
 import { useState } from "react";
 import { GeocodeResultI, parseGeocodeResult } from "@/constants/location/googleRequest";
 import { inThirty } from "@/constants/formatting/time";
+import usePlaceautoComplete from "@/hooks/usePlaceAutocomplete";
 
 const BookNow = () => {
     const [ airportSearch, setAirportSearch ] = useState<boolean>(false)
-    const [ selAddress, setSelAddress ] = useState<GeocodeResultI>()
     const router = useRouter()
 
     const currentDate = DateTime.now()
@@ -28,23 +28,25 @@ const BookNow = () => {
         type: ""
     }, undefined, "filter")
 
-    
+    const {
+        input,
+        setInput,
+        handleGoogleSel,
+        selAddress,
+        predictions,
+    } = usePlaceautoComplete({})
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
         const params = new URLSearchParams()
 
         Object.keys(values).forEach(key => {
-            if (key === "address" && airportSearch ){
-                params.set("airport", values[key]!)
-                return
-            }
-
-            //@ts-ignore
+            // @ts-ignore
             params.set(key, values[key]!)
 
-            
         })
+        
+        params.set("type", values.type!)
 
         router.push(`/rentals?${params.toString()}`)
     }
@@ -60,76 +62,34 @@ const BookNow = () => {
                 className="p-6 lg:p-8 flex flex-col lg:flex-row items-center md:items-start justify-start md:justify-between gap-3 w-full bg-white text-neutral-700 text-xl"
                 onSubmit={e => handleSubmit(e)}
             >
-                <div className="text-center lg:text-left">
+                <div className="relative text-center lg:text-left max-w-96">
                     <label 
                         htmlFor="pickupAddress"
                         className="font-bold justify-center"
                     >
                         Location
                     </label>
-                    {!airportSearch && <AutoComplete
-                        className="border rounded-md border-gray-600 p-1 w-full"
-                        apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!}
+                    <input
+                        className="border rounded-md border-gray-600 inv p-1 w-full"
                         onChange={e => {
                             e.preventDefault()
-                            //@ts-ignore
-                            setValues(prev => ({...prev, address: e.target.value}))
+                            setInput(e.target.value)
                         }}
-                        options={{
-                            types: ["(regions)"]
-                        }}
-                        onPlaceSelected={data => {
-                            const res = parseGeocodeResult(data)
-                            if (res === null) {
-                                alert("something went wrong. Please try again later")
-                                return
-                            }
-
-                            setValues(prev => ({
-                                ...prev,
-                                address: data.formatted_address
-                            }))
-
-                            setSelAddress(res)
-                        }}
-                    />}
-                    {airportSearch && <AutoComplete
-                        className="border rounded-md border-gray-600 p-1 w-full"
-                        placeholder="Search Airport"
-                        apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY!}
-                        onChange={e => {
-                            e.preventDefault()
-                            //@ts-ignore
-                            setValues(prev => ({...prev, address: e.target.value}))
-                        }}
-                        options={{
-                            types: ["airport"]
-                        }}
-                        onPlaceSelected={data => {
-                            const res = parseGeocodeResult(data)
-                            if (res === null) {
-                                alert("something went wrong. Please try again later")
-                                return
-                            }
-
-                            setValues(prev => ({
-                                ...prev,
-                                address: data.formatted_address
-                            }))
-
-                            setSelAddress(res)
-                        }}
-                    />}
-                    <div className="flex gap-2">
-                        <input 
-                            type="checkbox" 
-                            name="airport" 
-                            id="airport"
-                            checked={airportSearch}
-                            onChange={() => setAirportSearch(!airportSearch)}
-                        />
-                        <label htmlFor="airport">Search Airport</label>
-                    </div>
+                        value={input}
+                    />
+                    <ul 
+                        className={`absolute translate-y-1 rounded-md w-full bg-white border-2 border-black z-30 ${predictions.length ? 'visble' : 'invisible'}`}
+                    >
+                        {predictions.map(p => (
+                            <li
+                                key={p.place_id}
+                                className="hover:bg-gray-200 p-1 cursor-pointer"
+                                onClick={() => handleGoogleSel(p)}
+                            >
+                                {p.structured_formatting.main_text}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
                 <div className="text-center lg:text-left">
                     <div>
