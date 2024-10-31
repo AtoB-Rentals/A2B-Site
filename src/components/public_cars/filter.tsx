@@ -11,6 +11,7 @@ import { DateTime } from 'luxon';
 import useBasicFormHook from '@/hooks/useForm';
 import { gAddress, GeocodeResultI, parseGeocodeResult } from '@/constants/location/googleRequest';
 import usePlaceautoComplete from '@/hooks/usePlaceAutocomplete';
+import { AddressType, addressTypes } from '@/interface/api/address';
 
 export const FilterShema = z.object({
     address: z.string().optional(),
@@ -28,7 +29,10 @@ export const FilterShema = z.object({
     }).optional(),
     type: z.string().refine(value => {
         return carTypeList.includes(value as CarTypeT)
-    }).optional()
+    }).optional(),
+    addressType: z.string().refine(value => {
+        return addressTypes.includes(value as AddressType)
+    }).default("Default")
 })
 
 const Filter = ({
@@ -57,18 +61,17 @@ const Filter = ({
     const q = useSearchParams()
 
     const {
-        updateParams,
         updateValues,
         setValues,
         values,
-        errs
     } = useBasicFormHook(FilterShema, {
         address: q.get("address") || "",
         "start_date": q.get("start_date") || "",
         "end_date": q.get("end_date") || "",
         "start_time": q.get("start_time") || "",
         "end_time": q.get("end_time") || "",
-        type: q.get("type") || ""
+        type: q.get("type") || "",
+        addressType: q.get("addressType") || "Default"
     }, undefined, "filter")
 
     const init = async () => {
@@ -164,8 +167,6 @@ const Filter = ({
             return
         }
 
-        console.log("filer: selAddress", selAddress)
-
         const params = new URLSearchParams(`${q.toString()}`)
 
         Object.keys(selAddress).forEach(key => {
@@ -198,6 +199,14 @@ const Filter = ({
     useEffect(() => {
         init()
     }, [])
+
+    useEffect(() => {
+        setValues(prev => ({
+            ...prev, 
+            addressType: selAddress?.type,
+            address: input,
+        }))
+    }, [selAddress])
 
     return (
         <div

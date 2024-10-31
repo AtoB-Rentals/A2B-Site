@@ -36,9 +36,7 @@ export const addressTypes: AddressType[] = [
 
 /**Returns default if the address to is invalid */
 export const validateAddressType = (type: string): AddressType => {
-    if (!addressTypes.includes(type as AddressType)) return "Default"
-
-    return !addressTypes.includes(type as AddressType) ? type as AddressType : "Default"
+    return addressTypes.includes(type as AddressType) ? type as AddressType : "Default"
 }
 
 export interface ReqAddressI {

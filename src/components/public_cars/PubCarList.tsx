@@ -46,25 +46,14 @@ const PubCarList = () => {
 
         try {
             setLoading(true)
-            console.log('it has gotten to here')
             const res = await getCars({
                 city: q.get("city") || undefined,
                 state: q.get("region") || undefined,
                 start_time: start_time.toUTC().toISO(),
                 end_time: end_time.toUTC().toISO(),
-                type: validateAddressType(q.get("address") || ""),
-                // address: q.get('address') || undefined
-            })
-
-            console.log("params: ", {
-                city: q.get("city") || undefined,
-                state: q.get("region") || undefined,
-                start_time: start_time.toUTC().toISO(),
-                end_time: end_time.toUTC().toISO(),
-                type: validateAddressType(q.get("address") || ""),
+                type: q.get("type") || undefined,
                 address: q.get('address') || undefined
             })
-            console.log("res: ", res)
 
             if (res.isErr) {
                 alert("Something went wrong please try again later")
@@ -99,7 +88,7 @@ const PubCarList = () => {
                 <CarCard
                     key={c.id}
                     c={c}
-                    qParams={carParams}
+                    qParams={q.toString()}
                 />
             ))}
             {!cars.length && !loading && <p className="text-2xl font-bold text-center">

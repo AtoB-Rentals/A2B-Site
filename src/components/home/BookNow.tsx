@@ -5,7 +5,7 @@ import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import AutoComplete from 'react-google-autocomplete';
 import { FilterShema } from "../public_cars/filter";
 import useBasicFormHook from "@/hooks/useForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GeocodeResultI, parseGeocodeResult } from "@/constants/location/googleRequest";
 import { inThirty } from "@/constants/formatting/time";
 import usePlaceautoComplete from "@/hooks/usePlaceAutocomplete";
@@ -16,6 +16,7 @@ const BookNow = () => {
 
     const currentDate = DateTime.now()
     const {
+        updateParams,
         updateValues,
         values,
         setValues
@@ -47,9 +48,24 @@ const BookNow = () => {
         })
         
         params.set("type", values.type!)
+        params.set("addressType", values.type!)
 
         router.push(`/rentals?${params.toString()}`)
     }
+
+    useEffect(() => {
+        setValues(prev => ({...prev, address: input}))
+    }, [input])
+
+    useEffect(() => {
+        updateParams()
+    }, [values])
+
+    useEffect(() => {
+        if (selAddress?.type) {
+            setValues(prev => ({...prev, addressType: selAddress.type}))
+        }
+    }, [selAddress])
 
     return (
         <section className="w-full p-10">

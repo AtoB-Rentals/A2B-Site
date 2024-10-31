@@ -2,6 +2,8 @@ import { CarI } from "@/interface/api/car"
 import Image from "next/image"
 import RentalSchedule from "./Schedule"
 import { numToDallor } from '../../../constants/formatting/money';
+import CarAddressSect from "./address";
+import Options from "./options";
 
 
 interface RentalInfoI {
@@ -38,10 +40,7 @@ const RentalInfo = ({car}: RentalInfoI) => {
                     Description
                 </p>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                    Dicta delectuulla maxime laboriosam itaque consectetur 
-                    accusamus corrupti rerum ad! Cupiditate quisquam magni iusto fugit 
-                    consequatur laborum dignissimos. Explicabo, tempore.s quam n
+                    {`${car.name} in ${car.address.formatted}`}
                 </p>
             </div>
             <div className="col-start-1 col-span-1">
@@ -49,7 +48,13 @@ const RentalInfo = ({car}: RentalInfoI) => {
                     carId={car.id}
                 />
             </div>
-            <div className="col-start-2 col-span-2 self-start">
+            <div className="col-start-1 col-span-1">
+                <CarAddressSect />
+            </div>
+            <div className="col-start-2 col-span-2 row-start-3 self-start">
+                <Options />
+            </div>
+            <div className="col-start-2 col-span-2 row-start-4 self-start">
                 <h3 className="font-bold text-xl">
                     Gallery
                 </h3>

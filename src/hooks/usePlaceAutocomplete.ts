@@ -62,7 +62,7 @@ const usePlaceautoComplete = ({
     const handleGoogleSel = async (prediction: PlaceAutocompleteResult) => {
         /**@ts-ignore */
         if (prediction.types.includes("establishment")) {
-            await setInput(prediction.terms[0].value)
+            await setInput(prediction.structured_formatting.main_text + " - " + prediction.structured_formatting.secondary_text)
         }
 
         const googleAddresses = await gPlaceId(prediction.place_id)
