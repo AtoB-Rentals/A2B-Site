@@ -7,7 +7,7 @@ import { FilterShema } from "../public_cars/filter";
 import useBasicFormHook from "@/hooks/useForm";
 import { useEffect, useState } from "react";
 import { GeocodeResultI, parseGeocodeResult } from "@/constants/location/googleRequest";
-import { inThirty } from "@/constants/formatting/time";
+import { inThirty, timeFormFormat } from "@/constants/formatting/time";
 import usePlaceautoComplete from "@/hooks/usePlaceAutocomplete";
 
 const BookNow = () => {
@@ -41,13 +41,20 @@ const BookNow = () => {
         e.preventDefault()
         const params = new URLSearchParams()
 
-        Object.keys(values).forEach(key => {
-            // @ts-ignore
-            params.set(key, values[key]!)
+        const startTime = DateTime.fromFormat(`${values.start_date} ${values.start_time}`, timeFormFormat)
+        const endTime = DateTime.fromFormat(`${values.end_date} ${values.end_time}`, timeFormFormat)
 
-        })
+        params.set("start_time", startTime.toUTC().toISO() || "")
+        params.set("end_time", endTime.toUTC().toISO() || "")
+        params.set
+
+        if (selAddress) {
+            Object.keys(selAddress).forEach(key => {
+                // @ts-ignore
+                params.set(key, selAddress[key]!)
+            })
+        }
         
-        params.set("type", values.type!)
         params.set("addressType", values.type!)
 
         router.push(`/rentals?${params.toString()}`)
@@ -56,10 +63,6 @@ const BookNow = () => {
     useEffect(() => {
         setValues(prev => ({...prev, address: input}))
     }, [input])
-
-    useEffect(() => {
-        updateParams()
-    }, [values])
 
     useEffect(() => {
         if (selAddress?.type) {

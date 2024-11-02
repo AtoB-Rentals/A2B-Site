@@ -4,7 +4,7 @@ import { QueryParams } from '@/constants/requests/constants';
 import { CarI, carTypeList, CarTypeT } from '@/interface/api/car';
 import { useEffect, useRef, useState } from 'react'
 import AutoComplete from 'react-google-autocomplete'
-import { inThirty, toAmPm } from '../../constants/formatting/time';
+import { inThirty, timeFormFormat, toAmPm } from '../../constants/formatting/time';
 import { useSearchParams } from 'next/navigation';
 import { z } from 'zod';
 import { DateTime } from 'luxon';
@@ -59,6 +59,8 @@ const Filter = ({
     } = usePlaceautoComplete({})
 
     const q = useSearchParams()
+
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
     const {
         updateValues,
@@ -115,45 +117,38 @@ const Filter = ({
 
         //** Schedule Section **/
         const dateFmt = "yyyy-MM-dd"
-        const qStartDate = q.get("start_date")
         /**Start time */
-        let sDate = DateTime.fromFormat(qStartDate || "", dateFmt)
-        if (!sDate.isValid) {
-            sDate = DateTime.now().plus({ days: 4 })
-        }
-        d.start_date = sDate.toFormat(dateFmt)
-
-        const qEndDate = q.get("end_date")
-        let eDate = DateTime.fromFormat(qEndDate || "", dateFmt)
-        if (!eDate.isValid) {
-            eDate = sDate.plus({ days: 3 })
-        }
-        d.end_date = eDate.toFormat(dateFmt)
-
         const qStartTime = q.get("start_time")
-        let sTime = DateTime.fromFormat(qStartTime || "", "t")
+        let sTime = DateTime.fromISO(qStartTime || "")
         if (!sTime.isValid) {
-            sTime = DateTime.fromFormat("9:00 AM", "t")
+            sTime = DateTime.fromFormat("9:00 AM", "t").plus({days: 1}).toUTC()
         }
+        d.start_date = sTime.toFormat(dateFmt)
         d.start_time = sTime.toFormat("t")
         
         /**End time */
         const qEndTime = q.get("end_time")
-        let eTime = DateTime.fromFormat(qEndTime || "", "t")
+        let eTime = DateTime.fromISO(qEndTime || "")
         if (!eTime.isValid) {
-            eTime = DateTime.fromFormat("9:00 AM", "t")
+            eTime = DateTime.fromFormat("9:00 AM", "t").plus({days: 3}).toUTC()
         }
+        d.end_date = eTime.toFormat(dateFmt)
         d.end_time = eTime.toFormat("t")
 
         params.set("address", d.address)
-        params.set("start_date", d.start_date)
-        params.set("end_date", d.end_date)
-        params.set("start_time", d.start_time)
-        params.set("end_time", d.end_time)
+        params.set("start_time", sTime.toISO() || "")
+        params.set("end_time", eTime.toISO() || "")
+
+        sTime.setZone(tz)
+        eTime.setZone(tz)
 
         await setValues(prev => ({
             ...prev,
-            ...d
+            ...d,
+            start_date: sTime.setZone(tz).toFormat(dateFmt),
+            end_date: eTime.setZone(tz).toFormat(dateFmt),
+            start_time: eTime.setZone(tz).toFormat("t"),
+            end_time: eTime.setZone(tz).toFormat("t")
         }))
 
         setInput(d.address)
@@ -178,20 +173,23 @@ const Filter = ({
                 value = value.toString()
             }
 
-            params.set(key, value)
-        })
-
-        Object.keys(values).forEach(key => {
-            //@ts-ignore
-            let value = values[key]
-            if (typeof value === 'object') {
-                value = JSON.stringify(value)
-            } else if (typeof value === 'number') {
-                value = value.toString()
+            if (key === "type") {
+                key = "addressType"
             }
 
             params.set(key, value)
         })
+
+        const sTime = DateTime.fromFormat(`${values.start_date} ${values.start_time}`, timeFormFormat)
+        const eTime = DateTime.fromFormat(`${values.end_date} ${values.end_time}`, timeFormFormat)
+
+        if (!sTime.isValid || !eTime.isValid) {
+            alert("something went wrong")
+            return
+        }
+
+        params.set("start_time", sTime.toUTC().toISO())
+        params.set("end_time", eTime.toUTC().toISO())
 
         window.history.replaceState({}, '', `?${params.toString()}`)
     }

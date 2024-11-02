@@ -1,19 +1,8 @@
 import BookingForm from "@/components/book/bookingform"
-import { BookingRequestBody } from "@/interface/api/booking";
+import { ReqBookingI } from "@/interface/api/booking";
 import { z } from "zod";
 
-const BookingRequestBodySchema = z.object({
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    phone: z.string().optional(),
-    email: z.string().optional(),
-    insuranceProvider: z.string().optional(),
-    policyNumber: z.string().optional(),
-    startDate: z.string().optional(),
-    endDate: z.string().optional(),
-    dropoffAddress: z.string().optional(),
-    pickupAddress: z.string().optional(),
-});
+;
 
 const Book = ({
     params,

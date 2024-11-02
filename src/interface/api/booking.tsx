@@ -17,10 +17,9 @@ export const BookingStatuses: BookingStatusT[] = [
     'Scheduled'
 ]
 
-export interface BookingRequestBody {
+export interface ReqBookingI {
     firstName: string
     lastName: string
-    phone: string
     email: string
     phoneNumber: string
     vehicleId: CarI["id"]
@@ -33,8 +32,24 @@ export interface BookingRequestBody {
         local: string
         iana: string
     }
-    dropoffAddress: ReqAddressI
+    dropoffAddress?: ReqAddressI
     pickupAddress: ReqAddressI
+}
+
+export interface InvoiceItemI {
+    /**item number */
+    id: number
+    name: string
+    description: string
+    amount: number
+}
+
+export interface StripeBookingI {
+    invoiceId: string
+    paymentIntentId: string
+    clientSecret: string
+    invoiceURL: string
+    items: InvoiceItemI[]
 }
 export interface BookingI {
     id: string
@@ -55,7 +70,21 @@ export interface BookingI {
     pickupAddress: AddressI
 
     status: BookingStatusT
+    stripe: StripeBookingI
 }
+
+const ReqBookingSchema = z.object({
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    phone: z.string().optional(),
+    email: z.string().optional(),
+    insuranceProvider: z.string().optional(),
+    policyNumber: z.string().optional(),
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
+    dropoffAddress: z.string().optional(),
+    pickupAddress: z.string().optional(),
+})
 
 // type PostTime struct {
 // 	Local string `json:"local" validate:"required"`

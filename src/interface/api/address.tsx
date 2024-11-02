@@ -32,7 +32,7 @@ export type AddressType =
 export const addressTypes: AddressType[] = [
     "Airport",
     "Default"
-]
+] as const 
 
 /**Returns default if the address to is invalid */
 export const validateAddressType = (type: string): AddressType => {
@@ -47,7 +47,7 @@ export interface ReqAddressI {
     zipcode: string
     country: string
     type: AddressType
-    index: string
+    index?: string
 }
 
 export const ReqAddressSchema = z.object({

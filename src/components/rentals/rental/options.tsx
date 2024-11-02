@@ -10,7 +10,7 @@ const Options = () => {
                 Options
             </h3>
             <div
-                className="flex overflow-scroll w-full gap-3 p-3"
+                className="flex overflow-x-scroll md:w-full gap-3 p-3"
             >
                 <div
                     className="bg-gray-300 w-72 h-44 rounded-md p-2 flex flex-col gap-3 shrink-0"

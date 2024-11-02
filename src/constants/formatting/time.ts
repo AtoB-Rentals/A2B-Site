@@ -51,6 +51,8 @@ export const inThirty = [
     "11:30 PM"
 ]
 
+export const timeFormFormat = "yyyy-MM-dd t"
+
 export const toMilitaryTime = (time: string) => {
     let [hours, modifier] = time.split(' ')
     let [hour, minutes] = hours.split(':').map(Number)

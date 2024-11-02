@@ -19,15 +19,8 @@ const PubCarList = () => {
         isValid: boolean
     } => {
         const timeFormat = "yyyy-MM-dd t"
-        const start_time = DateTime.fromFormat(
-            `${q.get("start_date")} ${q.get("start_time")}`,
-            timeFormat
-        )
-
-        const end_time = DateTime.fromFormat(
-            `${q.get("end_date")} ${q.get("end_time")}`,
-            timeFormat
-        )
+        const start_time = DateTime.fromISO(q.get("start_time") || "")
+        const end_time = DateTime.fromISO(q.get("end_time") || "")
 
         return {
             start_time,
