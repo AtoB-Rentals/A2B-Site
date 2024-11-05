@@ -1,15 +1,12 @@
 'use client'
-import { getCars } from '@/constants/requests/cars';
-import { QueryParams } from '@/constants/requests/constants';
 import { CarI, carTypeList, CarTypeT } from '@/interface/api/car';
 import { useEffect, useRef, useState } from 'react'
-import AutoComplete from 'react-google-autocomplete'
 import { inThirty, timeFormFormat, toAmPm } from '../../constants/formatting/time';
 import { useSearchParams } from 'next/navigation';
 import { z } from 'zod';
 import { DateTime } from 'luxon';
 import useBasicFormHook from '@/hooks/useForm';
-import { gAddress, GeocodeResultI, parseGeocodeResult } from '@/constants/location/googleRequest';
+import { gAddress, parseGeocodeResult } from '@/constants/location/googleRequest';
 import usePlaceautoComplete from '@/hooks/usePlaceAutocomplete';
 import { AddressType, addressTypes } from '@/interface/api/address';
 
@@ -49,13 +46,16 @@ const Filter = ({
     }
 }) => {
 
+    const [brokeInitInput, setBrokeInitInput] = useState<boolean>(false)
+
     const {
         input,
         setInput,
         handleGoogleSel,
         selAddress,
         setSelAddress,
-        predictions
+        predictions,
+        setPredictions,
     } = usePlaceautoComplete({})
 
     const q = useSearchParams()
@@ -98,6 +98,9 @@ const Filter = ({
         } else {
             d.address = resAddress.results[0].formatted_address
             const pGeoRes = parseGeocodeResult(resAddress.results[0])
+
+            console.log("pGeoRes", pGeoRes)
+
             if (pGeoRes !== null) {
                 Object.keys(pGeoRes).forEach(key => {
                     //@ts-ignore
@@ -108,6 +111,10 @@ const Filter = ({
                         value = value.toString()
                     }
 
+                    if (key === 'type') {
+                        key = 'addressType'
+                    }
+
                     params.set(key, value)
                 })
 
@@ -115,7 +122,7 @@ const Filter = ({
             }
         }
 
-        //** Schedule Section **/
+        //** Schedule Section */
         const dateFmt = "yyyy-MM-dd"
         /**Start time */
         const qStartTime = q.get("start_time")
@@ -151,7 +158,10 @@ const Filter = ({
             end_time: eTime.setZone(tz).toFormat("t")
         }))
 
-        setInput(d.address)
+        await setInput(d.address)
+        
+
+        console.log("params address type", params.get("addressType"))
 
         window.history.replaceState({}, '', `?${params.toString()}`)
     }
@@ -196,6 +206,9 @@ const Filter = ({
 
     useEffect(() => {
         init()
+
+        
+        setPredictions([])
     }, [])
 
     useEffect(() => {
@@ -204,6 +217,8 @@ const Filter = ({
             addressType: selAddress?.type,
             address: input,
         }))
+
+        setBrokeInitInput(false)
     }, [selAddress])
 
     return (
@@ -222,11 +237,12 @@ const Filter = ({
                     onFocus={e => e.target.select()}
                     onChange={e => {
                         e.preventDefault()
+                        setBrokeInitInput(true)
                         //@ts-ignore
                         setInput(e.target.value)
                     }}
                 />
-                <ul className={`absolute translate-y-1 rounded-md w-full bg-white border-2 border-black z-30 ${predictions.length ? 'visble' : 'invisible'}`}>
+                <ul className={`absolute translate-y-1 rounded-md w-full bg-white border-2 border-black z-30 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'}`}>
                     {predictions.map(p => (
                         <li
                             key={p.place_id}

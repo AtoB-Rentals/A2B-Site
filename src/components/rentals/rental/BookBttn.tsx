@@ -47,8 +47,9 @@ const BookBttn = ({
     const handleBookBttn = async () => {
         if (!Cookies.get("token")) {
             const params = new URLSearchParams(q.toString())
-            params.set("create_new_user", "y")
-            window.history.replaceState({}, '', `?${params.toString()}`)
+            // params.set("create_new_user", "y")
+            // window.history.replaceState({}, '', `?${params.toString()}`)
+            router.push(`/rental/${carId}/get_user?${params.toString()}`)
             return
         }
 
@@ -60,7 +61,6 @@ const BookBttn = ({
             return
         }
 
-        const timeFormat = "yyyy-MM-dd t"
         const start_time = DateTime.fromISO(q.get("start_time") || "")
 
         const end_time = DateTime.fromISO(q.get("end_time") || "")
@@ -100,7 +100,10 @@ const BookBttn = ({
         const res = await createBooking(reqBooking)
         if (res.isErr) {
             alert("Something went wrong with requesting new booking")
+            return
         }
+
+        router.push(`/checkout/${res.data.id}`)
     }
 
     return (

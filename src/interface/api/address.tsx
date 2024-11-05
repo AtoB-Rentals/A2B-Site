@@ -28,10 +28,13 @@ export type GeoT =
 export type AddressType = 
     | "Airport"
     | "Default"
+    /**Area mean that is a city are location. This will be parsed as Default when sent to api */
+    | "Area"
 
 export const addressTypes: AddressType[] = [
     "Airport",
-    "Default"
+    "Default",
+    "Area"
 ] as const 
 
 /**Returns default if the address to is invalid */

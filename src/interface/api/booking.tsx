@@ -63,7 +63,7 @@ export interface BookingI {
     policyNumber: string
     startTime: TimeI
     endTime: TimeI
-
+    totalPrice: number
     vehicle: CarI
 
     dropOffAddress: AddressI

@@ -1,7 +1,7 @@
 // "use server"
 import { ApiRes, apiURL, err, objectToQueryString, QueryParams, throwError, unknownErr } from "./constants";
 import { AddCarI, CarI, CarStatusT, PictureTypeT, TransmissionT } from '../../interface/api/car';
-import { ReqAddressI } from "@/interface/api/address";
+import { AddressI, ReqAddressI } from "@/interface/api/address";
 import { RecordI } from "@/interface/api/time";
 
 export const getCars = async (params?: QueryParams): Promise<ApiRes<CarI[]> | err> => {
@@ -26,6 +26,30 @@ export const getCars = async (params?: QueryParams): Promise<ApiRes<CarI[]> | er
         }
 
         return await response.json() as ApiRes<CarI[]>
+    } catch (e) {
+        return unknownErr()
+    }
+}
+
+export const getCarAddress = async (carId: string): Promise<ApiRes<AddressI> | err> => {
+    try {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/address`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+
+        return await response.json() as ApiRes<AddressI>
     } catch (e) {
         return unknownErr()
     }

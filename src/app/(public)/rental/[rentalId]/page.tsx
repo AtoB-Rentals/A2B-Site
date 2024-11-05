@@ -1,10 +1,7 @@
 import { getCar } from "@/constants/requests/cars"
-import { redirect } from "next/navigation"
-import Vehicle from '../../../../components/bookings/bookingProfile/Vehicle'
 import Link from "next/link";
 import RentalInfo from "@/components/rentals/rental/RentalInfo"
 import { Metadata } from "next"
-import Head from "next/head";
 
 interface RentalPageI {
     rentalId: string

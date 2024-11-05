@@ -35,7 +35,9 @@ const CheckoutPage = async ({
 
     return (
         <div>
-            <h1>
+            <h1
+                className="text-center font-bold text-2xl"
+            >
                 Checkout
             </h1>
             <StripeCheckout 

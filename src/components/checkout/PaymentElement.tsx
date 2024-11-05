@@ -66,13 +66,13 @@ const PE = ({ clientSecret }:{clientSecret: string}) => {
     return (
         <form 
             onSubmit={handleSubmit}
-            className='flex flex-col mx-2'
+            className='flex flex-col mx-2 border-blue-500 border-2 rounded-md p-4 max-w-3xl md:mx-auto'
         >
             <PaymentElement />
             <button 
                 type="submit" 
                 disabled={!stripe || !elements}
-                className='p-4 text-center rounded-md w-full bg-blue-500 mt-4 text-white mr-3'
+                className='p-4 text-center rounded-md w-full bg-blue-500 mt-4 text-white'
             >
                 Pay
             </button>

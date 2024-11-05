@@ -16,6 +16,7 @@ interface UsePlaceautoCompleteResI {
     selAddress: GeocodeResultI | undefined,
     setSelAddress: Dispatch<SetStateAction<GeocodeResultI | undefined>>
     predictions: PlaceAutocompleteResult[]
+    setPredictions: Dispatch<SetStateAction<PlaceAutocompleteResult[]>>
 }
 
 const usePlaceautoComplete = ({
@@ -27,6 +28,7 @@ const usePlaceautoComplete = ({
     selAddress: GeocodeResultI | undefined,
     predictions: PlaceAutocompleteResult[],
     setSelAddress: Dispatch<SetStateAction<GeocodeResultI | undefined>>
+    setPredictions: Dispatch<SetStateAction<PlaceAutocompleteResult[]>>
 } => {
     const [input, setInput] = useState<string>("")
     const [trigger, setTrigger] = useState<boolean>(false)
@@ -55,6 +57,7 @@ const usePlaceautoComplete = ({
                 const opts = await autoComplete(input, /*searchTypeMap[currentSearchType] */);
 
                 setPredictions([...opts]);
+                console.log("preditcion", predictions)
             }
         })();
     }, [trigger])
@@ -82,6 +85,13 @@ const usePlaceautoComplete = ({
             setInput(geoCodeAddress.address)
         }
 
+        const areaTypes = ["locality", "political"]
+
+        //@ts-ignore
+        if (prediction.types.filter(p => areaTypes.includes(p))) {
+            geoCodeAddress.type = "Area"
+        }
+
         /**@ts-ignore */
         if (prediction.types.includes("airport")) {
             geoCodeAddress.type = "Airport"
@@ -98,7 +108,8 @@ const usePlaceautoComplete = ({
         handleGoogleSel,
         selAddress,
         predictions,
-        setSelAddress
+        setSelAddress,
+        setPredictions,
     })
 }
 

@@ -21,7 +21,7 @@ const RentalInfo = async ({car}: RentalInfoI) => {
         ipD = await getIPData(ip)
     }
     
-    const timezone = ipD?.timezone||""
+    const timezone = ipD?.timezone || ""
     
     return (
         <>
@@ -61,7 +61,7 @@ const RentalInfo = async ({car}: RentalInfoI) => {
                     />
                 </div>
                 <div className="col-start-1 col-span-1">
-                    <CarAddressSect />
+                    <CarAddressSect carId={car.id}/>
                 </div>
                 <div className="col-start-2 col-span-2 row-start-3 self-start w-full">
                     <Options />

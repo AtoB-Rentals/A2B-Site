@@ -116,7 +116,6 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
     if (!result && !result?.address_components.length) {
         return null
     }
-    console.log("Geocode Result:", result)
 
     let placeId = result.place_id as string
     let city = ""
@@ -125,6 +124,7 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
     let zipcode = ""
     let route = ""
     let streetNumber = ""
+    let type: AddressType = "Default"
 
     result.address_components.forEach((component: any) => {
         if (component.types.includes("locality")) {
@@ -151,6 +151,11 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
         lat: result.geometry.location.lat,
         lng: result.geometry.location.lng,
     };
+
+    const areaTypes = ["locality", "political"]
+    if (result?.types.filter((a: string) => areaTypes.includes(a))) {
+        type = "Area"
+    }
 
     const latitude = result.geometry.location.lat
     const longitude = result.geometry.location.lng
@@ -181,6 +186,7 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
         longitude,
         bounds,
         zipcode,
-        address: result.formatted_address || `${streetNumber} ${route}, ${city}, ${region}, ${country}`
+        address: result.formatted_address || `${streetNumber} ${route}, ${city}, ${region}, ${country}`,
+        type
     };
 };

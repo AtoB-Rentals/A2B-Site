@@ -36,8 +36,17 @@ export const ReqUserSchema = z.object({
     }, "Invalid phone number provided"),
     email: z.string().refine(value => {
         return isEmail(value)
-    }, "Invalid email provided")
+    }, "Invalid email provided"),
+    password: z.string().min(8, "Must be at least 8 characters")
 })
+
+export const reqUserInitialValues = {
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+    password: ''
+}
 
 export interface UserI {
     firstName: string
