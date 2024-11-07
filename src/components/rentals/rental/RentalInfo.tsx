@@ -64,7 +64,7 @@ const RentalInfo = async ({car}: RentalInfoI) => {
                     <CarAddressSect carId={car.id}/>
                 </div>
                 <div className="col-start-2 col-span-2 row-start-3 self-start w-full">
-                    <Options />
+                    <Options carId={car.id}/>
                 </div>
                 <div className="col-start-2 col-span-2 row-start-4 self-start">
                     <h3 className="font-bold text-xl">

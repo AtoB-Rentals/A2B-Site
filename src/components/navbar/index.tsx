@@ -31,35 +31,45 @@ const Navbar = () => {
 
 
                     <ul className="absolute top-0 z-40 h-[100%] bg-white w-48 lg:h-auto lg:w-full left-[-100%] peer-checked:left-0 lg:translate-x-0 pt-20 lg:pt-0 lg:mt-0 lg:static lg:flex justify-center no-underline list-none gap-4 transition-all ease border-r-2 lg:border-r-0 border-black">
-                        <li>
+                        <li
+                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                        >
                             <Link
                                 href='/rentals'
                             >
                                 Rentals
                             </Link>
                         </li>
-                        <li>
+                        <li
+                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                        >
                             <Link
                                 href='/book'
                             >
                                 Book
                             </Link>
                         </li>
-                        <li>
+                        <li
+                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                        >
                             <Link
                                 href='/coming-soon'
                             >
                                 Become A Partner
                             </Link>
                         </li>
-                        <li>
+                        <li
+                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                        >
                             <Link
                                 href='/coming-soon'
                             >
                                 Terms Of Conditions
                             </Link>
                         </li>
-                        <li>
+                        <li
+                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                        >
                             <Link
                                 href='/coming-soon'
                             >

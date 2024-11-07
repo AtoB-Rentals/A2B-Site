@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import ManCarCard from "./card"
 import Link from "next/link"
-import AddCarModal from '../../modals/cars/addCarModal';
+import AddCarModal from "@/components/modals/cars/AddCarModal"
 
 const ListCars = () => {
     const [cars, setCars] = useState<CarI[]>([])

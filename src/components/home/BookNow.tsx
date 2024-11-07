@@ -94,6 +94,7 @@ const BookNow = () => {
                             e.preventDefault()
                             setInput(e.target.value)
                         }}
+                        placeholder="Where do you need the car?"
                         value={input}
                     />
                     <ul 

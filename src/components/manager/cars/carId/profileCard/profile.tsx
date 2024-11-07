@@ -1,6 +1,6 @@
 'use client'
 
-import { addDeliveryAddress, delCarPics, RemDeliveryAddress, setProfilePic, upateCarStatus, UpatePassengers, upateTransmission, updateCarAddress, updateCarPrice } from "@/constants/requests/cars"
+import { addDeliveryAddress, delCarPics, NewAddon, RemAddon, RemDeliveryAddress, setProfilePic, upateCarStatus, UpatePassengers, upateTransmission, updateCarAddress, updateCarPrice } from "@/constants/requests/cars"
 import { CarI, carStatusList, CarStatusT, transmissions, TransmissionT } from "@/interface/api/car"
 import Image from "next/image"
 import Link from "next/link"
@@ -11,6 +11,9 @@ import { useRouter } from "next/navigation"
 import SetAddressModal from "@/components/modals/setAddress"
 import { ReqAddressI } from "@/interface/api/address"
 import DeliverAddressCard from "./DelAddressCard"
+import NewAddonModal from "@/components/modals/cars/NewAddonModal"
+import { ReqInvoiceItemI } from "@/interface/api/invoice"
+import AddonCard from "./AddonCard"
 
 interface ManCarProfileI {
     car: CarI
@@ -25,6 +28,7 @@ const CarProfile = ({
     const [ selImages, setSelImages ] = useState<string[]>([])
     const [ carInfo, setCarInfo ] = useState<CarI>(car)
     const [ exDelAddys, setExDelAddys ] = useState<boolean>(false)
+    const [ exAddOns, setExAddOns ] = useState<boolean>(false)
     const router = useRouter()
 
     const handleSetProPic = async (): Promise<boolean> => {
@@ -102,6 +106,36 @@ const CarProfile = ({
 
     const handleDeleteDelAddress = async (placeId: string) => {
         const res = await RemDeliveryAddress(car.id, placeId)
+
+        if (res.isErr) {
+            if (res.status === 400) {
+                alert(res.message)
+            }
+        }
+
+        setCarInfo(res.data)
+
+        return true
+    }
+
+    const handleNewAddon = async (req: ReqInvoiceItemI): Promise<boolean> => {
+        const res = await NewAddon(car.id, req)
+
+        if (res.isErr) {
+            if (res.status === 400) {
+                alert(res.message)
+            }
+
+            return false
+        }
+
+        setCarInfo(res.data)
+
+        return true
+    }
+
+    const handleRemoveAddon = async (name: string) => {
+        const res = await RemAddon(car.id, name)
 
         if (res.isErr) {
             if (res.status === 400) {
@@ -239,6 +273,39 @@ const CarProfile = ({
                         </Link>
                     </DetailCard>
                 </div>
+                {/* ADD-ONS SECTION */}
+                <div className="text-lg px-3">
+                    <div className="flex justify-between items-center mb-3">
+                        <div className="flex gap-3 items-center">
+                            <h3 className="font-bold text-xl">Add ons</h3>
+                            <div className="font-bold">
+                                {carInfo.addOns ? carInfo.addOns.length : 0}
+                            </div>
+                            <button
+                                className={`p-2 rounded-md w-24 text-white font-bold ${exAddOns ? "bg-red-600" : "bg-blue-600"}`}
+                                onClick={() => setExAddOns(!exAddOns)}
+                            >
+                                {exAddOns ? "Minimize" : "Expand"}
+                            </button>
+                        </div>
+                        <button
+                            className={`p-2 rounded-md text-white font-bold bg-blue-600`}
+                            onClick={() => router.push(`/manager/cars/${car.id}?new_addon=y`)}
+                        >
+                            Add Add-on
+                        </button>
+                    </div>
+                    <div className={`flex flex-col gap-3 overflow-auto transition-all ease-linear cursor-pointer ${exAddOns ? "h-60" : "h-0"}`}>
+                        {carInfo.addOns && carInfo.addOns.map(a => (
+                            <>
+                                <AddonCard 
+                                    addOn={a}
+                                    remove={handleRemoveAddon}
+                                />
+                            </>
+                        ))}
+                    </div>
+                </div>
                 {/* DELIVERY ADDRESSES SECTION */}
                 <div className="text-lg px-3">
                     <div className="flex justify-between items-center mb-3">
@@ -337,6 +404,9 @@ const CarProfile = ({
                 callback={(req) => handleAddDelAddress(req)}
                 searchTypes={['Address', 'Airport']}
                 paramKey="set_delivery_address"
+            />
+            <NewAddonModal 
+                callback={(req) => handleNewAddon(req)}
             />
         </>
     )

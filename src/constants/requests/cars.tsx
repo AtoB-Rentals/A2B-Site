@@ -3,6 +3,7 @@ import { ApiRes, apiURL, err, objectToQueryString, QueryParams, throwError, unkn
 import { AddCarI, CarI, CarStatusT, PictureTypeT, TransmissionT } from '../../interface/api/car';
 import { AddressI, ReqAddressI } from "@/interface/api/address";
 import { RecordI } from "@/interface/api/time";
+import { ReqInvoiceItemI } from '../../interface/api/invoice';
 
 export const getCars = async (params?: QueryParams): Promise<ApiRes<CarI[]> | err> => {
 
@@ -368,7 +369,7 @@ export const RemDeliveryAddress = async (carId: string, placeId: string): Promis
 
 export const updateCarPrice = async (carId: string, price: number): Promise<ApiRes<CarI> | err> => {
     try {
-        const response = await fetch(`${apiURL}/api/manager/cars/car/${carId}/price`, {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/price`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -386,6 +387,81 @@ export const updateCarPrice = async (carId: string, price: number): Promise<ApiR
         }
 
         return await response.json() as ApiRes<CarI>
+    } catch (e) {
+        return unknownErr()
+    }
+}
+
+export const NewAddon = async (carId: string, req: ReqInvoiceItemI): Promise<ApiRes<CarI> | err> => {
+    try {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/add_ons`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(req)
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+
+        return await response.json() as ApiRes<CarI>
+    } catch (e) {
+        return unknownErr()
+    }
+}
+
+export const RemAddon = async (carId: string, name: string): Promise<ApiRes<CarI> | err> => {
+    try {
+        const parsedName = encodeURIComponent(name)
+
+        const response = await fetch(`${apiURL}/api/cars/${carId}/add_ons/${parsedName}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+
+        return await response.json() as ApiRes<CarI>
+    } catch (e) {
+        return unknownErr()
+    }
+}
+
+export const getAddons = async (carId: string): Promise<ApiRes<CarI['addOns']> | err> => {
+    try {
+        const response = await fetch(`${apiURL}/api/cars/${carId}/add_ons`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+
+        return await response.json() as ApiRes<CarI['addOns']>
     } catch (e) {
         return unknownErr()
     }

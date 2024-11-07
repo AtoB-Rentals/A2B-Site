@@ -37,6 +37,7 @@ const StripeCheckout = ({
                 alert("invalid booking id")
                 return
             }
+            
             setBooking(res.data)
         } finally {
             setLoading(false)
@@ -51,6 +52,7 @@ const StripeCheckout = ({
             if (res.isErr) {
                 if (res.message === "vehicle is already paid for") {
                     setSuccess(true)
+                    await getBooking()
                     setStripeData(res.data)
                 } else {
                     alert("Something went wrong")
@@ -58,20 +60,17 @@ const StripeCheckout = ({
 
                 return
             }
-    
-            setStripeData(res.data)
+            
+            await setStripeData(res.data)
+            await getBooking()
         } finally {
             setLoading(false)
         }
     }
 
     useEffect(() => {
-        getBooking()
-    }, [])
-
-    useEffect(() => {
         getPaymentIntent()
-    }, [booking])
+    }, [])
 
     if (loading) {
         return (
@@ -96,7 +95,7 @@ const StripeCheckout = ({
                 <div
                     className="flex flex-col gap-2 mx-2 border-2 border-blue-500 rounded-md p-2 mb-4 max-w-3xl md:mx-auto"
                 >
-                    {booking.stripe?.items.length && booking.stripe?.items.map(item => (
+                    {booking.stripe?.items?.length && booking.stripe?.items?.map(item => (
                         <div
                             key={item.id}
                             className="flex justify-between w-full items-center"

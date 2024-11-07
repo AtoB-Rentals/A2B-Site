@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { AddressI } from "./address"
+import { InvoiceItemI } from "./invoice"
 
 export type PictureTypeT = "Driver Side" |
     "Front" |
@@ -86,6 +87,7 @@ export interface CarI {
     price: number
     transmission: TransmissionT
     passengers: number
+    addOns: InvoiceItemI[]
 
     address: AddressI
     deliveryAddresses: AddressI[]
