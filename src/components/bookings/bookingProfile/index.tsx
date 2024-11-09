@@ -1,10 +1,10 @@
 'use client'
 import { BookingI, BookingStatusT } from "@/interface/api/booking"
 import { useState } from "react"
-import Schedule from "./Schedule"
+import Schedule from "./schedule"
 import Location from "./Location"
 import Vehicle from "./Vehicle"
-import Renter from "./Renter"
+import Renter from "./renter"
 
 
 const BookingProfile = ({
