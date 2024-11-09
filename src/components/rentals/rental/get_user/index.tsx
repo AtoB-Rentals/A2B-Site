@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import RentalNewUser from './NewUser'
 import { DateTime } from 'luxon'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -36,6 +36,16 @@ const GetUserMain = ({timezone, carId}:{
             return
         }
 
+        const carAddons: ReqBookingI['carAddons'] = []
+        Array.from(q.entries()).forEach(([key, val]) => {
+            if (key.startsWith("xAd.")) {
+                carAddons.push({
+                    name: key.slice(4),
+                    quantity: parseInt(val)
+                });
+            }
+        })
+
         const reqBooking: ReqBookingI = {
             firstName: user.firstName,
             lastName: user.lastName,
@@ -60,7 +70,8 @@ const GetUserMain = ({timezone, carId}:{
             endTime: {
                 local: end_time.toISO()!,
                 iana: timezone
-            }
+            },
+            carAddons
         }
 
         const res = await createBooking(reqBooking)
@@ -73,35 +84,37 @@ const GetUserMain = ({timezone, carId}:{
     }
 
     return (
-        <main
-            className="mx-2 md:mx-auto rounded-2xl max-w-4xl border-black border-2 p-2 md:p-4 relative"
-        >
-            <div
-                className={`flex justify-evenly rounded-md border-black border-2 text-center text-lg font-bold md:mx-auto md:max-w-2xl`}
+        <Suspense>
+            <main
+                className="mx-2 md:mx-auto rounded-2xl max-w-4xl border-black border-2 p-2 md:p-4 relative"
             >
-                <button
-                    className={`border-r-2 p-2 border-black w-full ${isNewUser && activeChoice1}`}
-                    onClick={() => setIsNewUser(true)}
+                <div
+                    className={`flex justify-evenly rounded-md border-black border-2 text-center text-lg font-bold md:mx-auto md:max-w-2xl`}
                 >
-                    New User
-                </button>
-                <button
-                    className={`w-full ${!isNewUser && activeChoice1}`}
-                    onClick={() => setIsNewUser(false)}
-                >
-                    Login
-                </button>
-            </div>
-            {isNewUser && <RentalNewUser 
-                    toggle={() => setIsNewUser(false)}
-                    handleBooking={() => handleBooking()}
-                />
-            }
-            {!isNewUser && <RentalLoginUser 
-                    handleBooking={() => handleBooking()}
-                />
-            }
-        </main>
+                    <button
+                        className={`border-r-2 p-2 border-black w-full ${isNewUser && activeChoice1}`}
+                        onClick={() => setIsNewUser(true)}
+                    >
+                        New User
+                    </button>
+                    <button
+                        className={`w-full ${!isNewUser && activeChoice1}`}
+                        onClick={() => setIsNewUser(false)}
+                    >
+                        Login
+                    </button>
+                </div>
+                {isNewUser && <RentalNewUser 
+                        toggle={() => setIsNewUser(false)}
+                        handleBooking={() => handleBooking()}
+                    />
+                }
+                {!isNewUser && <RentalLoginUser 
+                        handleBooking={() => handleBooking()}
+                    />
+                }
+            </main>
+        </Suspense>
     )
 }
 

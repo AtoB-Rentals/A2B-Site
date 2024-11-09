@@ -1,6 +1,6 @@
 'use client'
 import { CarI, carTypeList, CarTypeT } from '@/interface/api/car';
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { inThirty, timeFormFormat, toAmPm } from '../../constants/formatting/time';
 import { useSearchParams } from 'next/navigation';
 import { z } from 'zod';
@@ -222,97 +222,99 @@ const Filter = ({
     }, [selAddress])
 
     return (
-        <div
-            id="filter"
-            className="w-full flex flex-col gap-3 p-3 rounded-md text-lg shadow-gray-200 shadow-[0px_0px_10px_10px]"
-        >
+        <Suspense>
             <div
-                className='relative'
+                id="filter"
+                className="w-full flex flex-col gap-3 p-3 rounded-md text-lg shadow-gray-200 shadow-[0px_0px_10px_10px]"
             >
-                <input
-                    type="text"
-                    className="border rounded-md border-gray-600 p-1 w-full"
-                    defaultValue={values.address}
-                    value={input}
-                    onFocus={e => e.target.select()}
-                    onChange={e => {
-                        e.preventDefault()
-                        setBrokeInitInput(true)
-                        //@ts-ignore
-                        setInput(e.target.value)
-                    }}
-                />
-                <ul className={`absolute translate-y-1 rounded-md w-full bg-white border-2 border-black z-30 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'}`}>
-                    {predictions.map(p => (
-                        <li
-                            key={p.place_id}
-                            className='hover:bg-gray-200 p-1 cursor-pointer'
-                            onClick={() => handleGoogleSel(p)}
-                        >
-                            {`${p.structured_formatting.main_text} - ${p.structured_formatting.secondary_text}`}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div
-                className="flex justify-between gap-2"
-            >   
-                <div className='flex flex-col gap-3 w-full'>
-                    <input 
-                        type="date" 
-                        name="start_date" 
-                        id="start_date"
-                        className="w-full p-1 rounded-md border border-gray-600"
-                        onChange={updateValues}
-                        value={values.start_date}
-                    />
-                    <select 
-                        name="startTime" 
-                        id="startTime"
-                        className="w-full p-1 rounded-md border border-gray-600"
-                        value={values.start_time}
-                        onChange={e => setValues(prev => ({...prev, start_time: e.target.value}))}
-                    >
-                        {inThirty.map(t => (
-                            <option key={t}>
-                                {t}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className='flex flex-col gap-3 w-full'>
-                    <input 
-                        type="date" 
-                        name="end_date" 
-                        id="end_date" 
-                        className="w-full p-1 rounded-md border border-gray-600"
-                        onChange={updateValues}
-                        value={values.end_date}
-                    />
-                    <select 
-                        name="end_time" 
-                        id="end_time"
-                        className="w-full p-1 rounded-md border border-gray-600"
-                        onChange={updateValues}
-                        value={values.end_time}
-                    >
-                        {inThirty.map(t => (
-                            <option key={t} onClick={() => setValues(prev => ({...prev, end_time: t}))}>
-                                {t}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-            <div>
-                <button
-                    className='text-white font-bold text-lg bg-blue-700 w-full p-2 rounded-full'
-                    onClick={() => applyFilter()}
+                <div
+                    className='relative'
                 >
-                    Apply Filter
-                </button>
+                    <input
+                        type="text"
+                        className="border rounded-md border-gray-600 p-1 w-full"
+                        defaultValue={values.address}
+                        value={input}
+                        onFocus={e => e.target.select()}
+                        onChange={e => {
+                            e.preventDefault()
+                            setBrokeInitInput(true)
+                            //@ts-ignore
+                            setInput(e.target.value)
+                        }}
+                    />
+                    <ul className={`absolute translate-y-1 rounded-md w-full bg-white border-2 border-black z-30 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'}`}>
+                        {predictions.map(p => (
+                            <li
+                                key={p.place_id}
+                                className='hover:bg-gray-200 p-1 cursor-pointer'
+                                onClick={() => handleGoogleSel(p)}
+                            >
+                                {`${p.structured_formatting.main_text} - ${p.structured_formatting.secondary_text}`}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div
+                    className="flex justify-between gap-2"
+                >   
+                    <div className='flex flex-col gap-3 w-full'>
+                        <input 
+                            type="date" 
+                            name="start_date" 
+                            id="start_date"
+                            className="w-full p-1 rounded-md border border-gray-600"
+                            onChange={updateValues}
+                            value={values.start_date}
+                        />
+                        <select 
+                            name="startTime" 
+                            id="startTime"
+                            className="w-full p-1 rounded-md border border-gray-600"
+                            value={values.start_time}
+                            onChange={e => setValues(prev => ({...prev, start_time: e.target.value}))}
+                        >
+                            {inThirty.map(t => (
+                                <option key={t}>
+                                    {t}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className='flex flex-col gap-3 w-full'>
+                        <input 
+                            type="date" 
+                            name="end_date" 
+                            id="end_date" 
+                            className="w-full p-1 rounded-md border border-gray-600"
+                            onChange={updateValues}
+                            value={values.end_date}
+                        />
+                        <select 
+                            name="end_time" 
+                            id="end_time"
+                            className="w-full p-1 rounded-md border border-gray-600"
+                            onChange={updateValues}
+                            value={values.end_time}
+                        >
+                            {inThirty.map(t => (
+                                <option key={t} onClick={() => setValues(prev => ({...prev, end_time: t}))}>
+                                    {t}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <button
+                        className='text-white font-bold text-lg bg-blue-700 w-full p-2 rounded-full'
+                        onClick={() => applyFilter()}
+                    >
+                        Apply Filter
+                    </button>
+                </div>
             </div>
-        </div>
+        </Suspense>
     )
 }
 

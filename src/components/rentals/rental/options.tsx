@@ -5,51 +5,53 @@ import { getAddons } from "@/constants/requests/cars"
 import { CarI } from "@/interface/api/car"
 import { InvoiceItemI } from "@/interface/api/invoice"
 import { useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 
 const Options = ({
-    carId
+    addOns
 }: {
-    carId: string
+    addOns: CarI['addOns']
 }) => {
-    const [ addons, setAddons ] = useState<CarI['addOns']>([])
+    // const [ addons, setAddons ] = useState<CarI['addOns']>([])
     const [ err, setErr ] = useState<string>("")
 
     const q = useSearchParams()
 
-    const handleGetAddons = async () => {
-        const res = await getAddons(carId)
+    // const handleGetAddons = async () => {
+    //     const res = await getAddons(carId)
 
-        if (res.isErr) {
-            setErr("Something went wrong")
-            return
-        }
+    //     if (res.isErr) {
+    //         setErr("Something went wrong")
+    //         return
+    //     }
 
-        setAddons(res.data)
-    }
+    //     setAddons(res.data)
+    // }
 
-    useEffect(() => {
-        handleGetAddons()
-    //@ts-ignore
-    }, [])
+    // useEffect(() => {
+    //     handleGetAddons()
+    // //@ts-ignore
+    // }, [])
+
+    addOns = addOns || []
 
     return (
         <>
             <h3
                 className="font-bold text-2xl"
             >
-                Options
+                Add-ons:
             </h3>
             {err !== "" && <p
                     className="text-red-500 font-bold text-lg"
                 >
-                    {err}
+                    {addOns ? null : "this can has not add-ons"}
                 </p>
             }
             <div
                 className="flex overflow-x-scroll md:w-full gap-3 p-3"
             >
-                {addons.map(a => (
+                {addOns.map(a => (
                     <AddOn key={a.name} a={a} />
                 ))}
             </div>
@@ -68,7 +70,7 @@ const AddOn = ({
     const q = useSearchParams()
 
     useEffect(() => {
-        const qAddon = q.get(a.name)
+        const qAddon = q.get("xAd." +a.name)
         if(qAddon) {
             if (parseInt(qAddon) > 0) {
                 setApplied(true)
@@ -80,7 +82,7 @@ const AddOn = ({
     useEffect(() => {
         const params = new URLSearchParams(q.toString())
         if(applied) {
-            params.set(a.name, quantity)
+            params.set("xAd." + a.name, quantity)
             window.history.replaceState({}, '', `?${params.toString()}`)
         } else {
             params.delete(a.name)
@@ -96,68 +98,70 @@ const AddOn = ({
     }, [quantity])
 
     return (
-        <div
-            className="bg-gray-300 w-72 h-44 rounded-md p-2 flex flex-col gap-3 shrink-0"
-            key={a.name}
-        >
-            <p className="font-bold text-lg">
-                {a.name}
-            </p>
-            <p
-                className="font-bold text-lg italic"
+        <Suspense>
+            <div
+                className="bg-gray-300 w-72 h-44 rounded-md p-2 flex flex-col gap-3 shrink-0"
+                key={a.name}
             >
-                {a.description}
-            </p>
-            <p className="text-lg">
-                ${numToDallor(a.amount)}
-            </p>
-            {!applied && <button 
-                className="w-full rounded-md bg-blue-600 text-white text-lg p-2 hover:scale-105"
-                onClick={() => setApplied(true)}
-            >
-                Apply
-            </button>}
-            {applied && a.type === 'Singular' && <button 
-                className="w-full rounded-md border-2 border-blue-600 text-blue-600 text-lg p-2"
-                onClick={() => setApplied(false)}
-            >
-                Applied
-            </button>}
-            {applied && a.type === 'Quantitative' && <div 
-                className="w-full flex justify-between"
-            >
-                <button
-                    className="size-7 rounded-md border-2 border-blue-600 flex justify-center items-center text-center text-2xl"
-                    onClick={() => {
-                        const int = parseInt(quantity) - 1
-                        setQuantity(int.toString())
-                    }}
+                <p className="font-bold text-lg">
+                    {a.name}
+                </p>
+                <p
+                    className="font-bold text-lg italic"
                 >
-                    -
-                </button>
-                <input 
-                    type="number" 
-                    name="quantity" 
-                    id="quantity"
-                    value={quantity}
-                    onChange={e => {
-                        e.preventDefault()
+                    {a.description}
+                </p>
+                <p className="text-lg">
+                    ${numToDallor(a.amount)}
+                </p>
+                {!applied && <button 
+                    className="w-full rounded-md bg-blue-600 text-white text-lg p-2 hover:scale-105"
+                    onClick={() => setApplied(true)}
+                >
+                    Apply
+                </button>}
+                {applied && a.type === 'Singular' && <button 
+                    className="w-full rounded-md border-2 border-blue-600 text-blue-600 text-lg p-2"
+                    onClick={() => setApplied(false)}
+                >
+                    Applied
+                </button>}
+                {applied && a.type === 'Quantitative' && <div 
+                    className="w-full flex justify-between"
+                >
+                    <button
+                        className="size-10 rounded-md border-2 border-blue-600 flex justify-center items-center text-center text-2xl"
+                        onClick={() => {
+                            const int = parseInt(quantity) - 1
+                            setQuantity(int.toString())
+                        }}
+                    >
+                        -
+                    </button>
+                    <input 
+                        type="number" 
+                        name="quantity" 
+                        id="quantity"
+                        value={quantity}
+                        onChange={e => {
+                            e.preventDefault()
 
-                        setQuantity(e.target.value)
-                    }}
-                    className="text-center w-7 rounded-md border-2 border-blue-600"
-                />
-                <button
-                    className="size-7 rounded-md bg-blue-600 text-white flex justify-center items-center text-center text-2x"
-                    onClick={() => {
-                        const int = parseInt(quantity) + 1
-                        setQuantity(int.toString())
-                    }}
-                >
-                    +
-                </button>
-            </div>}
-        </div>
+                            setQuantity(e.target.value)
+                        }}
+                        className="text-center w-10 rounded-md border-2 border-blue-600"
+                    />
+                    <button
+                        className="size-10 rounded-md bg-blue-600 text-white flex justify-center items-center text-center text-2x"
+                        onClick={() => {
+                            const int = parseInt(quantity) + 1
+                            setQuantity(int.toString())
+                        }}
+                    >
+                        +
+                    </button>
+                </div>}
+            </div>
+        </Suspense>
     )
 }
 

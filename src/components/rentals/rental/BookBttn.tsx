@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { UserI } from '../../../interface/api/user';
 import { GetUserProfile } from "@/constants/requests/users";
 import Cookies from "js-cookie";
@@ -70,6 +70,16 @@ const BookBttn = ({
             return
         }
 
+        const carAddons: ReqBookingI['carAddons'] = []
+        Array.from(q.entries()).forEach(([key, val]) => {
+        if (key.startsWith("xAd.")) {
+            carAddons.push({
+                name: key.slice(4),
+                quantity: parseInt(val)
+            });
+        }
+    })
+
         const reqBooking: ReqBookingI = {
             firstName: user.firstName,
             lastName: user.lastName,
@@ -94,7 +104,8 @@ const BookBttn = ({
             endTime: {
                 local: end_time.toISO()!,
                 iana: timezone
-            }
+            },
+            carAddons,
         }
 
         const res = await createBooking(reqBooking)
@@ -107,19 +118,14 @@ const BookBttn = ({
     }
 
     return (
-        <>
+        <Suspense>
             <button
                 className="bg-blue-600 font-bold text-white text-xl p-3 rounded-md w-full"
                 onClick={() => handleBookBttn()}
             >
                 Book
             </button>
-            <CreateUserModal 
-                title="New User"
-                callback={handleBookBttn}
-                paramKey="create_new_user"
-            />
-        </>
+        </Suspense>
     )
 }
 

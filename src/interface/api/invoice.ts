@@ -5,8 +5,8 @@ export type InvoiceItemTypeT =
     | "Quantitative"
 
 export const InvoiceItemList: InvoiceItemTypeT[] = [
-    "Quantitative",
-    "Singular"
+    "Singular",
+    "Quantitative"
 ] as const
 
 export const ReqInvoiceItemSchema = z.object({

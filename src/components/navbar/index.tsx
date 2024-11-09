@@ -44,15 +44,6 @@ const Navbar = () => {
                             className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
                         >
                             <Link
-                                href='/book'
-                            >
-                                Book
-                            </Link>
-                        </li>
-                        <li
-                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
-                        >
-                            <Link
                                 href='/coming-soon'
                             >
                                 Become A Partner

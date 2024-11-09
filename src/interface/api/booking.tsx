@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { string, z } from "zod"
 import { AddressI, ReqAddressI } from "./address"
 import { CarI } from "./car"
 import { TimeI } from "./time"
@@ -35,6 +35,11 @@ export interface ReqBookingI {
     }
     dropoffAddress?: ReqAddressI
     pickupAddress: ReqAddressI
+
+    carAddons?: {
+        name: string
+        quantity: number
+    }[]
 }
 
 export interface StripeBookingI {
@@ -58,6 +63,11 @@ export interface BookingI {
     endTime: TimeI
     totalPrice: number
     vehicle: CarI
+
+    carAddons: {
+        name: string
+        quantity: number
+    }[]
 
     dropOffAddress: AddressI
     pickupAddress: AddressI

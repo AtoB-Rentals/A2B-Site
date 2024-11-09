@@ -1,6 +1,6 @@
 'use client'
 import { CarI } from '@/interface/api/car'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import CarCard from './CarCard'
 import { useSearchParams } from 'next/navigation'
 import { getCars } from '@/constants/requests/cars'
@@ -76,7 +76,7 @@ const PubCarList = () => {
     }
 
     return (
-        <>
+        <Suspense>
             {cars.map(c => (
                 <CarCard
                     key={c.id}
@@ -87,7 +87,7 @@ const PubCarList = () => {
             {!cars.length && !loading && <p className="text-2xl font-bold text-center">
                 Available cars not found
             </p>}
-        </>
+        </Suspense>
     )
 }
 

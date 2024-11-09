@@ -192,7 +192,7 @@ const BookNow = () => {
                 </div>
                 <input
                     type="submit"
-                    className="p-4 bg-orange-500 text-white w-full lg:w-auto lg:min-w-fit"
+                    className="p-4 bg-orange-500 text-white hover:text-orange-500 w-full lg:w-auto lg:min-w-fit cursor-pointer hover:bg-white border-2 border-orange-500 transition-all ease rounded-md"
                     value="Rent Now"
                 />
             </form>

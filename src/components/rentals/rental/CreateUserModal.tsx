@@ -28,7 +28,8 @@ const CreateUserModal = ({
             firstName: "",
             lastName: "",
             email: "",
-            phoneNumber: ""
+            phoneNumber: "",
+            password: ""
         },
         undefined,
         "user_creation_form"

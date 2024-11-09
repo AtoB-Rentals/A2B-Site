@@ -1,7 +1,7 @@
 "use client"
 import { AddressType, validateAddressType } from "@/interface/api/address"
 import { useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { GeocodeResultI } from '../../../constants/location/googleRequest';
 import { getCarAddress } from "@/constants/requests/cars";
 
@@ -116,18 +116,20 @@ const CarAddressSect = ({carId}: {carId: string}) => {
     }, [address])
 
     return (
-        <div className="flex flex-col gap-3">
-            <div 
-                className="bg-gray-200 rounded-md px-1 py-2"
-            >
-                <p className="font-bold text-lg">
-                    Address {address?.type !== "Default" && `(${address?.type})`}
-                </p>
-                <p className="text-lg">
-                    {address?.address}
-                </p>
+        <Suspense>
+            <div className="flex flex-col gap-3">
+                <div 
+                    className="bg-gray-200 rounded-md px-1 py-2"
+                >
+                    <p className="font-bold text-lg">
+                        Address {address?.type !== "Default" && `(${address?.type})`}
+                    </p>
+                    <p className="text-lg">
+                        {address?.address}
+                    </p>
+                </div>
             </div>
-        </div>
+        </Suspense>
     )
 }
 

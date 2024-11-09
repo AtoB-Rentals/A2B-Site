@@ -5,7 +5,7 @@ import { getCarSchedule } from "@/constants/requests/cars"
 import { RecordI } from "@/interface/api/time"
 import { DateTime } from "luxon"
 import { useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { DayPicker, DateRange } from 'react-day-picker'
 import "react-day-picker/style.css"
 
@@ -77,58 +77,60 @@ const RentalSchedule = ({carId}: RentalScheduleI) => {
     })) : []
 
     return (
-        <div className="flex flex-col-reverse">
-            <DayPicker 
-                mode="range" 
-                disabled={[
-                    { before: new Date() },
-                    ...ranges
-                ]}
-                defaultMonth={dates.from}
-                selected={dates}
-                onSelect={e => {
-                    if (e) setDates(e)
-                }}
-            />
-            <div className="flex justify-around w-full">
-                <div className="flex flex-col">
-                    <label 
-                        htmlFor="start_time"
-                        className="font-bold"
-                    >
-                        Pickup Time
-                    </label>
-                    <select 
-                        name="startTime" 
-                        id="startTime"
-                        value={times.start}
-                        onChange={e => setTimes(p => ({...p, start: e.target.value}))}
-                    >
-                        {inThirty.map(t => <option key={t}>
-                            {t}
-                        </option>)}
-                    </select>
-                </div>
-                <div className="flex flex-col">
-                    <label 
-                        htmlFor="end_time"
-                        className="font-bold"
-                    >
-                        Drop-off Time
-                    </label>
-                    <select 
-                        name="endTime" 
-                        id="endTime"
-                        value={times.end}
-                        onChange={e => setTimes(p => ({...p, end: e.target.value}))}
-                    >
-                        {inThirty.map(t => <option key={t}>
-                            {t}
-                        </option>)}
-                    </select>
+        <Suspense>
+            <div className="flex flex-col-reverse">
+                <DayPicker 
+                    mode="range" 
+                    disabled={[
+                        { before: new Date() },
+                        ...ranges
+                    ]}
+                    defaultMonth={dates.from}
+                    selected={dates}
+                    onSelect={e => {
+                        if (e) setDates(e)
+                    }}
+                />
+                <div className="flex justify-around w-full">
+                    <div className="flex flex-col">
+                        <label 
+                            htmlFor="start_time"
+                            className="font-bold"
+                        >
+                            Pickup Time
+                        </label>
+                        <select 
+                            name="startTime" 
+                            id="startTime"
+                            value={times.start}
+                            onChange={e => setTimes(p => ({...p, start: e.target.value}))}
+                        >
+                            {inThirty.map(t => <option key={t}>
+                                {t}
+                            </option>)}
+                        </select>
+                    </div>
+                    <div className="flex flex-col">
+                        <label 
+                            htmlFor="end_time"
+                            className="font-bold"
+                        >
+                            Drop-off Time
+                        </label>
+                        <select 
+                            name="endTime" 
+                            id="endTime"
+                            value={times.end}
+                            onChange={e => setTimes(p => ({...p, end: e.target.value}))}
+                        >
+                            {inThirty.map(t => <option key={t}>
+                                {t}
+                            </option>)}
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Suspense>
     )
 }
 
