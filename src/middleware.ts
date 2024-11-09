@@ -2,11 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(req: NextRequest) {
-    const token = req.cookies.get('tokenX');
-    const url = req.nextUrl;
-
     // Get the IP address
-    let ip = process.env.NEXT_PUBLIC_TEST_IP! || ""
+    let ip = req.ip
 
     if (req.headers.get('x-forwarded-for') && req.headers.get('x-forwarded-for') !== "::1") {
         ip = req.headers.get('x-forwarded-for') || ip
@@ -17,7 +14,9 @@ export async function middleware(req: NextRequest) {
     const response = NextResponse.next()
 
     // Prepare the response
-    response.headers.set('X-Client-IP', ip); // Set the IP in the response headers
+    if (ip) {
+        response.headers.set('X-Client-IP', ip); // Set the IP in the response headers
+    }
 
     // Check the path and handle redirects based on authentication token
     // if (url.pathname.startsWith('/manager') && url.pathname !== '/manager/login' && !token) {
