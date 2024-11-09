@@ -1,12 +1,9 @@
 'use client'
-import Image from "next/image"
 import { DateTime } from 'luxon'
-import { redirect, useRouter, useSearchParams } from 'next/navigation';
-import AutoComplete from 'react-google-autocomplete';
+import { useRouter } from 'next/navigation';
 import { FilterShema } from "../public_cars/filter";
 import useBasicFormHook from "@/hooks/useForm";
 import { useEffect, useState } from "react";
-import { GeocodeResultI, parseGeocodeResult } from "@/constants/location/googleRequest";
 import { inThirty, timeFormFormat } from "@/constants/formatting/time";
 import usePlaceautoComplete from "@/hooks/usePlaceAutocomplete";
 
