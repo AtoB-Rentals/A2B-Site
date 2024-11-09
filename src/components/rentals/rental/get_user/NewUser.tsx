@@ -7,6 +7,19 @@ import { useState } from "react"
 import Cookies from 'js-cookie'
 import { jwtDecode } from "jwt-decode"
 import { DecodedTokenI } from "@/interface/api"
+import parsePhoneNumberFromString from "libphonenumber-js"
+
+function formatPhoneNumber(phone: string): string {
+    try {
+        const phoneNumber = parsePhoneNumberFromString(phone, 'US'); // Specify a default country if needed
+        if (phoneNumber && phoneNumber.isValid()) {
+          return phoneNumber.format('E.164'); // This formats to +19999999999
+        }
+        throw new Error('Invalid phone number');
+    } catch {
+        return ""
+    }
+}
 
 
 const RentalNewUser = ({
@@ -57,6 +70,8 @@ const RentalNewUser = ({
             await setLoading(true)
 
             console.log("values: ", values)
+
+            values.phoneNumber = formatPhoneNumber(values.phoneNumber)
 
             const res = await CreateUser(values)
             if (res.message === "User already exists") {
