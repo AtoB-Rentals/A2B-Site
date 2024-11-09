@@ -1,3 +1,4 @@
+"use client"
 import Input2 from "@/components/assets/formInput2"
 import FormModal from "@/components/modals/formModal"
 import { addCar } from "@/constants/requests/cars";
