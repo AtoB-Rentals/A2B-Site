@@ -70,7 +70,7 @@ const RentalInfo = async ({car}: RentalInfoI) => {
                 <div className="col-start-2 col-span-2 row-start-3 self-start w-full">
                     <Options addOns={car.addOns}/>
                 </div>
-                <div className="col-start-2 col-span-2 row-start-4 self-start">
+                <div className="col-start-2 col-span-2 row-start-4 self-start w-full">
                     <RentalInfoGallery car={ car }/>
                 </div>
                 <div className="col-start-1 col-span-1 w-full block md:hidden">
