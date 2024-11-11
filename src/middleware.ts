@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(req: NextRequest) {
     // Get the IP address
-    let ip = req.ip
+    let ip = process.env.NEXT_PUBLIC_TEST_IP! || req.ip
 
     if (req.headers.get('x-forwarded-for') && req.headers.get('x-forwarded-for') !== "::1") {
         ip = req.headers.get('x-forwarded-for') || ip

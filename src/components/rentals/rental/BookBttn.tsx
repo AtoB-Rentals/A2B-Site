@@ -23,9 +23,9 @@ const BookBttn = ({
     const [ user, setUser ] = useState<UserI>()
 
     const getUser = async () => {
-        if (!Cookies.get("token")) {
-            return
-        }
+        // if (!Cookies.get("token")) {
+        //     return
+        // }
         
         const res = await GetUserProfile()
         if (res.isErr) {
@@ -33,6 +33,7 @@ const BookBttn = ({
                 Cookies.remove("token")
                 Cookies.remove("tokenX")
             }
+            return
         }
 
         await setUser(res.data)

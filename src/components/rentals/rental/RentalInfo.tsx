@@ -7,6 +7,7 @@ import Options from "./options";
 import BookBttn from "./BookBttn";
 import { headers } from "next/headers";
 import { getIPData, IPDataI } from "@/constants/ip";
+import RentalInfoGallery from "./Gallery";
 
 interface RentalInfoI {
     car: CarI
@@ -62,31 +63,17 @@ const RentalInfo = async ({car}: RentalInfoI) => {
                 </div>
                 <div className="col-start-1 col-span-1">
                     <CarAddressSect carId={car.id}/>
+                    <div className="hidden md:block mt-3">
+                        <BookBttn carId={car.id} timezone={timezone}/>
+                    </div>
                 </div>
                 <div className="col-start-2 col-span-2 row-start-3 self-start w-full">
                     <Options addOns={car.addOns}/>
                 </div>
                 <div className="col-start-2 col-span-2 row-start-4 self-start">
-                    <h3 className="font-bold text-xl">
-                        Gallery
-                    </h3>
-                    <div className="flex gap-3 overflow-x-auto h-4 hover:h-60 md:h-auto transition-all">
-                        {car.pictures.map(p => (
-                            <div 
-                                key={p.publicId}
-                                className="relative size-52 rounded-md"
-                            >
-                                <Image 
-                                    src={p.url} 
-                                    alt={p.type}
-                                    layout="fill"
-                                    className="object-cover rounded-lg"
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    <RentalInfoGallery car={ car }/>
                 </div>
-                <div className="col-start-1 col-span-1 w-full">
+                <div className="col-start-1 col-span-1 w-full block md:hidden">
                     <BookBttn carId={car.id} timezone={timezone}/>
                 </div>
             </div>

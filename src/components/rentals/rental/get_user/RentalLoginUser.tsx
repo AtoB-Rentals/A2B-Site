@@ -76,7 +76,7 @@ const RentalLoginUser = ({
     return (
         <form 
             onSubmit={e => handleLogin(e)}
-            className=" mx-auto mt-2 flex flex-col gap-6 px-10"
+            className="mx-auto mt-2 flex flex-col gap-6 px-10"
         >
             <div
                 className="flex flex-col col-start-1 col-span-2"
