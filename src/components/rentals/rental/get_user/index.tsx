@@ -24,69 +24,68 @@ const GetUserMain = ({timezone, carId}:{
     const handleBooking = async () => {
         try {
             setLoading(true)
-            console.log("triggered")
-            // const resUser = await GetUserProfile()
-            // if (resUser.isErr) {
-            //     alert("Unable to find user. Please try again later")
-            //     return
-            // }
+            const resUser = await GetUserProfile()
+            if (resUser.isErr) {
+                alert("Unable to find user. Please try again later")
+                return
+            }
     
-            // const user = resUser.data
-            // const start_time = DateTime.fromISO(q.get("start_time") || "")
-            // const end_time = DateTime.fromISO(q.get("end_time") || "")
+            const user = resUser.data
+            const start_time = DateTime.fromISO(q.get("start_time") || "")
+            const end_time = DateTime.fromISO(q.get("end_time") || "")
     
-            // if (!start_time.isValid || !end_time.isValid) {
-            //     alert("something went wrong with the time")
-            //     return
-            // }
+            if (!start_time.isValid || !end_time.isValid) {
+                alert("something went wrong with the time")
+                return
+            }
     
-            // const carAddons: ReqBookingI['carAddons'] = []
-            // Array.from(q.entries()).forEach(([key, val]) => {
-            //     if (key.startsWith("xAd.")) {
-            //         carAddons.push({
-            //             name: key.slice(4),
-            //             quantity: parseInt(val)
-            //         });
-            //     }
-            // })
+            const carAddons: ReqBookingI['carAddons'] = []
+            Array.from(q.entries()).forEach(([key, val]) => {
+                if (key.startsWith("xAd.")) {
+                    carAddons.push({
+                        name: key.slice(4),
+                        quantity: parseInt(val)
+                    });
+                }
+            })
     
-            // const reqBooking: ReqBookingI = {
-            //     firstName: user.firstName,
-            //     lastName: user.lastName,
-            //     email: user.email,
-            //     phoneNumber: user.phoneNumber,
+            const reqBooking: ReqBookingI = {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
     
-            //     vehicleId: carId,
-            //     pickupAddress: {
-            //         street1: q.get("address") || "",
-            //         street2: "",
-            //         city: q.get("city") || "",
-            //         state: q.get("region") || "",
-            //         country: q.get("country") || "",
-            //         zipcode: q.get("zipcode") || "",
-            //         type: validateAddressType(q.get("addressType") as AddressType),
-            //     },
-            //     sameAsPickup: true,
-            //     startTime: {
-            //         local: start_time.toISO(),
-            //         iana: timezone
-            //     },
-            //     endTime: {
-            //         local: end_time.toISO()!,
-            //         iana: timezone
-            //     },
-            //     carAddons
-            // }
+                vehicleId: carId,
+                pickupAddress: {
+                    street1: q.get("address") || "",
+                    street2: "",
+                    city: q.get("city") || "",
+                    state: q.get("region") || "",
+                    country: q.get("country") || "",
+                    zipcode: q.get("zipcode") || "",
+                    type: validateAddressType(q.get("addressType") as AddressType),
+                },
+                sameAsPickup: true,
+                startTime: {
+                    local: start_time.toISO(),
+                    iana: timezone
+                },
+                endTime: {
+                    local: end_time.toISO()!,
+                    iana: timezone
+                },
+                carAddons
+            }
     
-            // const res = await createBooking(reqBooking)
-            // if (res.isErr) {
-            //     alert("Something went wrong with requesting new booking")
-            //     return
-            // }
+            const res = await createBooking(reqBooking)
+            if (res.isErr) {
+                alert("Something went wrong with requesting new booking")
+                return
+            }
     
-            // router.push(`/checkout/${res.data.id}`)
+            router.push(`/checkout/${res.data.id}`)
         } finally {
-            // setLoading(false)
+            setLoading(false)
         }
     }
     
