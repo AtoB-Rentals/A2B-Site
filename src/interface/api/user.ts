@@ -1,5 +1,6 @@
 import z from 'zod'
 import { isMobilePhone, isEmail } from 'validator'
+import { DateTime } from 'luxon'
 
 // type ReqUser struct {
 // 	FirstName string`bson:"first_name" json:"firstName" form:"firstName" validate:"required"`
@@ -26,6 +27,8 @@ export interface ReqUserI {
     lastName: string
     phoneNumber: string
     email: string
+    /**2006-01-02 */
+    dob: string
 }
 
 export const ReqUserSchema = z.object({
@@ -37,7 +40,25 @@ export const ReqUserSchema = z.object({
     email: z.string().refine(value => {
         return isEmail(value)
     }, "Invalid email provided"),
-    password: z.string().min(8, "Must be at least 8 characters")
+    password: z.string().min(8, "Must be at least 8 characters"),
+    dob: z.string().refine(value => {
+        console.log("dob: ", value)
+        const date = DateTime.fromFormat(value, "yyyy-MM-dd")
+        // if (!date.isValid) return
+        console.log("date.isValid: ", date.isValid)
+        // Get the current date
+        const now = DateTime.now();
+
+        // Calculate age by subtracting the years
+        let age = now.year - date.year;
+
+        // Adjust if the birthday hasn't occurred yet this year
+        if (now < date.plus({ years: age })) {
+            age--;
+        }
+        return age >= 18
+
+    }, "You must be at least 18 years old")
 })
 
 export const reqUserInitialValues = {
@@ -45,7 +66,8 @@ export const reqUserInitialValues = {
     lastName: '',
     phoneNumber: '',
     email: '',
-    password: ''
+    password: '',
+    dob: ''
 }
 
 export interface UserI {
@@ -54,4 +76,6 @@ export interface UserI {
     phoneNumber: string
     email: string
     timezone: string
+    /**2006-01-02 */
+    dob: string
 }

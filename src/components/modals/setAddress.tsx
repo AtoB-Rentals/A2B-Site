@@ -68,7 +68,6 @@ const SetAddressModal = ({
     } = usePlaceautoComplete({})
 
     useEffect(() => {
-        console.log("the address type: ", selAddress)
         setValues(prev => ({
             ...prev,
             state: selAddress?.region || "",

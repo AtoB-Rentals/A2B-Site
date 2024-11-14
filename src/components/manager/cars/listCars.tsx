@@ -16,7 +16,6 @@ const ListCars = () => {
     
     // const handleGetCars = () => {
     //     setLoading(true)
-    //     console.log('it got here')
     //     getCars()
     //         .then(res => {
     //             if(res.isErr) {

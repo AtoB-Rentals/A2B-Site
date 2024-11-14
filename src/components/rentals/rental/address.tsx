@@ -10,7 +10,6 @@ const CarAddressSect = ({carId}: {carId: string}) => {
     const q = useSearchParams()
 
     let addressType = validateAddressType(q.get("addressType") as AddressType)
-    console.log("the Address Type: ", q.get("addressType"))
 
     const handleGetCarAddress = async () => {
         try {

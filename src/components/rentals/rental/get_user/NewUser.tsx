@@ -33,45 +33,50 @@ const RentalNewUser = ({
     const [ password2Err, setPassword2Err ] = useState<string>("")
     
     const {
+        setValues,
         values,
         updateValues,
         errs,
         validateValues,
     } = useBasicFormHook(
         ReqUserSchema,
-        reqUserInitialValues,
+        {
+            ...reqUserInitialValues
+        },
         undefined,
         "auth_user"
     )
 
     const handleSubmit = async (e: any) => {
-        e.preventDefault()
-        let err = false
-
-        validateValues()
-        if (Object.keys(errs).length) {
-            err = true
-        }
-
-        if (values.password !== password2) {
-            setPassword2Err("Passwords do not match")
-            err = true
-        }
-
-        if (err) {
-            return
-        }
-
-        if (password2) {
-            setPassword2("")
-        }
-
         try {
+            e.preventDefault()
+            let err = false
+
+            const validateRes = validateValues()
+            if (!validateRes) {
+                err = true
+            }
+            if (Object.keys(errs).length) {
+                err = true
+            }
+
+            if (values.password !== password2) {
+                setPassword2Err("Passwords do not match")
+                err = true
+            } else {
+                setPassword2Err("")
+            }
+
+            if (password2) {
+                setPassword2("")
+            }
+        
+            if (err) return
             await setLoading(true)
 
-            console.log("values: ", values)
-
             values.phoneNumber = formatPhoneNumber(values.phoneNumber)
+
+            console.log("values: ", values)
 
             const res = await CreateUser(values)
             if (res.message === "User already exists") {
@@ -190,6 +195,43 @@ const RentalNewUser = ({
                     {errs.phoneNumber}
                 </p>
             </div>
+            {/* Date of birth */}
+            <div
+                className="flex flex-col col-start-1 col-span-1"
+            >
+                <label 
+                    htmlFor="password"
+                    className="font-bold text-lg"
+                >
+                    Date of birth
+                </label>
+                <p
+                    className="italic"
+                >
+                    As shown on driver's license
+                </p>
+                <input 
+                    type="date" 
+                    name="dob" 
+                    id="dob"
+                    value={values.dob}
+                    onChange={e => {
+                        e.preventDefault()
+
+                        setValues(prev => ({
+                            ...prev,
+                            dob: e.target.value.trim()
+                        }))
+                    }}
+                    className="border-black border rounded-md p-1"
+                />
+                <p
+                    className="font-bold text-red-500"
+                >
+                    {errs.dob}
+                </p>
+            </div>
+
             <div
                 className="flex flex-col col-start-1 col-span-1"
             >
@@ -235,7 +277,6 @@ const RentalNewUser = ({
                     {password2Err}
                 </p>
             </div>
-
             <button
                 className="p-2 font-bold text-2xl rounded-md bg-blue-600 border-black hover:border-2 w-full text-white col-satrt-1 col-span-2"
             >

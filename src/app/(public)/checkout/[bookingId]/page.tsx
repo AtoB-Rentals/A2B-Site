@@ -31,8 +31,6 @@ const CheckoutPage = async ({
         bookingId: string
     }
 }) => {
-    console.log("params", params.bookingId)
-
     return (
         <div>
             <h1

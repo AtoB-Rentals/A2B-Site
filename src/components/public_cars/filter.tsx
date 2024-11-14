@@ -45,7 +45,7 @@ const Filter = ({
         long: number
     }
 }) => {
-
+    const [ enableFilterBtn, setEnableFilterBtn ] = useState<boolean>(false)
     const [brokeInitInput, setBrokeInitInput] = useState<boolean>(false)
 
     const {
@@ -159,9 +159,6 @@ const Filter = ({
         }))
 
         await setInput(d.address)
-        
-
-        console.log("params address type", params.get("addressType"))
 
         window.history.replaceState({}, '', `?${params.toString()}`)
     }
@@ -202,12 +199,12 @@ const Filter = ({
         params.set("end_time", eTime.toUTC().toISO())
 
         window.history.replaceState({}, '', `?${params.toString()}`)
+        setEnableFilterBtn(false)
     }
 
     useEffect(() => {
         init()
 
-        
         setPredictions([])
     }, [])
 
@@ -220,6 +217,12 @@ const Filter = ({
 
         setBrokeInitInput(false)
     }, [selAddress])
+
+    useEffect(() => {
+        if (!enableFilterBtn && brokeInitInput) {
+            setEnableFilterBtn(true)
+        }
+    }, [values, selAddress, input])
 
     return (
         <Suspense>
@@ -307,8 +310,8 @@ const Filter = ({
                 </div>
                 <div>
                     <button
-                        className='text-white font-bold text-lg bg-blue-700 w-full p-2 rounded-full'
-                        onClick={() => applyFilter()}
+                        className={`text-white font-bold text-lg  w-full p-2 rounded-full ${enableFilterBtn ? "bg-blue-700 text-white" : "border-2 border-blue-700 text-blue-700"}`}
+                        onClick={() => enableFilterBtn && applyFilter()}
                     >
                         Apply Filter
                     </button>

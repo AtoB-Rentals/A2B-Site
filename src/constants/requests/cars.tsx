@@ -178,6 +178,7 @@ export const getCar = async (carId: string): Promise<ApiRes<CarI> | err> => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            // 'cache': 'no-store',
         })
 
         if (!response.ok) {
