@@ -61,7 +61,7 @@ const RentalSchedule = ({carId}: RentalScheduleI) => {
         const start_time = DateTime.fromFormat(`${start_date} ${times.start}`, timeFormat)
         
         const end_date = DateTime.fromJSDate(dates.to).toFormat("yyyy-MM-dd")
-        const end_time = DateTime.fromFormat(`${end_date} ${times.start}`, timeFormat)
+        const end_time = DateTime.fromFormat(`${end_date} ${times.end}`, timeFormat)
 
         const params = new URLSearchParams(`${q.toString()}`)
 
