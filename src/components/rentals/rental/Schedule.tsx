@@ -2,7 +2,7 @@
 
 import { inThirty } from "@/constants/formatting/time"
 import { getCarSchedule } from "@/constants/requests/cars"
-import { RecordI } from "@/interface/api/time"
+import { RecordI } from "@/interface/api/booking"
 import { DateTime } from "luxon"
 import { useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"

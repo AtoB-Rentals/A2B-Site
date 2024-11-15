@@ -6,8 +6,6 @@ export async function GET(req: NextRequest) {
     const input = searchParams.get('input');
     const type = searchParams.get('type') || null
 
-    console.log("it got to here")
-
     if (!input) {
         return NextResponse.json({ predictions: [] }, { status: 400 });
     }

@@ -10,13 +10,17 @@ export type BookingStatusT =
     | "In Progress"
     | "Cancelled"
     | "Complete"
+    | "Draft"
+    | "Blocked"
 
 export const BookingStatuses: BookingStatusT[] = [
     'Cancelled',
     'Complete',
     'In Progress',
-    'Scheduled'
-]
+    'Scheduled',
+    'Blocked',
+    'Draft',
+] as const
 
 export interface ReqBookingI {
     firstName: string
@@ -93,3 +97,9 @@ const ReqBookingSchema = z.object({
 // 	Local string `json:"local" validate:"required"`
 // 	IANA  string `json:"iana" validate:"required"`
 // }
+
+export interface RecordI {
+    startTime: TimeI
+    endTime: TimeI
+    status: BookingStatusT
+}

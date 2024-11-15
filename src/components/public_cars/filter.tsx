@@ -206,6 +206,8 @@ const Filter = ({
         init()
 
         setPredictions([])
+        setBrokeInitInput(false)
+        setEnableFilterBtn(false)
     }, [])
 
     useEffect(() => {
@@ -214,14 +216,14 @@ const Filter = ({
             addressType: selAddress?.type,
             address: input,
         }))
-
-        setBrokeInitInput(false)
     }, [selAddress])
 
     useEffect(() => {
-        if (!enableFilterBtn && brokeInitInput) {
+        if (!enableFilterBtn) {
             setEnableFilterBtn(true)
         }
+
+        // setBrokeInitInput(true)
     }, [values, selAddress, input])
 
     return (
@@ -310,8 +312,9 @@ const Filter = ({
                 </div>
                 <div>
                     <button
-                        className={`text-white font-bold text-lg  w-full p-2 rounded-full ${enableFilterBtn ? "bg-blue-700 text-white" : "border-2 border-blue-700 text-blue-700"}`}
+                        className={`text-white font-bold text-lg  w-full p-2 rounded-full ${enableFilterBtn ? "bg-blue-700" : "border-2 border-blue-700 !text-blue-700"} transition-all ease duration-300`}
                         onClick={() => enableFilterBtn && applyFilter()}
+                        disabled={!enableFilterBtn}
                     >
                         Apply Filter
                     </button>
