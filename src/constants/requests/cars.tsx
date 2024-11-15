@@ -2,8 +2,8 @@
 import { ApiRes, apiURL, err, objectToQueryString, QueryParams, throwError, unknownErr } from "./constants";
 import { AddCarI, CarI, CarStatusT, PictureTypeT, TransmissionT } from '../../interface/api/car';
 import { AddressI, ReqAddressI } from "@/interface/api/address";
-import { RecordI } from "@/interface/api/time";
 import { ReqInvoiceItemI } from '../../interface/api/invoice';
+import { RecordI } from "@/interface/api/booking";
 
 export const getCars = async (params?: QueryParams): Promise<ApiRes<CarI[]> | err> => {
 
