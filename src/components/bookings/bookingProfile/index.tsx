@@ -17,10 +17,12 @@ const BookingProfile = ({
     const [booking, setBooking] = useState<BookingI>(b)
 
     const statusColors: {[key in BookingStatusT]: string} = {
-        Scheduled: "gray",
+        Scheduled: "yellow",
         "In Progress": "blue",
-        Cancelled: "red",
+        Cancelled: "gray",
         Complete: "green",
+        Blocked: "red",
+        Draft: "black"
     }
 
     return (
