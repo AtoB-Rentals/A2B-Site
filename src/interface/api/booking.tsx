@@ -99,6 +99,7 @@ const ReqBookingSchema = z.object({
 // }
 
 export interface RecordI {
+    bookingId: string
     startTime: TimeI
     endTime: TimeI
     status: BookingStatusT
