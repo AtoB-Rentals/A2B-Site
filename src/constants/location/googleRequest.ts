@@ -157,7 +157,7 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
         type = "Area"
     }
 
-    if (result?.types.includes("premise")) {
+    if (result?.types.includes("premise") || result?.types.includes("subpremise")) {
         type = "Default"
     }
 
