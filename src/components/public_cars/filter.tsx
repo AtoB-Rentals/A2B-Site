@@ -98,7 +98,7 @@ const Filter = ({
         } else {
             d.address = resAddress.results[0].formatted_address
             const pGeoRes = parseGeocodeResult(resAddress.results[0])
-
+            console.log("resAddress.results[0]", resAddress.results[0])
             console.log("pGeoRes", pGeoRes)
 
             if (pGeoRes !== null) {

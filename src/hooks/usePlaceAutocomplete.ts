@@ -80,6 +80,8 @@ const usePlaceautoComplete = ({
             return
         }
 
+        console.log("prediction.type", prediction.types)
+
         //@ts-ignore
         if (!prediction.types.includes("establishment")) {
             setInput(geoCodeAddress.address)
@@ -90,6 +92,12 @@ const usePlaceautoComplete = ({
         //@ts-ignore
         if (prediction.types.filter(p => areaTypes.includes(p))) {
             geoCodeAddress.type = "Area"
+        }
+
+        //@ts-ignore
+        if (prediction.types.includes("premise")) {
+            console.log("it got here")
+            geoCodeAddress.type = "Default"
         }
 
         /**@ts-ignore */

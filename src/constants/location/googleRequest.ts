@@ -157,6 +157,10 @@ export const parseGeocodeResult = (result: any): GeocodeResultI | null => {
         type = "Area"
     }
 
+    if (result?.types.includes("premise")) {
+        type = "Default"
+    }
+
     const latitude = result.geometry.location.lat
     const longitude = result.geometry.location.lng
 

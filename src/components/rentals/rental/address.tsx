@@ -55,6 +55,8 @@ const CarAddressSect = ({carId}: {carId: string}) => {
 
     useEffect(() => {
         if (q.get("addressType") === "Area" || !q.get("placeId")) {
+            console.log("it got here")
+            console.log("q.get(addressType)", q.get("addressType"))
             handleGetCarAddress()
         }
 
