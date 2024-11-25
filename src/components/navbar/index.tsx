@@ -11,43 +11,56 @@ const Navbar = () => {
                     </a>
                 </header>
                 <div className="flex items-center justify-end">
-                    <input type="checkbox" name="hamburger" id="hamburger" className="peer" hidden={true}/>
+                    <input 
+                        type="checkbox" 
+                        name="hamburger" 
+                        id="hamburger" 
+                        className="peer" 
+                        hidden={true}
+                    />
                     <label htmlFor="hamburger" className="peer-checked:hamburger block relative z-20  cursor-pointer lg:hidden" accessKey="n">
                         <div aria-hidden="true" className="m-auto h-0.5 w-6 rounded bg-sky-900 transition duration-300"></div>
                         <div aria-hidden="true" className="m-auto mt-2 h-0.5 w-6 rounded bg-sky-900 transition duration-300"></div>
                     </label>
+                    <label 
+                        htmlFor="hamburger"
+                        className="peer-checked:fixed peer-checked:top-0 peer-checked:right-0 peer-checked:bottom-0 w-full z-30 lg:hidden"
+                    >
+                        
+                    </label>
 
 
-                    <ul className="absolute top-0 z-40 h-[100%] bg-white w-48 lg:h-auto lg:w-auto left-[-100%] peer-checked:left-0 lg:translate-x-0 pt-20 lg:pt-0 lg:mt-0 lg:static lg:flex justify-center flex-wrap no-underline list-none gap-4 transition-all ease border-r-2 lg:border-r-0 border-black">
-                        <li>
+                    <ul className="absolute top-0 z-40 h-[100%] bg-white w-48 lg:h-auto lg:w-full left-[-100%] peer-checked:left-0 lg:translate-x-0 pt-20 lg:pt-0 lg:mt-0 lg:static lg:flex justify-center no-underline list-none gap-4 transition-all ease border-r-2 lg:border-r-0 border-black">
+                        <li
+                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                        >
                             <Link
-                                href='/coming-soon'
+                                href='/rentals'
                             >
-                                Cars
+                                Rentals
                             </Link>
                         </li>
-                        <li>
-                            <Link
-                                href='/book'
-                            >
-                                Book
-                            </Link>
-                        </li>
-                        <li>
+                        <li
+                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                        >
                             <Link
                                 href='/coming-soon'
                             >
                                 Become A Partner
                             </Link>
                         </li>
-                        <li>
+                        <li
+                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                        >
                             <Link
                                 href='/coming-soon'
                             >
                                 Terms Of Conditions
                             </Link>
                         </li>
-                        <li>
+                        <li
+                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                        >
                             <Link
                                 href='/coming-soon'
                             >

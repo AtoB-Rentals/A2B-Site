@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import Navbar from "./../components/navbar"
 import { ThemeProvider } from "next-themes"
+import { useEffect } from "react"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -23,7 +24,6 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" enableSystem={false} enableColorScheme={false}>
-          <Navbar />
           {children}
         </ThemeProvider>
       </body>

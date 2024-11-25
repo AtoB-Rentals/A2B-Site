@@ -1,5 +1,3 @@
-
-
 interface ServerError {
     Status: 'error';
     code: 'SERVER_ERROR';
@@ -35,3 +33,21 @@ interface SuccessResponse {
 }
 
 export type ApiResponse = ServerError | FieldValidationError | BodyError | SuccessResponse
+
+export type roleT = 
+    | "manager"
+    | "host"
+    | "user"
+    | "admin"
+
+export const roles: roleT[] = [
+    "admin",
+    "host",
+    "manager",
+    "user"
+]
+
+export interface DecodedTokenI {
+    _id: string
+    role: roleT
+}
