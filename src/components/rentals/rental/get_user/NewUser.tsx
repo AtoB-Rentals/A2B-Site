@@ -76,8 +76,6 @@ const RentalNewUser = ({
 
             values.phoneNumber = formatPhoneNumber(values.phoneNumber)
 
-            console.log("values: ", values)
-
             const res = await CreateUser(values)
             if (res.message === "User already exists") {
                 alert(res.message)

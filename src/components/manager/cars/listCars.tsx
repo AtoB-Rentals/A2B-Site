@@ -38,7 +38,7 @@ const ListCars = () => {
             const res = await getCars()
             if(res.isErr) {
                 if (res.status === 401) {
-                    Cookies.remove("token")
+                    // Cookies.remove("token")
                     router.push('/manager/login')
                 }
                 console.log('the error happened', res.data)

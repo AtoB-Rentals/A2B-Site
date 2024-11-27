@@ -1,5 +1,8 @@
 // middleware.js
+import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
+
+const secret = process.env.NEXTAUTH_SECRET!
 
 export async function middleware(req: NextRequest) {
     // Get the IP address
@@ -18,6 +21,13 @@ export async function middleware(req: NextRequest) {
         response.headers.set('X-Client-IP', ip); // Set the IP in the response headers
     }
 
+    const token = await getToken({ req, secret })
+
+    if (token) {
+        req.cookies.set("token", token.token as string)
+        console.log("the tokens:", token)
+    }
+
     // Check the path and handle redirects based on authentication token
     // if (url.pathname.startsWith('/manager') && url.pathname !== '/manager/login' && !token) {
 
@@ -31,6 +41,16 @@ export async function middleware(req: NextRequest) {
     // }
 
     // Return the response with the IP header if no redirects happen
+
+    const url = req.nextUrl;
+    if (
+        url.pathname.startsWith('/manager') &&
+        url.pathname !== '/manager/login' &&
+        !token
+    ) {
+        return NextResponse.redirect(new URL('/manager/login', req.url));
+    }
+
     return response;
 }
 

@@ -67,6 +67,15 @@ const Navbar = () => {
                                 Contact Us
                             </Link>
                         </li>
+                        <li
+                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                        >
+                            <Link
+                                href='/login'
+                            >
+                                Login
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             </nav>
