@@ -1,6 +1,13 @@
 import Link  from "next/link"
+import { getServerSession } from "next-auth" 
+import { authOptions } from '../../app/api/auth/[...nextauth]/route';
+import { signOut } from "next-auth/react";
 
-const Navbar = () => {
+const Navbar = async () => {
+
+    const session = await getServerSession(authOptions)
+
+    signOut
 
     return (
         <div className="w-full py-8 px-14 text-neutral-900">
@@ -69,12 +76,18 @@ const Navbar = () => {
                         </li>
                         <li
                             className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
-                        >
-                            <Link
-                                href='/login'
-                            >
-                                Login
-                            </Link>
+                        >   
+                            {
+                                !session?.user?.email ?
+                                <Link
+                                    href='/login'
+                                >
+                                    {!!session?.user?.email ? "Logout" : "Login"}
+                                </Link> :
+                                <button type="submit" >
+
+                                </button>
+                            }
                         </li>
                     </ul>
                 </div>

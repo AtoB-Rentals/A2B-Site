@@ -47,14 +47,15 @@ export const authOptions: AuthOptions = {
 
                 const { data } = await res.json()
 
-                const decodedToken = jwtDecode<DecodedTokenI>(data.token)
+                // const decodedToken = jwtDecode<DecodedTokenI>(data.token)
 
                 console.log("data", data)
 
                 return {
-                    id: data.token as string,
+                    id: data.id as string,
                     email: data.email as string,
-                    name: data.name
+                    name: data.name as string,
+                    role: data.role
                 }
             }
         })
@@ -62,12 +63,12 @@ export const authOptions: AuthOptions = {
 
     callbacks: {
         async signIn({ account, email, credentials, user }) {
-            console.log("sign in", {
-                account,
-                email,
-                user,
-                credentials
-            })
+            // console.log("sign in", {
+            //     account,
+            //     email,
+            //     user,
+            //     credentials
+            // })
 
             if (account?.provider === 'google') {
                 //Put the google login here
@@ -85,19 +86,17 @@ export const authOptions: AuthOptions = {
         // */
         async jwt({ token, user, account, profile }) {
             console.log("jwt", {
-                token,
                 user,
                 account,
                 profile
             })
-            console.log("user 1", user)
 
             if (user) {
-                console.log("user in token", user)
-                const decodedToken = jwtDecode<DecodedTokenI>(user.id)
                 token.email = user.email
-                token.token = user.id
-                token.role = decodedToken.role
+                token.role = "manager"
+                token.token = user.token ?? ""
+                token.name = user.name
+                token.id = user.id
             }
 
             return token
@@ -107,28 +106,35 @@ export const authOptions: AuthOptions = {
         //  * Session Callback: Adds user data from the JWT token to the session.
         //  */
         async session({ session, user, token }) {
-            console.log("session", {
-                session,
-                user,
-                token
-            })
+            // console.log("session", {
+            //     session,
+            //     user,
+            //     token
+            // })
 
-            console.log("token in session", token)
+            if (token) {
+                session.user = {
+                    ...session.user,
+                    name: token.name ?? "",
+                    email: token.email ?? "",
+                    token: token.token ?? ""
+                }
+            }
 
             return session;
         },
     },
-    session: {
-        strategy: "jwt", // Use JWTs for session handling
-    },
+    // session: {
+    //     strategy: "database", // Use JWTs for session handling
+    // },
     debug: process.env.NODE_ENV === "development",
     cookies: {
         sessionToken: {
-            name: "token",
+            name: "next-auth-token",
             options: {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "strict",
+                httpOnly: false,
+                secure: process.env.NODE_ENV === "production" || true,
+                sameSite: "None",
                 path: "/",
             },
         },

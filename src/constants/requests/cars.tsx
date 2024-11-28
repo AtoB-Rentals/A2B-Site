@@ -1,4 +1,4 @@
-// "use server"
+"use client"
 import { ApiRes, apiURL, err, objectToQueryString, QueryParams, throwError, unknownErr } from "./constants";
 import { AddCarI, CarI, CarStatusT, PictureTypeT, TransmissionT } from '../../interface/api/car';
 import { AddressI, ReqAddressI } from "@/interface/api/address";
@@ -178,7 +178,7 @@ export const getCar = async (carId: string): Promise<ApiRes<CarI> | err> => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            // 'cache': 'no-store',
+            credentials: 'include',
         })
 
         if (!response.ok) {
