@@ -4,7 +4,7 @@ import { authOptions } from '../../app/api/auth/[...nextauth]/route';
 import ThemeToggle from "./ThemeToggle";
 import MobileMenu from "./MobileMenu";
 import Image from "next/image"
-import DesktopUser from "./desktopUser";
+import DesktopUser from "./DesktopUser";
 
 const Navbar = async () => {
     const session = await getServerSession(authOptions)
