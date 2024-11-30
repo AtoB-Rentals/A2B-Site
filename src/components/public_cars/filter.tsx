@@ -230,17 +230,18 @@ const Filter = ({
         <Suspense>
             <div
                 id="filter"
-                className="w-full flex flex-col gap-3 p-3 rounded-md text-lg shadow-gray-200 shadow-[0px_0px_10px_10px]"
+                className="w-full flex flex-col gap-3 p-3 rounded-md text-lg max-w-lg shadow-xl"
             >
                 <div
                     className='relative'
                 >
                     <input
                         type="text"
-                        className="border rounded-md border-gray-600 p-1 w-full"
+                        className="input border rounded-md border-gray-600 p-1 w-full"
                         defaultValue={values.address}
                         value={input}
                         onFocus={e => e.target.select()}
+                        tabIndex={0}
                         onChange={e => {
                             e.preventDefault()
                             setBrokeInitInput(true)
@@ -248,12 +249,13 @@ const Filter = ({
                             setInput(e.target.value)
                         }}
                     />
-                    <ul className={`absolute translate-y-1 rounded-md w-full bg-white border-2 border-black z-30 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'}`}>
-                        {predictions.map(p => (
+                    <ul className={`dropdown-content bg-base-100 menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 z-30 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'}`}>
+                        {predictions.map((p,i) => (
                             <li
                                 key={p.place_id}
-                                className='hover:bg-gray-200 p-1 cursor-pointer'
+                                className=' p-1 cursor-pointer'
                                 onClick={() => handleGoogleSel(p)}
+                                tabIndex={i}
                             >
                                 {`${p.structured_formatting.main_text} - ${p.structured_formatting.secondary_text}`}
                             </li>
@@ -268,14 +270,14 @@ const Filter = ({
                             type="date" 
                             name="start_date" 
                             id="start_date"
-                            className="w-full p-1 rounded-md border border-gray-600"
+                            className="input input-bordered w-full p-1 rounded-md border border-gray-600"
                             onChange={updateValues}
                             value={values.start_date}
                         />
                         <select 
                             name="startTime" 
                             id="startTime"
-                            className="w-full p-1 rounded-md border border-gray-600"
+                            className="select w-full p-1 rounded-md border border-gray-600"
                             value={values.start_time}
                             onChange={e => setValues(prev => ({...prev, start_time: e.target.value}))}
                         >
@@ -291,14 +293,14 @@ const Filter = ({
                             type="date" 
                             name="end_date" 
                             id="end_date" 
-                            className="w-full p-1 rounded-md border border-gray-600"
+                            className="input w-full p-1 rounded-md border border-gray-600"
                             onChange={updateValues}
                             value={values.end_date}
                         />
                         <select 
                             name="end_time" 
                             id="end_time"
-                            className="w-full p-1 rounded-md border border-gray-600"
+                            className="select w-full p-1 rounded-md border border-gray-600"
                             onChange={updateValues}
                             value={values.end_time}
                         >

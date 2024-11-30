@@ -104,6 +104,7 @@ const RentalSchedule = ({carId}: RentalScheduleI) => {
                             id="startTime"
                             value={times.start}
                             onChange={e => setTimes(p => ({...p, start: e.target.value}))}
+                            className="select"
                         >
                             {inThirty.map(t => <option key={t}>
                                 {t}
@@ -122,6 +123,7 @@ const RentalSchedule = ({carId}: RentalScheduleI) => {
                             id="endTime"
                             value={times.end}
                             onChange={e => setTimes(p => ({...p, end: e.target.value}))}
+                            className="select"
                         >
                             {inThirty.map(t => <option key={t}>
                                 {t}

@@ -123,7 +123,7 @@ const BookBttn = ({
     return (
         <Suspense>
             <button
-                className="bg-blue-600 font-bold text-white text-xl p-3 rounded-md w-full"
+                className="btn btn-primary text-white text-xl w-full"
                 onClick={() => handleBookBttn()}
             >
                 Book

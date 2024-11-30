@@ -120,7 +120,7 @@ const CarAddressSect = ({carId}: {carId: string}) => {
         <Suspense>
             <div className="flex flex-col gap-3">
                 <div 
-                    className="bg-gray-200 rounded-md px-1 py-2"
+                    className="bg-base-100 rounded-md px-1 py-2"
                 >
                     <p className="font-bold text-lg">
                         Address {address?.type !== "Default" && `(${address?.type})`}

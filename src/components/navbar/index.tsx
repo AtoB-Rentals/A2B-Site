@@ -1,98 +1,91 @@
 import Link  from "next/link"
 import { getServerSession } from "next-auth" 
 import { authOptions } from '../../app/api/auth/[...nextauth]/route';
-import { signOut } from "next-auth/react";
+import ThemeToggle from "./ThemeToggle";
+import MobileMenu from "./MobileMenu";
+import Image from "next/image"
+import DesktopUser from "./desktopUser";
 
 const Navbar = async () => {
-
     const session = await getServerSession(authOptions)
 
-    signOut
+    const DesktopNav = "hidden md:flex dark:text-primary hover:bg-secondary hover:text-black"
 
     return (
-        <div className="w-full py-8 px-14 text-neutral-900">
-            <nav className="flex w-full justify-between">
-                <header className="z-50">
-                    <a href="/">
-                        <h1>A2B Rentals</h1>
-                    </a>
-                </header>
-                <div className="flex items-center justify-end">
-                    <input 
-                        type="checkbox" 
-                        name="hamburger" 
-                        id="hamburger" 
-                        className="peer" 
-                        hidden={true}
-                    />
-                    <label htmlFor="hamburger" className="peer-checked:hamburger block relative z-20  cursor-pointer lg:hidden" accessKey="n">
-                        <div aria-hidden="true" className="m-auto h-0.5 w-6 rounded bg-sky-900 transition duration-300"></div>
-                        <div aria-hidden="true" className="m-auto mt-2 h-0.5 w-6 rounded bg-sky-900 transition duration-300"></div>
-                    </label>
-                    <label 
-                        htmlFor="hamburger"
-                        className="peer-checked:fixed peer-checked:top-0 peer-checked:right-0 peer-checked:bottom-0 w-full z-30 lg:hidden"
-                    >
-                        
-                    </label>
-
-
-                    <ul className="absolute top-0 z-40 h-[100%] bg-white w-48 lg:h-auto lg:w-full left-[-100%] peer-checked:left-0 lg:translate-x-0 pt-20 lg:pt-0 lg:mt-0 lg:static lg:flex justify-center no-underline list-none gap-4 transition-all ease border-r-2 lg:border-r-0 border-black">
-                        <li
-                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+        <nav className="navbar bg-base-100">
+            <Link href="/" className="flex-1 p-3">
+                <Image 
+                    src="/images/logo_with_name.png"
+                    alt="A2B Rentals"
+                    width={150}
+                    height={75}
+                />
+            </Link>
+            <div className="flex-none">
+                <ul className="menu menu-horizontal px-1">
+                    <li>
+                        <Link 
+                            href="/rentals"
+                            className={`btn btn-ghost btn-sm ${DesktopNav} `}
                         >
-                            <Link
-                                href='/rentals'
-                            >
-                                Rentals
-                            </Link>
-                        </li>
-                        <li
-                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                            Rentals
+                        </Link>
+                    </li>
+                    <li>
+                        <Link 
+                            href="/coming-soon"
+                            className={`btn btn-ghost btn-sm ${DesktopNav} `}
                         >
-                            <Link
-                                href='/coming-soon'
-                            >
-                                Become A Partner
-                            </Link>
-                        </li>
-                        <li
-                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                            Become A Partner
+                        </Link>
+                    </li>
+                    <li>
+                        <Link 
+                            href="/coming-soon"
+                            className={`btn btn-ghost btn-sm ${DesktopNav} `}
                         >
-                            <Link
-                                href='/coming-soon'
-                            >
-                                Terms Of Conditions
-                            </Link>
-                        </li>
-                        <li
-                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
+                            Contact Us
+                        </Link>
+                    </li>
+                    <li>
+                        <Link 
+                            href="/coming-soon"
+                            className={`btn btn-ghost btn-sm ${DesktopNav} `}
                         >
-                            <Link
-                                href='/coming-soon'
-                            >
-                                Contact Us
-                            </Link>
-                        </li>
-                        <li
-                            className="hover:bg-orange-500 hover:text-white px-2 py-1 rounded-full cursor-pointer transition-all ease-linear"
-                        >   
-                            {
-                                !session?.user?.email ?
-                                <Link
-                                    href='/login'
-                                >
-                                    {!!session?.user?.email ? "Logout" : "Login"}
-                                </Link> :
-                                <button type="submit" >
-
-                                </button>
-                            }
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
+                            Terms Of Condition
+                        </Link>
+                    </li>
+                    <li className="hidden md:flex">
+                        <DesktopUser />
+                    </li>
+                    <li className="md:hidden">
+                        <MobileMenu>
+                            <li>
+                                <Link href="/rentals">
+                                    Rentals
+                                </Link>
+                                <Link href="/coming-soon">
+                                    Become A Partner
+                                </Link>
+                                <Link href="/coming-soon">
+                                    Contact US
+                                </Link>
+                                <Link href="/coming-soon">
+                                    Terms and Conditions
+                                </Link>
+                                <Link href="/login">
+                                    Login
+                                </Link>
+                                <ThemeToggle />
+                            </li>
+                        </MobileMenu>
+                    </li>
+                    <li className={`hidden md:flex text-primary`}>
+                        <ThemeToggle />
+                    </li>
+                </ul>
+            </div>
+        </nav>
     )
 }
 

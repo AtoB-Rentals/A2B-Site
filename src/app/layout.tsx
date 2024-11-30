@@ -17,14 +17,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="light">
+    <html lang="en" data-theme="light">
       <head>
         <meta name="color-scheme" content="light only"></meta>
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} transition-colors ease-in-out duration-1000`}>
         <NextAuthProvider>
-          <ThemeProvider attribute="class" enableSystem={false} enableColorScheme={false}>
+          <ThemeProvider attribute="class" defaultTheme="light">
             {children}
+            <footer className="p-4 bg-neutral text-base-100 text-center">
+              © 2024 A2B Rentals
+            </footer>
           </ThemeProvider>
         </NextAuthProvider>
       </body>
