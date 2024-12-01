@@ -20,7 +20,7 @@ const CarCard = ({ c, qParams }: CarCardI) => {
             className="card md:card-side glass bg-base-100 shadow-xl w-full"
         >
             <figure>
-                <div className="relative h-36 md:h-full w-96 md:w-36">
+                <div className="relative h-36 md:h-full w-80 md:w-36">
                     <Image 
                         src={c.profilePicture.url ? c.profilePicture.url : "/images/sedan.png"} 
                         alt={c.name}

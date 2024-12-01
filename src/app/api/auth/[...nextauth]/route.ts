@@ -23,8 +23,6 @@ export const authOptions: AuthOptions = {
                     return null
                 }
 
-                console.log("credntials", credentials)
-
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API!}/api/users/login`, { // Replace '/api/login' with your actual login endpoint
                     method: 'POST',
                     headers: {
@@ -47,10 +45,6 @@ export const authOptions: AuthOptions = {
 
                 const { data } = await res.json()
 
-                // const decodedToken = jwtDecode<DecodedTokenI>(data.token)
-
-                console.log("data", data)
-
                 return {
                     id: data.id as string,
                     email: data.email as string,
@@ -63,12 +57,6 @@ export const authOptions: AuthOptions = {
 
     callbacks: {
         async signIn({ account, email, credentials, user }) {
-            // console.log("sign in", {
-            //     account,
-            //     email,
-            //     user,
-            //     credentials
-            // })
 
             if (account?.provider === 'google') {
                 //Put the google login here
@@ -85,15 +73,10 @@ export const authOptions: AuthOptions = {
         //  * JWT Callback: Adds additional user data to the JWT token.
         // */
         async jwt({ token, user, account, profile }) {
-            console.log("jwt", {
-                user,
-                account,
-                profile
-            })
 
             if (user) {
                 token.email = user.email
-                token.role = "manager"
+                token.role = user.role || "user"
                 token.token = user.token ?? ""
                 token.name = user.name
                 token.id = user.id
@@ -106,11 +89,6 @@ export const authOptions: AuthOptions = {
         //  * Session Callback: Adds user data from the JWT token to the session.
         //  */
         async session({ session, user, token }) {
-            // console.log("session", {
-            //     session,
-            //     user,
-            //     token
-            // })
 
             if (token) {
                 session.user = {

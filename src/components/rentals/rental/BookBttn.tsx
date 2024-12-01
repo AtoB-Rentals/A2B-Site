@@ -52,7 +52,14 @@ const BookBttn = ({
             const params = new URLSearchParams(q.toString())
             // params.set("create_new_user", "y")
             // window.history.replaceState({}, '', `?${params.toString()}`)
-            router.push(`/rental/${carId}/get_user?${params.toString()}`)
+            // router.push(`/rental/${carId}/get_user?${params.toString()}`)
+            localStorage.setItem(
+                'redirectURL', 
+                `/rental/${carId}?${params.toString()}`
+            )
+
+            router.push('/signup')
+
             return
         }
 

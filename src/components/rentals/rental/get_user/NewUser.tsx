@@ -85,7 +85,6 @@ const RentalNewUser = ({
 
             if (res.isErr) {
                 alert("invalid information provided")
-                console.log("err", res.message)
                 return 
             }
 

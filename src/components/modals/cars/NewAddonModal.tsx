@@ -33,7 +33,6 @@ const NewAddonModal = ({
 
     const handleCallback = async (): Promise<boolean> => {
         try {
-            console.log(values.name)
             if (Object.keys(errs).length !== 0) {
                 return false
             }

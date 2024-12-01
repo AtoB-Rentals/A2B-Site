@@ -8,7 +8,6 @@ import { RecordI } from "@/interface/api/booking";
 export const getCars = async (params?: QueryParams): Promise<ApiRes<CarI[]> | err> => {
 
     const queryString = params !== undefined ? "?" + objectToQueryString(params) : ""
-    console.log("get cars url", `${apiURL}/api/cars/${queryString}`)
     try {
         const response = await fetch(`${apiURL}/api/cars/${queryString}`, {
             method: 'GET',
@@ -77,7 +76,6 @@ export const addCar = async (newCar: AddCarI): Promise<ApiRes<CarI> | err> => {
 
         return await response.json() as ApiRes<CarI>
     } catch (e) {
-        console.log("err: ", e)
         return unknownErr()
     }
 }
@@ -103,7 +101,6 @@ export const setProfilePic = async (
 
         return await response.json() as ApiRes<CarI>
     } catch (e) {
-        console.log("err: ", e)
         return unknownErr()
     }
 }
@@ -136,7 +133,6 @@ export const addCarPic = async (
 
         return await response.json() as ApiRes<CarI>
     } catch (e) {
-        console.log("err: ", e)
         return unknownErr()
     }
 }

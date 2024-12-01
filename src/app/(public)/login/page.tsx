@@ -14,7 +14,7 @@ const Login = () => {
                 <h1
                     className="mt-10 mb-4 text-4xl font-bold"
                 >
-                    Sign Up
+                    Sign In
                 </h1>
                 <GoogleBttn />
                 <CredentialsForm />

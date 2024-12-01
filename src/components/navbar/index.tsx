@@ -1,13 +1,12 @@
 import Link  from "next/link"
-import { getServerSession } from "next-auth" 
 import { authOptions } from '../../app/api/auth/[...nextauth]/route';
 import ThemeToggle from "./ThemeToggle";
 import MobileMenu from "./MobileMenu";
 import Image from "next/image"
 import DesktopUser from "./DesktopUser";
+import MobileUser from "./MobileUser";
 
 const Navbar = async () => {
-    const session = await getServerSession(authOptions)
 
     const DesktopNav = "hidden md:flex dark:text-primary hover:bg-secondary hover:text-black"
 
@@ -73,9 +72,7 @@ const Navbar = async () => {
                                 <Link href="/coming-soon">
                                     Terms and Conditions
                                 </Link>
-                                <Link href="/login">
-                                    Login
-                                </Link>
+                                <MobileUser />
                                 <ThemeToggle />
                             </li>
                         </MobileMenu>

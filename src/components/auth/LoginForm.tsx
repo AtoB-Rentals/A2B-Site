@@ -1,6 +1,7 @@
 "use client";
 
 import { signIn, useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
 
@@ -31,16 +32,10 @@ export function CredentialsForm(props: CredentialsFormProps) {
         if (signInResponse && !signInResponse.error) {
         //Redirect to homepage (/timeline)
         //   router.push("/timeline");
-        console.log("signInResponse: ", signInResponse);
         } else {
-        console.log("Error: ", signInResponse);
         setError("Your Email or Password is wrong!");
         }
     }
-
-    useEffect(() => {
-        console.log("session", session)
-    }, [ session ]) 
 
     return (
         <form
@@ -67,6 +62,10 @@ export function CredentialsForm(props: CredentialsFormProps) {
                 required
                 className="w-full px-4 py-4 mb-4 border border-gray-300 rounded-md"
             />
+
+            <Link href="/signup" className="text-primary underline">
+                Sign Up
+            </Link>
 
             <button
                 type="submit"

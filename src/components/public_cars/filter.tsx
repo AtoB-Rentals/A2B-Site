@@ -98,8 +98,6 @@ const Filter = ({
         } else {
             d.address = resAddress.results[0].formatted_address
             const pGeoRes = parseGeocodeResult(resAddress.results[0])
-            console.log("resAddress.results[0]", resAddress.results[0])
-            console.log("pGeoRes", pGeoRes)
 
             if (pGeoRes !== null) {
                 Object.keys(pGeoRes).forEach(key => {
@@ -239,6 +237,7 @@ const Filter = ({
                         type="text"
                         className="input border rounded-md border-gray-600 p-1 w-full"
                         defaultValue={values.address}
+                        placeholder='Where do you want the vehicle?'
                         value={input}
                         onFocus={e => e.target.select()}
                         tabIndex={0}
@@ -249,11 +248,11 @@ const Filter = ({
                             setInput(e.target.value)
                         }}
                     />
-                    <ul className={`dropdown-content bg-base-100 menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 z-30 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'}`}>
+                    <ul className={`dropdown-content bg-base-100 menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 z-30 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'} border-2 border-secondary`}>
                         {predictions.map((p,i) => (
                             <li
                                 key={p.place_id}
-                                className=' p-1 cursor-pointer'
+                                className=' p-1 py-2 cursor-pointer  hover:shadow-md rounded-md'
                                 onClick={() => handleGoogleSel(p)}
                                 tabIndex={i}
                             >

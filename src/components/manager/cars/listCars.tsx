@@ -41,10 +41,8 @@ const ListCars = () => {
                     // Cookies.remove("token")
                     router.push('/manager/login')
                 }
-                console.log('the error happened', res.data)
             } else {
                 setCars([...res.data])
-                console.log("should have updated")
             } 
         } catch(e) {
             console.error(e)
