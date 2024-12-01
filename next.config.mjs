@@ -11,9 +11,9 @@ const nextConfig = {
     experimental: {
         missingSuspenseWithCSRBailout: false,
     },
-    typescript: {
-        ignoreBuildErrors: true
-    }
+    // typescript: {
+    //     ignoreBuildErrors: true
+    // }
 };
 
 export default nextConfig;

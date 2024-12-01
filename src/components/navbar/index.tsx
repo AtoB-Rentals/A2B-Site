@@ -1,5 +1,4 @@
 import Link  from "next/link"
-import { authOptions } from '../../app/api/auth/[...nextauth]/route';
 import ThemeToggle from "./ThemeToggle";
 import MobileMenu from "./MobileMenu";
 import Image from "next/image"
