@@ -110,9 +110,9 @@ export const authOptions: AuthOptions = {
         sessionToken: {
             name: "next-auth-token",
             options: {
-                httpOnly: false,
-                secure: process.env.NODE_ENV === "production" || true,
-                sameSite: "None",
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
                 path: "/",
             },
         },
