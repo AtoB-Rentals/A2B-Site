@@ -110,12 +110,12 @@ const BookNow = () => {
                     />
                     <ul
                         tabIndex={0}
-                        className={`dropdown-content menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 z-30 ${predictions.length && showPredictions ? 'visble' : 'invisible'}`}
+                        className={`bg-base-100 dropdown-content menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 z-30 ${predictions.length && showPredictions ? 'visble' : 'invisible'}`}
                     >
                         {predictions.map((p, i) => (
                             <li
                                 key={p.place_id}
-                                className="hover:bg-gray-200 p-1 cursor-pointer"
+                                className="hover:bg-base-300 p-1 py-2 mx-1 cursor-pointer transition-colors ease-in-out duration-75 rounded-md"
                                 onClick={() => handleGoogleSel(p)}
                                 tabIndex={i}
                             >

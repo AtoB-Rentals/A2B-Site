@@ -248,11 +248,11 @@ const Filter = ({
                             setInput(e.target.value)
                         }}
                     />
-                    <ul className={`dropdown-content bg-base-100 menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 z-30 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'} border-2 border-secondary`}>
+                    <ul className={`dropdown-content bg-base-100 menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 z-30 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'} border-2 border-base-200`}>
                         {predictions.map((p,i) => (
                             <li
                                 key={p.place_id}
-                                className=' p-1 py-2 cursor-pointer  hover:shadow-md rounded-md'
+                                className='hover:bg-base-300 p-1 py-2 cursor-pointer  hover:shadow-md rounded-md'
                                 onClick={() => handleGoogleSel(p)}
                                 tabIndex={i}
                             >
