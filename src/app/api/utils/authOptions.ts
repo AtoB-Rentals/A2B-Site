@@ -114,6 +114,7 @@ export const authOptions: AuthOptions = {
                 secure: process.env.NODE_ENV === "production",
                 sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
                 path: "/",
+                domain: ".atob.rentals"
             },
         },
     },
