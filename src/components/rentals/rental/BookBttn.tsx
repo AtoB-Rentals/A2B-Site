@@ -58,7 +58,7 @@ const BookBttn = ({
                 `/rental/${carId}?${params.toString()}`
             )
 
-            router.push('/signup')
+            router.push('/login')
 
             return
         }

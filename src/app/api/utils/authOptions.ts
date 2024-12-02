@@ -1,15 +1,63 @@
-import NextAuth, { AuthOptions } from "next-auth"
+import NextAuth, { AuthOptions, User } from "next-auth"
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { jwtDecode } from "jwt-decode";
-import { DecodedTokenI } from "@/interface/api";
-import { Adapter, AdapterUser } from "next-auth/adapters";
+import { apiURL, objectToQueryString } from "@/constants/requests/constants"
+
+interface AuthUserData {
+    id: string,
+    name: string,
+    email: string,
+    role: string
+}
+
+const authGetUser = async (
+    email: string,
+    role: string = 'user'
+) => {
+    const params = objectToQueryString({
+        email,
+        role
+    }) || ""
+
+    const res = await fetch(`${apiURL}/api/users/auth_user?${params}`)
+
+    return res
+}
 
 export const authOptions: AuthOptions = {
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            async profile(profile) {
+                console.log('PROFILE RAN!')
+                const res = await authGetUser(profile.email)
+                if (res === null) {
+                    throw new Error("Unable to authenticate with Google")
+                }
+
+                const data = await res.json()
+                if (data.code === "USER_NOT_FOUND") {
+                    return {
+                        id: "USER_NOT_FOUND",
+                        name: profile.name,
+                        email: profile.email,
+                        role: "user"
+                    } as AuthUserData as User
+                }
+
+                if (!res.ok) {
+                    return {
+                        id: "SERVER_ERROR",
+                        name: profile.name,
+                        email: profile.email,
+                        role: "user"
+                    } as AuthUserData as User
+                }
+
+
+                return data.data as AuthUserData as User
+            }
         }),
         CredentialsProvider({
             name: 'Email & Password',
@@ -17,7 +65,7 @@ export const authOptions: AuthOptions = {
                 email: { label: "Email", type: "text", placeholder: "example@example.com" },
                 password: { label: "Password", type: "password" },
             },
-            // id: "Email & Password",
+
             async authorize(credentials) {
                 if (!credentials?.email || !credentials.password) {
                     return null
@@ -56,10 +104,24 @@ export const authOptions: AuthOptions = {
     ],
 
     callbacks: {
-        async signIn({ account, email, credentials, user }) {
+        async signIn({ account, email, credentials, user, profile }) {
 
             if (account?.provider === 'google') {
-                //Put the google login here
+                if (user.id === 'USER_NOT_FOUND') {
+                    let [firstName, lastName] = user.name?.split(' ') || ['', '']
+
+                    const params = objectToQueryString({
+                        firstName,
+                        lastName,
+                        email: profile?.email || ""
+                    })
+
+                    return `/signup?${params}`
+                }
+
+                if (user.id === 'SERVER_ERROR') {
+                    return false
+                }
 
                 return true
             }
@@ -67,6 +129,13 @@ export const authOptions: AuthOptions = {
             if (!user.email) return false
 
             return true
+        },
+
+        async redirect({ url, baseUrl }) {
+            if (url.startsWith(baseUrl)) {
+                return url;
+            }
+            return baseUrl;
         },
 
         // /**
@@ -77,7 +146,6 @@ export const authOptions: AuthOptions = {
             if (user) {
                 token.email = user.email
                 token.role = user.role || "user"
-                token.token = user.token ?? ""
                 token.name = user.name
                 token.id = user.id
             }
@@ -94,13 +162,15 @@ export const authOptions: AuthOptions = {
                 session.user = {
                     ...session.user,
                     name: token.name ?? "",
-                    email: token.email ?? "",
-                    token: token.token ?? ""
+                    email: token.email ?? ""
                 }
             }
 
             return session;
         },
+    },
+    pages: {
+        error: "/signup", // Custom error page to handle errors
     },
     // session: {
     //     strategy: "database", // Use JWTs for session handling
@@ -114,7 +184,7 @@ export const authOptions: AuthOptions = {
                 secure: process.env.NODE_ENV === "production",
                 sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
                 path: "/",
-                domain: ".atob.rentals"
+                domain: process.env.NODE_ENV === "production" ? ".atob.rentals" : undefined
             },
         },
     },

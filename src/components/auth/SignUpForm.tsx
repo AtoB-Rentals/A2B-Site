@@ -5,7 +5,7 @@ import { reqUserInitialValues, ReqUserSchema } from "@/interface/api/user"
 import parsePhoneNumberFromString from "libphonenumber-js"
 import { signIn, useSession } from "next-auth/react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
 function formatPhoneNumber(phone: string): string {
@@ -21,12 +21,15 @@ function formatPhoneNumber(phone: string): string {
 }
 
 const SignUpForm = () => {
+    const [redirecting, setRedirecting] = useState<boolean>(false)
     const [ loading, setLoading ] = useState<boolean>(false)
     const [ password2, setPassword2 ] = useState<string>("")
     const [ password2Err, setPassword2Err ] = useState<string>("")
     const [ error, setError ] = useState<string>("")
     const router = useRouter()
     const session = useSession()
+
+    const q = useSearchParams()
 
     const {
         setValues,
@@ -105,9 +108,19 @@ const SignUpForm = () => {
     }
 
     useEffect(() => {
-        if(session.status === 'authenticated') {
+        setValues(prev => ({
+            ...prev,
+            firstName: q.get('firstName') || "",
+            lastName: q.get('lastName') || "",
+            email: q.get('email') || "",
+        }))
+    }, [])
+
+    useEffect(() => {
+        if(session.status === 'authenticated' && redirecting === false) {
             const redirect = localStorage.getItem("redirectURL") || "/"
             localStorage.removeItem('redirectURL')
+            setRedirecting(true)
 
             router.push(redirect)
         }
