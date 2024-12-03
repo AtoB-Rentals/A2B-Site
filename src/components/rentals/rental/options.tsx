@@ -38,7 +38,7 @@ const Options = ({
     return (
         <>
             <h3
-                className="font-bold text-2xl"
+                className="font-bold text-xl text-primary"
             >
                 Add-ons:
             </h3>
@@ -49,7 +49,7 @@ const Options = ({
                 </p>
             }
             <div
-                className="flex overflow-x-scroll md:w-full gap-3 p-3"
+                className="flex overflow-x-scroll md:w-full gap-3 p-3 h-full"
             >
                 {addOns.map(a => (
                     <AddOn key={a.name} a={a} />
@@ -100,7 +100,7 @@ const AddOn = ({
     return (
         <Suspense>
             <div
-                className="bg-gray-300 w-72 h-44 rounded-md p-2 flex flex-col gap-3 shrink-0"
+                className="shadow-success shadow-[0px_0px_5px_1px] w-72 h-44 rounded-md p-2 flex flex-col gap-3 shrink-0"
                 key={a.name}
             >
                 <p className="font-bold text-lg">
@@ -111,7 +111,7 @@ const AddOn = ({
                 >
                     {a.description}
                 </p>
-                <p className="text-lg">
+                <p className="text-lg text-bold text-success">
                     ${numToDallor(a.amount)}
                 </p>
                 {!applied && <button 
@@ -121,7 +121,7 @@ const AddOn = ({
                     Apply
                 </button>}
                 {applied && a.type === 'Singular' && <button 
-                    className="w-full rounded-md border-2 border-blue-600 text-blue-600 text-lg p-2"
+                    className="btn btn-success btn-outline w-full rounded-md border-2 text-lg p-2"
                     onClick={() => setApplied(false)}
                 >
                     Applied
@@ -145,10 +145,9 @@ const AddOn = ({
                         value={quantity}
                         onChange={e => {
                             e.preventDefault()
-
                             setQuantity(e.target.value)
                         }}
-                        className="text-center w-10 rounded-md border-2 border-blue-600"
+                        className="text-center w-10 rounded-md border-2 bg-transparent"
                     />
                     <button
                         className="size-10 rounded-md bg-blue-600 text-white flex justify-center items-center text-center text-2x"

@@ -70,7 +70,6 @@ export const vR = (...roles: roleT[]): boolean => {
 }
 
 export const extractFirstParenthesesValue = (input: string): string | null => {
-    console.log("input: ", input)
     const openIndex = input.indexOf('(');
     const closeIndex = input.indexOf(')', openIndex);
 

@@ -2,19 +2,29 @@ import { getCar } from "@/constants/requests/cars"
 import Link from "next/link";
 import RentalInfo from "@/components/rentals/rental/RentalInfo"
 import { Metadata } from "next"
+import { apiURL } from "@/constants/requests/constants";
+import { CarI } from "@/interface/api/car";
 
 interface RentalPageI {
     rentalId: string
 }
 
 async function fetchCarData(rentalId: string) {
-  const res = await getCar(rentalId);
+  const res = await fetch(`${apiURL}/api/cars/${rentalId}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+  })
 
-  if (res.isErr) {
-    return null; // Return null if there was an error
+  if (!res.ok) {
+    return null
   }
 
-  return res.data;
+  const data = await res.json()
+
+  return data.data as CarI
 }
 
 // `generateMetadata` now receives the car data
