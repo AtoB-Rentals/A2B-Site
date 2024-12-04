@@ -8,7 +8,7 @@ import { inThirty, timeFormFormat } from "@/constants/formatting/time";
 import usePlaceautoComplete from "@/hooks/usePlaceAutocomplete";
 
 const BookNow = () => {
-    const [ airportSearch, setAirportSearch ] = useState<boolean>(false)
+    const [ showPredictions, setShowPredictions ] = useState<boolean>(false)
     const router = useRouter()
 
     const currentDate = DateTime.now()
@@ -67,6 +67,17 @@ const BookNow = () => {
         }
     }, [selAddress])
 
+    const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+        // Check if the next element receiving focus is outside the dropdown container
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+            setShowPredictions(false);
+        }
+    }
+
+    const handleFocus = () => {
+        setShowPredictions(true);
+    }
+
     return (
         <section className="w-full p-10">
             <div className="text-center mb-8">
@@ -75,10 +86,11 @@ const BookNow = () => {
                 </h2>
             </div>
             <form 
-                className="p-6 lg:p-8 flex flex-col lg:flex-row items-center md:items-start justify-start md:justify-between gap-3 w-full bg-white text-neutral-700 text-xl"
+                className="p-6 lg:p-8 flex flex-col lg:flex-row items-center lg:items-start justify-start lg:justify-between gap-3 w-full"
                 onSubmit={e => handleSubmit(e)}
             >
-                <div className="relative text-center lg:text-left max-w-96">
+                {/* Address section */}
+                <div className="relative text-center lg:text-left max-w-96" onBlur={handleBlur}>
                     <label 
                         htmlFor="pickupAddress"
                         className="font-bold justify-center"
@@ -86,29 +98,34 @@ const BookNow = () => {
                         Location
                     </label>
                     <input
-                        className="border rounded-md border-gray-600 inv p-1 w-full"
+                        tabIndex={0}
+                        className="input border-2 input-bordered rounded-md w-full"
                         onChange={e => {
                             e.preventDefault()
                             setInput(e.target.value)
                         }}
                         placeholder="Where do you need the car?"
                         value={input}
+                        onFocus={handleFocus} 
                     />
-                    <ul 
-                        className={`absolute translate-y-1 rounded-md w-full bg-white border-2 border-black z-30 ${predictions.length ? 'visble' : 'invisible'}`}
+                    <ul
+                        tabIndex={0}
+                        className={`bg-base-100 dropdown-content menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 z-30 ${predictions.length && showPredictions ? 'visble' : 'invisible'}`}
                     >
-                        {predictions.map(p => (
+                        {predictions.map((p, i) => (
                             <li
                                 key={p.place_id}
-                                className="hover:bg-gray-200 p-1 cursor-pointer"
+                                className="hover:bg-base-300 p-1 py-2 mx-1 cursor-pointer transition-colors ease-in-out duration-75 rounded-md"
                                 onClick={() => handleGoogleSel(p)}
+                                tabIndex={i}
                             >
                                 {p.structured_formatting.main_text}
                             </li>
                         ))}
                     </ul>
                 </div>
-                <div className="text-center lg:text-left">
+                {/* Start section */}
+                <div className="text-center lg:text-left w-full max-w-72">
                     <div>
                         <label 
                             htmlFor="start_date"
@@ -121,24 +138,24 @@ const BookNow = () => {
                                 type="date" 
                                 name="start_date" 
                                 id="start_date"
-                                className="bg-transparent active:border-neutral-900 w-full text-center lg:text-left"
+                                className="input w-full text-center lg:text-left"
                                 value={values['start_date']}
                                 onChange={updateValues}
                             />
                         </div>
                     </div>
-                    <div>
+                    <div className='w-full'>
                         <label 
                             htmlFor="start_date"
                             className="font-bold text-center lg:text-left"
                         >
                             
                         </label>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 w-full">
                             <select 
                                 name="start_time" 
                                 id="start_time"
-                                className="w-full p-1 rounded-md border border-gray-600"
+                                className="select w-full p-1 rounded-md border border-gray-600"
                                 value={values.start_time}
                                 onChange={e => setValues(prev => ({...prev, start_time: e.target.value}))}
                             >
@@ -151,7 +168,7 @@ const BookNow = () => {
                         </div>
                     </div>
                 </div>
-                <div className="text-center lg:text-left">
+                <div className="text-center lg:text-left w-full max-w-72">
                     <div>
                         <label 
                             htmlFor="end_date"
@@ -165,7 +182,7 @@ const BookNow = () => {
                                 name="end_date"
                                 id="end_date"
                                 placeholder="until"
-                                className="bg-transparent active:border-neutral-900 w-full text-center lg:text-left"
+                                className="input w-full text-center lg:text-left"
                                 value={values['end_date']}
                                 onChange={updateValues}
                             />
@@ -175,7 +192,7 @@ const BookNow = () => {
                         <select 
                             name="end_time" 
                             id="end_time"
-                            className="w-full p-1 rounded-md border border-gray-600"
+                            className="select w-full p-1 rounded-md border border-gray-600"
                             value={values.end_time}
                             onChange={e => setValues(prev => ({...prev, end_time: e.target.value}))}
                         >
@@ -189,7 +206,7 @@ const BookNow = () => {
                 </div>
                 <input
                     type="submit"
-                    className="p-4 bg-orange-500 text-white hover:text-orange-500 w-full lg:w-auto lg:min-w-fit cursor-pointer hover:bg-white border-2 border-orange-500 transition-all ease rounded-md"
+                    className="btn btn-secondary btn-outline btn-lg w-full lg:w-auto lg:min-w-fit cursor-pointer hover:bg-white border-2 border-orange-500 transition-all ease rounded-md"
                     value="Rent Now"
                 />
             </form>

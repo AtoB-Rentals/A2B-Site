@@ -57,7 +57,6 @@ const usePlaceautoComplete = ({
                 const opts = await autoComplete(input, /*searchTypeMap[currentSearchType] */);
 
                 setPredictions([...opts]);
-                console.log("preditcion", predictions)
             }
         })();
     }, [trigger])
@@ -80,8 +79,6 @@ const usePlaceautoComplete = ({
             return
         }
 
-        console.log("prediction.type", prediction.types)
-
         //@ts-ignore
         if (!prediction.types.includes("establishment")) {
             setInput(geoCodeAddress.address)
@@ -96,7 +93,6 @@ const usePlaceautoComplete = ({
 
         //@ts-ignore
         if (prediction.types.includes("premise")) {
-            console.log("it got here")
             geoCodeAddress.type = "Default"
         }
 

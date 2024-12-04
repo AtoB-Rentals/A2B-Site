@@ -19,7 +19,6 @@ export const CreateUser = async (req: ReqUserI): Promise<ApiRes<string> | err> =
                 errorData
             )
         }
-
         return await response.json() as ApiRes<string>
     } catch (e) {
         return unknownErr()

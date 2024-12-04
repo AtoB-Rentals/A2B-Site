@@ -122,7 +122,11 @@ const StripeCheckout = ({
                     <Elements 
                         stripe={stripePromise} 
                         options={{ 
-                            clientSecret: stripeData?.clientSecret
+                            clientSecret: stripeData?.clientSecret,
+                            appearance: {
+                                theme: localStorage.getItem('theme') === "dark" ? "night" : "stripe",
+                                labels: 'floating',
+                            }
                         }}
                     >
                         <PE clientSecret={stripeData.clientSecret} />
