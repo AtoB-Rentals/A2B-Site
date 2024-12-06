@@ -25,9 +25,6 @@ export default function RootLayout({
         <NextAuthProvider>
           <ThemeProvider attribute="class" defaultTheme="light">
             {children}
-            <footer className="p-4 bg-neutral text-base-100 text-center">
-              © 2024 A2B Rentals
-            </footer>
           </ThemeProvider>
         </NextAuthProvider>
       </body>

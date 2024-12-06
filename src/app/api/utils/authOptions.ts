@@ -181,8 +181,8 @@ export const authOptions: AuthOptions = {
             name: "next-auth-token",
             options: {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+                secure: process.env.NODE_ENV === "production" || true,
+                sameSite: process.env.NODE_ENV === "production" ? "None" : "None",
                 path: "/",
                 domain: process.env.NODE_ENV === "production" ? ".atob.rentals" : undefined
             },
