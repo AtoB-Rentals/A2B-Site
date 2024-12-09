@@ -1,6 +1,7 @@
 import { roleT } from '../../interface/api'
 
 export const apiURL = process.env.NEXT_PUBLIC_API!
+export const siteURL = process.env.NEXT_PUBLIC_WEB_URL!
 
 export interface ApiRes<T> {
     status: string; // or whatever type response.Success is
