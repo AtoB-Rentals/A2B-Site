@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 import { useRouter } from "next/navigation";
 import { DecodedTokenI } from "@/interface/api";
 import { jwtDecode } from "jwt-decode";
+import { ManCredentialsForm } from "@/components/auth/ManagerLogin";
 
 
 
@@ -69,52 +70,19 @@ const ManagerLogin = () => {
     }
 
     return(
-        <main>
-            <section className="my-6 mx-3 md:mx-auto max-w-[800px] rounded-2xl shadow-[0px_0px_12px_3px] py-8 shadow-neutral-500">
-                <h2 className="text-center text-3xl">
-                    Manager Login
-                </h2>
-                <form 
-                    onSubmit={e => handleLogin(e)}
-                    className=" mx-auto mt-2 flex flex-col gap-6 px-10"
+        <main
+            className="w-full flex flex-col items-center justify-center min-h-screen py-2"
+        >
+            <div
+                className="flex flex-col items-center w-full mx-4 md:w-1/3 p-10 shadow-md"
+            >
+                <h1
+                    className="mt-10 mb-4 text-4xl font-bold"
                 >
-                    <FormInput1 
-                        labelName="Email"
-                        inputProps={{
-                            name:"email",
-                            required: true,
-                            type: "text",
-                            "aria-required": true,
-                            value: email,
-                            onChange: e => setEmail(e.target.value)
-                        }}
-                    />
-                    <FormInput1 
-                        labelName="Password"
-                        inputProps={{
-                            name:"password",
-                            required: true,
-                            type: "password",
-                            "aria-required": true,
-                            value: password,
-                            onChange: e => setPassword(e.target.value)
-                        }}
-                    />
-
-                    {error && (
-                        <p className="text-red-500 text-center">
-                            {error}
-                        </p>
-                    )}
-                    
-                    <button 
-                        type="submit"
-                        className="w-full p-5 bg-orange-500 rounded-lg"
-                    >
-                        Login
-                    </button>
-                </form>
-            </section>
+                    Manager login
+                </h1>
+                <ManCredentialsForm />
+            </div>
         </main>
     )
 }
