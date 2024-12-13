@@ -6,7 +6,7 @@ const ThemeToggler = () => {
 
     return (
         <button 
-            onClick={() => setTheme(resolvedTheme ? 'dark' : 'light')}
+            onClick={() => setTheme(resolvedTheme ? 'light' : 'dark')}
         >
             Theme: { resolvedTheme }
         </button>

@@ -1,9 +1,8 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import Navbar from "./../components/navbar"
 import { ThemeProvider } from "next-themes"
-import { useEffect } from "react"
+import { NextAuthProvider } from "./providers"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -18,14 +17,16 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="light">
+    <html lang="en" data-theme="light">
       <head>
         <meta name="color-scheme" content="light only"></meta>
       </head>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" enableSystem={false} enableColorScheme={false}>
-          {children}
-        </ThemeProvider>
+      <body className={`${inter.className} transition-colors ease-in-out duration-1000`}>
+        <NextAuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            {children}
+          </ThemeProvider>
+        </NextAuthProvider>
       </body>
     </html>
   )

@@ -11,6 +11,7 @@ import { ReqBookingI } from '../../../interface/api/booking';
 import { AddressType, validateAddressType } from "@/interface/api/address";
 import { DateTime } from "luxon";
 import { createBooking } from "@/constants/requests/bookings";
+import { useSession } from 'next-auth/react';
 
 const BookBttn = ({
     carId, timezone
@@ -21,11 +22,12 @@ const BookBttn = ({
     const router = useRouter()
     const q = useSearchParams()
     const [ user, setUser ] = useState<UserI>()
+    const session = useSession()
 
     const getUser = async () => {
-        // if (!Cookies.get("token")) {
-        //     return
-        // }
+        if (session.status === 'unauthenticated') {
+            return
+        }
         
         const res = await GetUserProfile()
         if (res.isErr) {
@@ -46,11 +48,18 @@ const BookBttn = ({
     timezone = timezone === "" ? timezone : Intl.DateTimeFormat().resolvedOptions().timeZone
 
     const handleBookBttn = async () => {
-        if (!Cookies.get("token")) {
+        if (session.status === 'unauthenticated') {
             const params = new URLSearchParams(q.toString())
             // params.set("create_new_user", "y")
             // window.history.replaceState({}, '', `?${params.toString()}`)
-            router.push(`/rental/${carId}/get_user?${params.toString()}`)
+            // router.push(`/rental/${carId}/get_user?${params.toString()}`)
+            localStorage.setItem(
+                'redirectURL', 
+                `/rental/${carId}?${params.toString()}`
+            )
+
+            router.push('/login')
+
             return
         }
 
@@ -121,7 +130,7 @@ const BookBttn = ({
     return (
         <Suspense>
             <button
-                className="bg-blue-600 font-bold text-white text-xl p-3 rounded-md w-full"
+                className="btn btn-primary text-white text-xl w-full"
                 onClick={() => handleBookBttn()}
             >
                 Book

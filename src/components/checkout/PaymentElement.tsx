@@ -1,9 +1,17 @@
 "use client"
+import { siteURL } from '@/constants/requests/constants';
+import { BookingI } from '@/interface/api/booking';
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState } from 'react';
 
 
-const PE = ({ clientSecret }:{clientSecret: string}) => {
+const PE = ({ 
+    clientSecret,
+    booking
+}:{
+    clientSecret: string
+    booking: BookingI
+}) => {
     const stripe = useStripe();
     const elements = useElements();
 
@@ -42,7 +50,7 @@ const PE = ({ clientSecret }:{clientSecret: string}) => {
             elements,
             clientSecret,
             confirmParams: {
-                return_url: 'https://example.com/order/123/complete',
+                return_url: `${siteURL}/checkout/${booking.id}/success`,
             },
         });
 
@@ -66,9 +74,18 @@ const PE = ({ clientSecret }:{clientSecret: string}) => {
     return (
         <form 
             onSubmit={handleSubmit}
-            className='flex flex-col mx-2 border-blue-500 border-2 rounded-md p-4 max-w-3xl md:mx-auto'
+            className='flex flex-col mx-2 border-blue-500 border-2 rounded-md p-4 max-w-3xl md:mx-auto mb-4'
         >
-            <PaymentElement />
+            <PaymentElement 
+                options={{
+                    defaultValues: {
+                        billingDetails: {
+                            email: booking.renter.email,
+                            phone: booking.renter.phoneNumber
+                        }
+                    }
+                }}
+            />
             <button 
                 type="submit" 
                 disabled={!stripe || !elements}

@@ -38,18 +38,18 @@ const RentalInfo = async ({car}: RentalInfoI) => {
                     />
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full text-center md:text-left col-span-2 font-bold text-lg">
-                    <div className=" p-3 rounded-lg w-full md:w-30 bg-green-500 text-white">
+                    <div className=" p-3 rounded-lg w-full md:w-30 bg-green-600 text-white">
                         <p>${numToDallor(car.price)}/day</p>
                     </div>
-                    <div className="bg-slate-200 p-3 rounded-lg w-full md:w-30">
+                    <div className="bg-primary glass p-3 rounded-lg w-full md:w-30">
                         <p>Seats {car.passengers}</p>
                     </div>
-                    <div className="bg-slate-200 p-3 rounded-lg w-full md:w-30">
+                    <div className="bg-primary glass p-3 rounded-lg w-full md:w-30">{/*bg-slate-200 */}
                         <p>{car.transmission}</p>
                     </div>
                 </div>
                 <div className="col-start-2 col-span-2 text-lg">
-                    <p className="font-bold ">
+                    <p className="font-bold text-primary">
                         Description
                     </p>
                     <p>
