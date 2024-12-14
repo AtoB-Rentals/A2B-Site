@@ -1,7 +1,7 @@
 import NextAuth, { AuthOptions, User } from "next-auth"
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { apiURL, objectToQueryString } from "@/constants/requests/constants"
+import { apiURL, objectToQueryString, QueryParams } from '@/constants/requests/constants';
 
 interface AuthUserData {
     id: string,
@@ -30,7 +30,6 @@ export const authOptions: AuthOptions = {
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
             async profile(profile) {
-                console.log('PROFILE RAN!')
                 const res = await authGetUser(profile.email)
                 if (res === null) {
                     throw new Error("Unable to authenticate with Google")
@@ -64,6 +63,7 @@ export const authOptions: AuthOptions = {
             credentials: {
                 email: { label: "Email", type: "text", placeholder: "example@example.com" },
                 password: { label: "Password", type: "password" },
+                role: { label: "Role", type: "text", placeholder: "user" },
             },
 
             async authorize(credentials) {
@@ -71,7 +71,11 @@ export const authOptions: AuthOptions = {
                     return null
                 }
 
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API!}/api/users/login`, { // Replace '/api/login' with your actual login endpoint
+                if (!credentials.role) {
+                    credentials.role = 'user'
+                }
+
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API!}/api/users/login?role=${credentials.role}`, { // Replace '/api/login' with your actual login endpoint
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -92,7 +96,6 @@ export const authOptions: AuthOptions = {
                 }
 
                 const { data } = await res.json()
-
                 return {
                     id: data.id as string,
                     email: data.email as string,
@@ -104,7 +107,7 @@ export const authOptions: AuthOptions = {
     ],
 
     callbacks: {
-        async signIn({ account, email, credentials, user, profile }) {
+        async signIn({ account, user, profile, }) {
 
             if (account?.provider === 'google') {
                 if (user.id === 'USER_NOT_FOUND') {

@@ -6,8 +6,8 @@ import { signIn } from "next-auth/react"
 
 const GoogleBttn = () => {
     const handleClick = () => {
-        signIn("google");
-    };   
+        signIn("google", undefined, {role: "manager"});
+    }
 
     return (
         <button
