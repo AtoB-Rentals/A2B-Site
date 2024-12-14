@@ -71,9 +71,6 @@ export const authOptions: AuthOptions = {
                     return null
                 }
 
-                console.log("url", `${process.env.NEXT_PUBLIC_API!}/api/users/login?role=${credentials.role}`)
-                console.log("credentials.role:", credentials.role)
-
                 if (!credentials.role) {
                     credentials.role = 'user'
                 }
@@ -99,7 +96,6 @@ export const authOptions: AuthOptions = {
                 }
 
                 const { data } = await res.json()
-                console.table(data)
                 return {
                     id: data.id as string,
                     email: data.email as string,
@@ -151,7 +147,6 @@ export const authOptions: AuthOptions = {
         async jwt({ token, user, account, profile }) {
 
             if (user) {
-                console.log("user.role jwt: ", user.role)
                 token.email = user.email
                 token.role = user.role || "user"
                 token.name = user.name
