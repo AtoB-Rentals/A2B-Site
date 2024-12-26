@@ -228,7 +228,7 @@ const Filter = ({
         <Suspense>
             <div
                 id="filter"
-                className="w-full flex flex-col gap-3 p-3 rounded-md text-lg max-w-lg shadow-xl"
+                className="w-full flex flex-col gap-3 p-3 rounded-md text-lg max-w-lg shadow-xl motion-preset-slide-down delay-200"
             >
                 <div
                     className='relative'

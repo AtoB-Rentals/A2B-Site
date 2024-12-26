@@ -17,7 +17,7 @@ const CarCard = ({ c, qParams }: CarCardI) => {
     return (
         <Link
             href={`/rental/${c.id}?${qParams}`}
-            className="card md:card-side glass bg-base-100 shadow-xl w-full"
+            className="card md:card-side glass bg-base-100 shadow-xl w-full motion-preset-pop transform hover:scale-105 transition-transform"
         >
             <figure>
                 <div className="relative h-36 md:h-full w-80 md:w-36">

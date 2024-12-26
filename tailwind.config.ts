@@ -57,6 +57,7 @@ const config: Config = {
   },
   plugins: [
     require('daisyui'),
+    require('tailwindcss-motion')
   ],
 };
 export default config;
