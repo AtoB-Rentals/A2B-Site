@@ -119,8 +119,9 @@ const Success = async ({ params }: {
                         src="/images/image.png"
                         width={100}
                         height={100}
+                        className="motion-preset-bounce "
                     />
-                    <h1 className="text-lg md:text-xl text-success font-bold">
+                    <h1 className="text-lg md:text-xl text-success font-bold motion-preset-confetti">
                         Booking Scheduled!
                     </h1>
                 </div>
