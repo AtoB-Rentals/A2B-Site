@@ -14,7 +14,7 @@ const CheckoutPage = async ({
     return (
         <div>
             <h1
-                className="text-center font-bold text-2xl"
+                className="text-center font-bold text-2xl text-secondary"
             >
                 Checkout
             </h1>

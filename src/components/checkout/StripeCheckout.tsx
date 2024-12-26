@@ -100,7 +100,7 @@ const StripeCheckout = ({
         <>
             <section>
                 <div
-                    className="flex flex-col gap-2 mx-2 border-2 border-blue-500 rounded-md p-2 mb-4 max-w-3xl md:mx-auto"
+                    className="flex flex-col gap-2 mx-2 border-2 border-blue-500 rounded-md p-2 mb-4 max-w-3xl md:mx-auto motion-translate-x-in-[-23%] motion-translate-y-in-[14%] motion-rotate-in-[22deg]"
                 >
                     {booking.stripe?.items?.length && booking.stripe?.items?.map(item => (
                         <div

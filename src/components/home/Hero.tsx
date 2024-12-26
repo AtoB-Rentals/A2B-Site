@@ -34,7 +34,7 @@ const Hero = () => {
                 alt='Picture of world map'
                 width={800}
                 height={600}
-                className='absolute top-[20%] right-4 z-0 hidden lg:block'
+                className='absolute top-[20%] right-4 z-0 hidden lg:block motion-preset-slide-left delay-200'
             />
         </section>
     )

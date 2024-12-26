@@ -81,7 +81,7 @@ const BookNow = () => {
     return (
         <section className="w-full p-10">
             <div className="text-center mb-8">
-                <h2 className="text-4xl">
+                <h2 className="text-4xl motion-preset-bounce font-bold text-primary">
                     Make A Booking
                 </h2>
             </div>
@@ -90,7 +90,7 @@ const BookNow = () => {
                 onSubmit={e => handleSubmit(e)}
             >
                 {/* Address section */}
-                <div className="relative text-center lg:text-left max-w-96" onBlur={handleBlur}>
+                <div className="relative text-center lg:text-left max-w-96 motion-preset-slide-up" onBlur={handleBlur}>
                     <label 
                         htmlFor="pickupAddress"
                         className="font-bold justify-center"
@@ -125,7 +125,7 @@ const BookNow = () => {
                     </ul>
                 </div>
                 {/* Start section */}
-                <div className="text-center lg:text-left w-full max-w-72">
+                <div className="text-center lg:text-left w-full max-w-72 motion-preset-slide-up delay-200">
                     <div>
                         <label 
                             htmlFor="start_date"
@@ -168,7 +168,8 @@ const BookNow = () => {
                         </div>
                     </div>
                 </div>
-                <div className="text-center lg:text-left w-full max-w-72">
+                {/* End section */}
+                <div className="text-center lg:text-left w-full max-w-72 motion-preset-slide-up delay-500">
                     <div>
                         <label 
                             htmlFor="end_date"
@@ -206,7 +207,7 @@ const BookNow = () => {
                 </div>
                 <input
                     type="submit"
-                    className="btn btn-secondary btn-outline btn-lg w-full lg:w-auto lg:min-w-fit cursor-pointer hover:bg-white border-2 border-orange-500 transition-all ease rounded-md"
+                    className="btn btn-secondary btn-outline btn-lg w-full lg:w-auto lg:min-w-fit cursor-pointer hover:bg-white border-2 border-orange-500 transition-all ease rounded-md motion-preset-shrink"
                     value="Rent Now"
                 />
             </form>
