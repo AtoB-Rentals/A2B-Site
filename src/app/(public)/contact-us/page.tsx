@@ -1,5 +1,7 @@
 import React from 'react';
 import { revalidatePath } from 'next/cache';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const ContactUsPage = () => {
 
@@ -40,7 +42,7 @@ const ContactUsPage = () => {
                 </h1>
                 <p>If you have any questions, feel free to reach out to us!</p>
             </div>
-            <form className="max-w-md mx-auto mt-8" action={handleSubmit}>
+            <form className="max-w-md mx-auto px-2 md:px-0 mt-8 " action={handleSubmit}>
                 <div className="mb-4 motion-preset-slide-right">
                     <label className="block text-md font-bold font-medium text-primary" htmlFor="name">Name</label>
                     <input
@@ -80,6 +82,43 @@ const ContactUsPage = () => {
                     </button>
                 </div>
             </form>
+            <section className='flex md:flex-row flex-col justify-around items-center mt-8 text-center gap-8 md:gap-0 max-w-4xl mx-auto'>
+                <div className='flex flex-col items-center px-8 max-w-sm motion-preset-slide-right-lg'>
+                    <Image 
+                        src='/images/mail.png'
+                        alt='email icon'
+                        width={50}
+                        height={50}
+                    />
+                    <h3 className='text-lg font-bold text-primary'>
+                        Email Us:
+                    </h3>
+                    <p className='opacity-80'>
+                        Email us for general queries, including marketing and partnership opportunities.
+                    </p>
+                    <Link href="mailto:rent@atob.rentals" className='link link-primary text-lg font-bold'>
+                        Rent@atob.rentals
+                    </Link>
+                </div>
+                <div className='flex flex-col items-center px-8 max-w-sm motion-preset-slide-left-lg'>
+                    <Image
+                        src='/images/phone.png'
+                        alt='email icon'
+                        width={50}
+                        height={50}
+                    />
+                    <h3 className='text-lg font-bold text-primary'>
+                        Call Us:
+                    </h3>
+                    <p className='opacity-80'>
+                        Call us to speak to a member of our team. We are always happy to help
+                    </p>
+                    <Link href="tel:+19802063002" className='link link-primary text-lg font-bold'>
+                        (980) 206-3002
+                    </Link>
+                </div>
+                
+            </section>
         </>
     );
 };

@@ -17,7 +17,7 @@ const Hero = () => {
                     <Link href='/rentals' className='btn btn-accent'>
                         Our Cars
                     </Link>
-                    <a href="tel:+19802063002" className='btn btn-secondary p-4 border btn-outline'>
+                    <a href="/contact-us" className='btn btn-secondary p-4 border btn-outline'>
                         Get In Touch
                     </a>
                 </div>

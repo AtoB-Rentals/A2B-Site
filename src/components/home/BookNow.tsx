@@ -81,7 +81,7 @@ const BookNow = () => {
     return (
         <section className="w-full p-10">
             <div className="text-center mb-8">
-                <h2 className="text-4xl motion-preset-bounce font-bold text-primary">
+                <h2 className="text-4xl font-bold text-primary motion-preset-bounc">
                     Make A Booking
                 </h2>
             </div>
