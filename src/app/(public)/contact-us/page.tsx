@@ -1,9 +1,17 @@
 import React from 'react';
+import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
+import { apiURL } from '@/constants/requests/constants';
+import { authOptions } from '@/app/api/utils/authOptions';
 
-const ContactUsPage = () => {
+const ContactUsPage = async () => {
+    const session = await getServerSession(authOptions);
+    const userEmail = session?.user?.email || '';
+    const userName = session?.user?.name || '';
+
+    console.log('User email:', userEmail);
 
     const handleSubmit = async (formData: FormData) => {
         "use server"
@@ -11,16 +19,15 @@ const ContactUsPage = () => {
         const name = formData.get('name')?.toString() || '';
         const email = formData.get('email')?.toString() || '';
         const message = formData.get('message')?.toString() || '';
-
-        console.table({ name, email, message });
+        const subject = formData.get('subject')?.toString() || '';;
 
         // Handle form submission logic here, e.g., save to database, send email, etc.
-        const response = await fetch('/api/send-email', {
+        const response = await fetch(`${apiURL}/api/users/contact-us`, {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name, email, message }),
+            body: JSON.stringify({ name, email, message, subject }),
         });
 
         if (!response.ok) {
@@ -41,6 +48,7 @@ const ContactUsPage = () => {
                     Contact Us
                 </h1>
                 <p>If you have any questions, feel free to reach out to us!</p>
+                <p>From booking to partnership questions!</p>
             </div>
             <form className="max-w-md mx-auto px-2 md:px-0 mt-8 " action={handleSubmit}>
                 <div className="mb-4 motion-preset-slide-right">
@@ -50,6 +58,7 @@ const ContactUsPage = () => {
                         id="name"
                         name="name"
                         className="mt-1 block w-full px-3 py-2 shadow-md rounded-md bg-base-300 focus:outline-none focus:ring-primary focus:shadow-primary sm:text-sm"
+                        defaultValue={userName}
                         required
                     />
                 </div>
@@ -59,6 +68,17 @@ const ContactUsPage = () => {
                         type="email"
                         id="email"
                         name="email"
+                        className="mt-1 block w-full px-3 py-2 shadow-md rounded-md bg-base-300 focus:outline-none focus:ring-primary focus:shadow-primary sm:text-sm"
+                        defaultValue={userEmail}
+                        required
+                    />
+                </div>
+                <div className="mb-4 motion-preset-slide-right">
+                    <label className="block text-md font-bold font-medium text-primary" htmlFor="name">Subject</label>
+                    <input
+                        type="text"
+                        id="subject"
+                        name="subject"
                         className="mt-1 block w-full px-3 py-2 shadow-md rounded-md bg-base-300 focus:outline-none focus:ring-primary focus:shadow-primary sm:text-sm"
                         required
                     />
