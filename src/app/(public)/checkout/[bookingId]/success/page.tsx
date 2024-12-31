@@ -94,8 +94,6 @@ const Success = async ({
         redirect(`/checkout/${booking.id}`);
     }
 
-    console.table(booking.startTime);
-
     const startTimef = DateTime.fromISO(booking.startTime.utc)
         .toLocal()
         .toFormat("LLL d, yyyy t");
