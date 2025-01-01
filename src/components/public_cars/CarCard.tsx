@@ -18,6 +18,7 @@ const CarCard = ({ c, qParams }: CarCardI) => {
         <Link
             href={`/rental/${c.id}?${qParams}`}
             target="_blank"
+            rel="noopener noreferrer"
             className="card md:card-side glass bg-base-100 shadow-xl w-full motion-preset-pop transform hover:scale-105 transition-transform"
         >
             <figure>
