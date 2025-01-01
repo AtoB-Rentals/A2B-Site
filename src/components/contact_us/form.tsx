@@ -27,7 +27,7 @@ const ContactUsForm = () => {
         })
 
         if (!response.ok) {
-            if (response.status <= 400 && response.status < 500) {
+            if (response.status >= 400 && response.status < 500) {
                 setStatus('bad data')
             }
 
