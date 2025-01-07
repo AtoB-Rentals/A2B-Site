@@ -3,13 +3,10 @@
 import { bookingPaymentIntent, getBookingById } from "@/constants/requests/bookings"
 import { BookingI } from "@/interface/api/booking"
 import { useEffect, useState } from 'react'
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import PE from "./PaymentElement";
 import { numToDallor } from "@/constants/formatting/money";
-import Success from "./Success";
-import Options from '../rentals/rental/options';
 import { useRouter } from "next/navigation";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!)
@@ -45,6 +42,10 @@ const StripeCheckout = ({
             if (bookingData.status !== 'Draft') {
                 router.push(`/checkout/${bookingData.id}/success`)
             }
+
+            if (bookingData.paidFor) {
+                router.push(`/checkout/${bookingData.id}/success`)
+            }
             
             setBooking(res.data)
         } finally {
@@ -60,8 +61,7 @@ const StripeCheckout = ({
             if (res.isErr) {
                 if (res.message === "vehicle is already paid for") {
                     setSuccess(true)
-                    await getBooking()
-                    setStripeData(res.data)
+                    router.push(`/checkout/${bookingId}/success`)
                 } else {
                     alert("Something went wrong")
                 }
