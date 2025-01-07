@@ -39,7 +39,7 @@ const Navbar = async () => {
                     </li>
                     <li>
                         <Link 
-                            href="/coming-soon"
+                            href="/contact-us"
                             className={`btn btn-ghost btn-sm ${DesktopNav} `}
                         >
                             Contact Us
@@ -65,8 +65,8 @@ const Navbar = async () => {
                                 <Link href="/coming-soon">
                                     Become A Partner
                                 </Link>
-                                <Link href="/coming-soon">
-                                    Contact US
+                                <Link href="/contact-us">
+                                    Contact Us
                                 </Link>
                                 <Link href="/coming-soon">
                                     Terms and Conditions

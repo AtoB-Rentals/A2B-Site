@@ -17,7 +17,9 @@ const CarCard = ({ c, qParams }: CarCardI) => {
     return (
         <Link
             href={`/rental/${c.id}?${qParams}`}
-            className="card md:card-side glass bg-base-100 shadow-xl w-full"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="card md:card-side glass bg-base-100 shadow-xl w-full motion-preset-pop transform hover:scale-105 transition-transform"
         >
             <figure>
                 <div className="relative h-36 md:h-full w-80 md:w-36">
@@ -25,7 +27,7 @@ const CarCard = ({ c, qParams }: CarCardI) => {
                         src={c.profilePicture.url ? c.profilePicture.url : "/images/sedan.png"} 
                         alt={c.name}
                         layout="fill"
-                        className="object-cover"
+                        className="object-cover w-full md:w-auto"
                     />
                 </div>
             </figure>

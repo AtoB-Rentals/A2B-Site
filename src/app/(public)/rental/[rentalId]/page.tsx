@@ -64,7 +64,7 @@ const RentalPage = async ({ params }: {params: RentalPageI}) => {
     return (
         <>
             <main className="max-w-[1000px] mx-3 lg:mx-auto">
-                <h1 className="text-blue-400 text-4xl font-bold my-2">
+                <h1 className="text-blue-400 text-4xl font-bold my-2 motion-preset-slide-right">
                     {car.name}
                 </h1>
                 <RentalInfo car={car}/>

@@ -74,7 +74,7 @@ const PE = ({
     return (
         <form 
             onSubmit={handleSubmit}
-            className='flex flex-col mx-2 border-blue-500 border-2 rounded-md p-4 max-w-3xl md:mx-auto mb-4'
+            className='flex flex-col mx-2 border-blue-500 border-2 rounded-md p-4 max-w-3xl md:mx-auto mb-4 motion-translate-x-in-[27%] motion-translate-y-in-[18%] motion-rotate-in-[-27deg]'
         >
             <PaymentElement 
                 options={{
