@@ -1,6 +1,6 @@
 'use client'
 
-import BookingProfile from "@/components/bookings/bookingProfile"
+import BookingProfile from "@/components/bookings/manager/bookingProfile"
 import { getBookingById } from "@/constants/requests/bookings"
 import { BookingI } from "@/interface/api/booking"
 import { useRouter } from "next/navigation"

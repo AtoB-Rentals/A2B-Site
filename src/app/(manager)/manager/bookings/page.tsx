@@ -1,6 +1,6 @@
 'use client'
 
-import ListBookings from "@/components/bookings/ListBookings"
+import ListBookings from "@/components/bookings/manager/ListBookings"
 
 const Bookings = () => {
 

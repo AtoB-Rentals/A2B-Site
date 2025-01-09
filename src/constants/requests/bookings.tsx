@@ -1,4 +1,3 @@
-'use client'
 import { BookingI, ReqBookingI, StripeBookingI } from "@/interface/api/booking";
 import { ApiRes, apiURL, err, throwError, unknownErr } from "./constants";
 import { ReqAddressI } from "@/interface/api/address";

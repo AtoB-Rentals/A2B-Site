@@ -11,11 +11,6 @@ interface CredentialsFormProps {
 
 export function CredentialsForm(props: CredentialsFormProps) {
     const session = useSession()
-
-    // if (session.status === 'authenticated') {
-    //     signOut()
-    // }
-
     const router = useRouter();
     const [error, setError] = useState<string | null>(null)
     const [redirecting, setRedirecting] = useState<boolean>(false)
@@ -31,8 +26,6 @@ export function CredentialsForm(props: CredentialsFormProps) {
         });
 
         if (signInResponse && !signInResponse.error) {
-        //Redirect to homepage (/timeline)
-        //   router.push("/timeline");
         } else {
         setError("Your Email or Password is wrong!");
         }
@@ -43,7 +36,7 @@ export function CredentialsForm(props: CredentialsFormProps) {
             const redirect = localStorage.getItem("redirectURL") || "/"
             localStorage.removeItem('redirectURL')
             setRedirecting(true)
-
+            
             router.push(redirect)
         }
     }, [session])

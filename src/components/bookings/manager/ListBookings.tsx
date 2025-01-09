@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { BookingI } from '../../interface/api/booking';
+import { BookingI } from '../../../interface/api/booking';
 import { bookingsFromTodayOn } from '@/constants/requests/bookings';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie'

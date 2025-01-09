@@ -1,3 +1,5 @@
+import { TimeI } from "@/interface/api/time"
+import { DateTime } from "luxon"
 
 
 export const inThirty = [
@@ -52,6 +54,7 @@ export const inThirty = [
 ]
 
 export const timeFormFormat = "yyyy-MM-dd t"
+export const timeUserFormat = "MM/dd/yyyy h:mm a"
 
 export const toMilitaryTime = (time: string) => {
     let [hours, modifier] = time.split(' ')
@@ -67,4 +70,15 @@ export const toAmPm = (time: string) => {
     if (hour === 0) hour = 12
     if (hour > 12) hour -= 12
     return `${hour}:${String(minutes).padStart(2, '0')} ${modifier}`
+}
+
+export const fromTimeI = (time: TimeI) => DateTime.fromISO(time.utc)
+
+export const defaultFormat = (time: TimeI) => {
+    return fromTimeI(time).toLocal().toFormat(timeUserFormat)
+}
+
+
+export const timeFormat = (time: TimeI, format: string) => {
+    return fromTimeI(time).toLocal().toFormat(format)
 }
