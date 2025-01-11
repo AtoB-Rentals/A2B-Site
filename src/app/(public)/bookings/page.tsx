@@ -1,3 +1,4 @@
+import Loading from "@/components/assets/loading"
 import { defaultFormat, timeFormat } from "@/constants/formatting/time"
 import { ApiRes, apiURL } from "@/constants/requests/constants"
 import { BookingI } from "@/interface/api/booking"
@@ -47,6 +48,23 @@ const BookingsPage = async () => {
     }
 
     const bookings = await bookingsFromTodayOn()
+
+    if(!bookings) {
+        return (
+            <main>
+                <section>
+                    <div className="">
+                        <h2 className="text-secondary text-3xl font-bold text-center">Upcoming</h2>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center"></div>
+                    <div className="flex flex-col justify-center items-center gap-4 mx-auto md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:justify-items-center max-w-7xl">
+                        <h2 className="text-secondary text-3xl font-bold text-center">No Upcoming Bookings</h2>
+                    </div>
+                </section>
+            </main>
+        )
+    }
+
     return (
         <main>
             <section>

@@ -55,7 +55,7 @@ export default function FormModal({
     const dialog: JSX.Element | null = showDialog === 'y'
         ? (
             <Suspense>
-                <dialog ref={dialogRef} className="fixed top-50 left-50 -translate-x-50 -translate-y-50 rounded-xl backdrop:bg-gray-800/50 border border-blue-500 w-full md:w-[100vh] max-h-[75vh]">
+                <dialog ref={dialogRef} className="fixed top-50 left-50 -translate-x-50 -translate-y-50 rounded-xl backdrop:bg-gray-800/50 border border-blue-500 w-full md:w-[100vh] max-h-[75vh] motion-preset-fade-lg">
                     <div className="flex flex-col justify-between">
                         <div className="flex flex-row justify-between items-center pt-2 px-5 bg-neutral-800 text-white">
                             <h1 className="text-xl whitespace-pre-wrap overflow-hidden">{title}</h1>

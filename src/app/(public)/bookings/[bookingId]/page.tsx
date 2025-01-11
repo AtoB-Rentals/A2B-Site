@@ -6,6 +6,7 @@ import { redirect } from "next/dist/server/api-utils"
 import { cookies } from "next/headers"
 import { Metadata } from "next"
 import { fromTimeI, timeFormat, timeUserFormat } from "@/constants/formatting/time"
+import Link from "next/link"
 
 /**
  * *undefined means that the error is a 401 or 403
@@ -76,14 +77,20 @@ const BookingPage = async ({
     const booking = await getBooking(params.bookingId)
     if (!booking) {
         return (
-            <section className='rounded-md shadow-[0px_0px_4px_1px] flex flex-col items-center md:items-start py-3 px-2 gap-2 md:grid grid-cols-3 auto-cols-max mb-12 max-w-[1000px] mx-3 lg:mx-auto'>
-                <p className='text-error text-lg text-center font-bold md:mx-4 md:text-left'>Booking not found</p>
+            <section className=''>
+                <p className='text-error text-lg text-center font-bold md:mx-4 motion-preset-slide-up-sm mb-4'>Booking not found</p>
+                <div className="flex gap-x-2 justify-center motion-preset-slide-up-sm motion-delay-200">
+                    <Link href="/bookings" className="btn btn-accent">
+                        View Bookings
+                    </Link>
+                </div>
             </section>
         )
     }
 
     return (
-        <>  
+        <>
+            
             <BookingProfile preBooking={booking} bookingId={params.bookingId}/>
         </>
     )

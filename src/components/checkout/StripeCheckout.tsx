@@ -8,6 +8,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import PE from "./PaymentElement";
 import { numToDallor } from "@/constants/formatting/money";
 import { useRouter } from "next/navigation";
+import Loading from "../assets/loading";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!)
 
@@ -80,13 +81,7 @@ const StripeCheckout = ({
         getPaymentIntent()
     }, [])
 
-    if (loading) {
-        return (
-            <h1 className="text-center font-bold text-lg">
-                Loading...
-            </h1>
-        )
-    }
+    if (loading) return <Loading />
 
     if (!booking) {
         return (
@@ -125,7 +120,7 @@ const StripeCheckout = ({
                     </div>
                 </div>
 
-                {stripeData?.clientSecret && 
+                {stripeData?.clientSecret ? 
                     <Elements 
                         stripe={stripePromise} 
                         options={{ 
@@ -140,7 +135,7 @@ const StripeCheckout = ({
                             clientSecret={stripeData.clientSecret}
                             booking={booking}
                         />
-                    </Elements>
+                    </Elements> : <Loading />
                 }
             </section>
         </>
