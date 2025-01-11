@@ -90,7 +90,7 @@ const BookNow = () => {
                 onSubmit={e => handleSubmit(e)}
             >
                 {/* Address section */}
-                <div className="relative text-center lg:text-left max-w-96 motion-preset-slide-up" onBlur={handleBlur}>
+                <div className="relative text-center lg:text-left max-w-96 motion-preset-slide-up z-10" onBlur={handleBlur}>
                     <label 
                         htmlFor="pickupAddress"
                         className="font-bold justify-center"
@@ -109,8 +109,7 @@ const BookNow = () => {
                         onFocus={handleFocus} 
                     />
                     <ul
-                        tabIndex={0}
-                        className={`bg-base-100 dropdown-content menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 z-30 ${predictions.length && showPredictions ? 'visble' : 'invisible'}`}
+                        className={`!bg-base-100 border-2 border-base-300 dropdown-content menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 !z-[1000] ${predictions.length && showPredictions ? 'visble' : 'invisible'}`}
                     >
                         {predictions.map((p, i) => (
                             <li
