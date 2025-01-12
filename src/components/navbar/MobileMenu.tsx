@@ -6,7 +6,9 @@ import MobileUser from "./MobileUser"
 import ThemeToggle from "./ThemeToggle"
 import Image from "next/image"
 
-const MobileMenu = () => {
+import { ReactNode } from "react";
+
+const MobileMenu = ({ children }: { children: ReactNode }) => {
     const [show, setShow] = useState<boolean>(false)
 
     return (
@@ -38,20 +40,7 @@ const MobileMenu = () => {
                         onClick={() => setShow(false)}
                     >
                         <li>
-                            <Link href="/rentals" >
-                                Rentals
-                            </Link>
-                            <Link href="/coming-soon" onClick={() => setShow(false)}>
-                                Become A Partner
-                            </Link>
-                            <Link href="/contact-us" onClick={() => setShow(false)}>
-                                Contact Us
-                            </Link>
-                            <Link href="/bookings" onClick={() => setShow(false)}>
-                                Bookings
-                            </Link>
-                            <MobileUser />
-                            <ThemeToggle />
+                            {children}
                         </li>
                     </ul>}
                 </div>

@@ -42,16 +42,14 @@ const Navbar = async () => {
                     </li>
                     <li className="md:hidden">
                         <MobileMenu>
-                            <li>
-                                <Link href="/manager/cars">
-                                    Cars
-                                </Link>
-                                <Link href="/manager/bookings">
-                                    Bookings
-                                </Link>
-                                <MobileUser />
-                                <ThemeToggle />
-                            </li>
+                            <Link href="/manager/cars">
+                                Cars
+                            </Link>
+                            <Link href="/manager/bookings">
+                                Bookings
+                            </Link>
+                            <MobileUser />
+                            <ThemeToggle />
                         </MobileMenu>
                     </li>
                     <li className={`hidden md:flex text-primary`}>
