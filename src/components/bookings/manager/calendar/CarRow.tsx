@@ -17,7 +17,7 @@ const CarRow = ({
     const [indexer, setIndexer] = useState(0)
     const booking = bookings[0]
 
-    console.log(bookings.length)
+    console.log("bookings by car: ", {car: booking.vehicle.name, bookingsAmount: bookings.length})
 
     return (
         <div className="flex border-b-2 border-primary border-dashed">
@@ -38,15 +38,13 @@ const CarRow = ({
                 let bookingStartTime: DateTime | null = null
                 let bookingDuration: number = 0
 
-                console.log("loop start")
                 bookings.forEach(b => {
                     if (date.hasSame(fromTimeI(b.startTime), 'day')) {
+                        console.log("found booking: ", b)
                         bookingStartTime = fromTimeI(b.startTime)
                         bookingDuration = fromTimeI(b.endTime).diff(bookingStartTime, 'days').as('days')
                     }
                 })
-                console.log("loop ended")
-                console.log(bookingDuration)
 
                 if (!bookingStartTime) return (
                     <div className="bg-base-300 w-32 flex flex-col items-center justify-center gap-2 border-r-2 border-primary shrink-0">
@@ -54,15 +52,23 @@ const CarRow = ({
                     </div>
                 )
 
+                console.log("bookingStartTime: ", bookingStartTime)
+                console.log("bookingDuration: ", bookingDuration)
+
+                const test = (bookingDuration*128).toString()
+
+                console.log
+
                 return (
                     <div 
-                        key={date.toISO()} 
+                        key={date.toFormat('yyyy-MM-dd')} 
                         className="relative bg-base-300 w-32 flex flex-col items-center justify-center gap-2 border-r-2 border-primary shrink-0"
                         onClick={() => onCarClick(booking.vehicle.id)}
                     >
                         <Link
                             href={`/manager/booking/${booking.id}`} 
-                            className={`block absolute left-1/2 z-50 h-2 bg-secondary w-[${bookingDuration*128}px] rounded-full bg-gradient-to-r from-primary via-secondary to-primary`}
+                            className={`block absolute left-1/2 z-50 h-3 bg-secondary w-[${test}px] rounded-full bg-gradient-to-r from-primary via-secondary to-primary`}
+                            style={{ width: `${bookingDuration * 128}px` }}
                         >
                             
                         </Link>

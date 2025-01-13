@@ -71,11 +71,13 @@ const Calendar = () => {
         }
     })
 
+    console.log("carBookings", carBookings)
+
     return (
         <div className="overflow-x-scroll mt-4">
             <Header dates={dates} />
             <section id='bookings'>
-                {Object.keys(carBookings).map((key) => <CarRow 
+                {Object.keys(carBookings).map((key, i) => <CarRow 
                     key={key} 
                     bookings={carBookings[key]} 
                     dates={dates}

@@ -16,7 +16,7 @@ const Header = ({
                     </p>
                 </div>
             {dates.map(date => (
-                <div className="bg-base-300 w-32 shrink-0 border-primary border-r-2 to-base-300">
+                <div key={date.toUnixInteger()}className="bg-base-300 w-32 shrink-0 border-primary border-r-2 to-base-300">
                     <p className="text-primary text-center">
                         {date.toFormat('ccc, LLL dd')}
                     </p>
