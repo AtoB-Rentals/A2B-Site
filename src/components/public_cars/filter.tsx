@@ -228,7 +228,7 @@ const Filter = ({
         <Suspense>
             <div
                 id="filter"
-                className="w-full flex flex-col gap-3 p-3 rounded-md text-lg max-w-lg shadow-xl motion-preset-slide-down delay-200"
+                className="w-full flex flex-col gap-3 p-3 rounded-md text-lg max-w-lg shadow-xl motion-preset-slide-down delay-200 z-20"
             >
                 <div
                     className='relative'
@@ -248,7 +248,7 @@ const Filter = ({
                             setInput(e.target.value)
                         }}
                     />
-                    <ul className={`dropdown-content bg-base-100 menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 z-30 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'} border-2 border-base-200`}>
+                    <ul className={`dropdown-content bg-base-100 menu-dropdown-toggle drop-shadow-sm w-full menu absolute rounded-box translate-y-1 ${brokeInitInput && predictions.length ? 'visble' : 'invisible'} border-2 border-base-200`}>
                         {predictions.map((p,i) => (
                             <li
                                 key={p.place_id}

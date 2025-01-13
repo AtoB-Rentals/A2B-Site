@@ -12,7 +12,7 @@ export default function RootLayout({
             <Navbar />
             {children}
             <footer className="p-4 bg-neutral text-base-100 text-center mt-8">
-              © 2024 A2B Rentals
+              © 2025 A2B Rentals
             </footer>
         </>
     )
