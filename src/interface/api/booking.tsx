@@ -69,10 +69,6 @@ export interface BookingI {
     vehicle: CarI
     paidFor: boolean
 
-    refundReason: string
-    refundAmount: number
-    cancelReason: string
-
     carAddons: {
         name: string
         quantity: number

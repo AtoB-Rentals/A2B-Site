@@ -57,22 +57,26 @@ const Navbar = async () => {
                     <li className="hidden md:flex">
                         <DesktopUser />
                     </li>
-                    <MobileMenu>
-                        <Link href="/rentals" >
-                            Rentals
-                        </Link>
-                        <Link href="/coming-soon">
-                            Become A Partner
-                        </Link>
-                        <Link href="/contact-us">
-                            Contact Us
-                        </Link>
-                        <Link href="/bookings">
-                            Bookings
-                        </Link>
-                        <MobileUser />
-                        <ThemeToggle />
-                    </MobileMenu>
+                    <li className="md:hidden">
+                        <MobileMenu>
+                            <li>
+                                <Link href="/rentals">
+                                    Rentals
+                                </Link>
+                                <Link href="/coming-soon">
+                                    Become A Partner
+                                </Link>
+                                <Link href="/contact-us">
+                                    Contact Us
+                                </Link>
+                                <Link href="/coming-soon">
+                                    Terms and Conditions
+                                </Link>
+                                <MobileUser />
+                                <ThemeToggle />
+                            </li>
+                        </MobileMenu>
+                    </li>
                     <li className={`hidden md:flex text-primary`}>
                         <ThemeToggle />
                     </li>
