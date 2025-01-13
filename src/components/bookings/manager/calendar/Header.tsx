@@ -9,12 +9,12 @@ const Header = ({
 }) => {
 
     return (
-        <div className="flex">
+        <div className="flex border-b-2 border-primary">
             <div className="bg-base-300 w-32 shrink-0 border-primary border-r-2 to-base-300">
-                    <p className="text-primary text-center">
-                        Cars
-                    </p>
-                </div>
+                <p className="text-primary text-center">
+                    Cars
+                </p>
+            </div>
             {dates.map(date => (
                 <div key={date.toUnixInteger()}className="bg-base-300 w-32 shrink-0 border-primary border-r-2 to-base-300">
                     <p className="text-primary text-center">
