@@ -7,6 +7,7 @@ const ReRoute = () => {
 
     useEffect(() => {
         router.push('/manager/bookings')
+    //@ts-ignore
     }, [])
 
     return (

@@ -69,6 +69,7 @@ const RentalSchedule = ({carId}: RentalScheduleI) => {
         params.set("end_time", end_time.toUTC().toISO()!)
 
         window.history.replaceState({}, '', `?${params.toString()}`)
+    //@ts-ignore
     }, [times, dates])
 
     const ranges = records ? records.map(r => ({
