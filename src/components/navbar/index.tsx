@@ -56,7 +56,7 @@ const Navbar = async () => {
                     </li>
                     <li>
                         <Link 
-                            href="/bofa-interveiw"
+                            href="/bofa-interview"
                             className={`btn btn-ghost btn-sm ${DesktopNav} `}
                         >
                             Interview
@@ -78,7 +78,7 @@ const Navbar = async () => {
                         <Link href="/bookings">
                             Bookings
                         </Link>
-                        <Link href="/bofa-interveiw">
+                        <Link href="/bofa-interview">
                             Interview
                         </Link>
                         <MobileUser />

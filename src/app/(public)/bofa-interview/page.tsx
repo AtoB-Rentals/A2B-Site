@@ -96,17 +96,17 @@ const BofA = () => {
 
     return (
         <main>
-            <section className="p-7 mx-auto max-w-4xl rounded-2xl bg-base-300">
+            <section className="p-7 mx-auto max-w-4xl rounded-2xl bg-base-300 motion-preset-slide-down-md">
                 <h1 className="text-center text-2xl text-secondary font-bold">Hello Bank of America!</h1>
                 <p
                     className="text text-justify-center mt-4"
-                >I was told that you guys were having trouble finding candidates that were compotent in javascript. Specifically in using promises. Throughout the application, I use "es6's async await" way of handling promises so I have plenty of examples to show you for that. However, I don't use es5's promises. Here's an example of me using it here.</p>
+                >I was told that you guys were having trouble finding candidates that were compotent in javascript. Specifically in using promises. Throughout the application, I use "es6's async await" way of handling promises so I have plenty of examples to show you for that. However, I don't use es5's promises. Here's an example of me using it here:</p>
                 {userData && <p className="text text-justify-center text-secondary mt-4"></p>}
 
                 <div className="flex justify-center gap-4 mt-4">
-                    <button className="btn btn-secondary" onClick={() => getUserEs5()}>Get User</button>
+                    <button className="btn btn-secondary" onClick={() => getUserEs5()}>Get User (es5)</button>
                     <button className="btn btn-success " onClick={() => getUserEs6()}>Get User (es6)</button>
-                    <button className="btn btn-error" onClick={() => setUserData(null)}>Clear</button>
+                    {!!userData && <button className="btn btn-error motion-preset-slide-left-md" onClick={() => setUserData(null)}>Clear</button>}
                 </div>
             </section>
             
