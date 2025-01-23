@@ -54,6 +54,14 @@ const Navbar = async () => {
                             Bookings
                         </Link>
                     </li>
+                    <li>
+                        <Link 
+                            href="/bofa-interveiw"
+                            className={`btn btn-ghost btn-sm ${DesktopNav} `}
+                        >
+                            Interview
+                        </Link>
+                    </li>
                     <li className="hidden md:flex">
                         <DesktopUser />
                     </li>
@@ -69,6 +77,9 @@ const Navbar = async () => {
                         </Link>
                         <Link href="/bookings">
                             Bookings
+                        </Link>
+                        <Link href="/bofa-interveiw">
+                            Interview
                         </Link>
                         <MobileUser />
                         <ThemeToggle />
