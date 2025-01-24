@@ -2,19 +2,20 @@
 
 import Loading from "@/components/assets/loading";
 import { apiURL } from "@/constants/requests/constants"
+import { GetUserProfile } from "@/constants/requests/users";
 import { UserI } from "@/interface/api/user"
+import Link from "next/link";
 import { useState } from "react"
-import { set } from 'zod';
 
 const BofA = () => {
     const [userData, setUserData] = useState<UserI | null>(null)
     const [loading, setLoading] = useState(false)
 
     class ApiService {
-        apiURL: string;
+        apiURL: string
 
         constructor(apiURL: string) {
-            this.apiURL = apiURL   
+            this.apiURL = apiURL
         }
 
         getUserEs6 = async () => {
@@ -116,6 +117,10 @@ const BofA = () => {
                 <h1 className="text-center text-2xl text-secondary font-bold">User Data</h1>
                 <pre className="whitespace-pre-wrap">{JSON.stringify(userData, null, 2)}</pre>
             </section>}
+
+            <Link href="/bofa-interview/promises" className="btn btn-lg btn-success fixed bottom-5 right-5">
+                Next: Promises
+            </Link>
         </main>
     )
 }
