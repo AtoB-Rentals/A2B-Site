@@ -100,7 +100,7 @@ const BofA = () => {
             <section className="p-7 mx-auto max-w-4xl rounded-2xl bg-base-300 motion-preset-slide-down-md">
                 <h1 className="text-center text-2xl text-secondary font-bold">Hello Bank of America!</h1>
                 <p
-                    className="text text-justify-center mt-4"
+                    className="text text-justify mt-4"
                 >I was told that you guys were having trouble finding candidates that were compotent in javascript. Specifically in using promises. Throughout the application, I use "es6's async await" way of handling promises so I have plenty of examples to show you for that. However, I don't use es5's promises. Here's an example of me using it here:</p>
                 {userData && <p className="text text-justify-center text-secondary mt-4"></p>}
 

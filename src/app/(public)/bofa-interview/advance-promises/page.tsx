@@ -5,15 +5,22 @@ import { useState } from "react";
 
 
 const AdvancedPromises = () => {
-    const [data, setData] = useState<any>([])
+    const [data, setData] = useState<any>()
     const [loading, setLoading] = useState<boolean>(false)
 
     const waitToWin = (win: boolean, time: number) => new Promise((res, err) => {
         setTimeout(() => win ? res("WIN") : err("Lose"), time);
     })
 
-    const all = Promise.all([waitToWin(true, 1000), waitToWin(false, 2000), waitToWin(true, 3000)])
-    const allSettled = Promise.allSettled([waitToWin(true, 1000), waitToWin(false, 2000), waitToWin(true, 3000)])
+    const waiters = [
+        waitToWin(true, 1000), 
+        waitToWin(false, 2000), 
+        waitToWin(true, 3000)
+    ]
+
+    const all = Promise.all(waiters)
+
+    const allSettled = Promise.allSettled(waiters)
 
     const triggerAll = async () => {
         try {
@@ -51,13 +58,13 @@ const AdvancedPromises = () => {
             <section className="p-7 mx-auto max-w-4xl rounded-2xl bg-base-300 motion-preset-slide-down-md">
                 <h1 className="text-center text-2xl text-secondary font-bold">Advanced Promises</h1>
                 <h2 className="text-center text-lg text-secondary font-bold italic">I Promised You All...</h2>
-                <p>Okay we know how promises operate now. We know where they came from. However, what about if we want to handle multiple promises. This is where "Promise.all()" comes in. "Promise.all()" takes in an array of promises and will run them all at the same time. This makes your code more unblocking by allowing not creating a non-sequential way starting asynchronously operation. This is also especially good for when you have an unknown number of promises you want to run.</p>
+                <p className="text-justify">Okay we know how promises operate now. We know where they came from. However, what about if we want to handle multiple promises. This is where "Promise.all()" comes in. "Promise.all()" takes in an array of promises and will run them all at the same time. This makes your code more unblocking by allowing not creating a non-sequential way starting asynchronously operation. This is also especially good for when you have an unknown number of promises you want to run.</p>
                 <h2 className="text-center text-lg text-secondary font-bold italic mt-4">Let's All Get Settle In</h2>
-                <p>One major caveat to the running "Promise.all()" is that it'll cancel all operations whenver a single Promise is rejected. Let's say you want to update the database for changes in node.js and also send an email at the same time. You wouldn't well now if the email fails your database will not be updated. That can cause major problems if the database update was the most important operation and you don't care if the email is sent.</p>
+                <p className="text-justify">One major caveat to the running "Promise.all()" is that it'll cancel all operations whenver a single Promise is rejected. Let's say you want to update the database for changes in node.js and also send an email at the same time. You wouldn't well now if the email fails your database will not be updated. That can cause major problems if the database update was the most important operation and you don't care if the email is sent.</p>
 
-                <p className="mt-4 indent-5">"Promise.allSettled()" comes as new method that would instead wait until all promises finish (resolved or rejected). Similar to "Promise.all()", "Promise.allSettled()" returns the results back as an array with the only difference that each result is displayed as: 
+                <p className="mt-4 indent-5 text-justify">"Promise.allSettled()" comes as new method that would instead wait until all promises finish (resolved or rejected). Similar to "Promise.all()", "Promise.allSettled()" returns the results back as an array with the only difference that each result is displayed as: 
                 
-                <pre>{`{status: "fulfilled" | "reject",  value: (if fulfilled), reason: (if rejected)}`}</pre></p>
+                <pre className="rounded-md bg-base-300">{`{status: "fulfilled" | "reject",  value: (if fulfilled), reason: (if rejected)}`}</pre></p>
 
                 <p className="mt-4">Here's an example explain them:</p>
 
@@ -93,6 +100,9 @@ const AdvancedPromises = () => {
 
             <Link href="/bofa-interview/promises" className="btn btn-lg btn-error fixed bottom-5 left-5">
                 Previous: Promises
+            </Link>
+            <Link href="/bofa-interview/react" className="btn btn-lg btn-success fixed bottom-5 right-5">
+                Next: React
             </Link>
         </main>
     )
