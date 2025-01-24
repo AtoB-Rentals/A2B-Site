@@ -94,9 +94,6 @@ const AdvancedPromises = () => {
             <Link href="/bofa-interview/promises" className="btn btn-lg btn-error fixed bottom-5 left-5">
                 Previous: Promises
             </Link>
-            <Link href="/bofa-interview/advance-promises" className="btn btn-lg btn-success fixed bottom-5 right-5">
-                Next: Advance Promises
-            </Link>
         </main>
     )
 }
