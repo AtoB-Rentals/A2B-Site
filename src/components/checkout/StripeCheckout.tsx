@@ -3,12 +3,11 @@
 import { bookingPaymentIntent, getBookingById } from "@/constants/requests/bookings"
 import { BookingI } from "@/interface/api/booking"
 import { useEffect, useState } from 'react'
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import PE from "./PaymentElement";
 import { numToDallor } from "@/constants/formatting/money";
-import Success from "./Success";
+import { useRouter } from "next/navigation";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!)
 
@@ -23,6 +22,7 @@ const StripeCheckout = ({
     const [ booking, setBooking ] = useState<BookingI>()
     const [ success, setSuccess ] = useState<boolean>(false)
     const [ loading, setLoading ] = useState<boolean>(true)
+    const router = useRouter()
 
     // const stripe = useStripe()
     // const elements = useElements()
@@ -36,6 +36,15 @@ const StripeCheckout = ({
             if (res.isErr) {
                 alert("invalid booking id")
                 return
+            }
+
+            const bookingData = res.data
+            if (bookingData.status !== 'Draft') {
+                router.push(`/checkout/${bookingData.id}/success`)
+            }
+
+            if (bookingData.paidFor) {
+                router.push(`/checkout/${bookingData.id}/success`)
             }
             
             setBooking(res.data)
@@ -52,8 +61,7 @@ const StripeCheckout = ({
             if (res.isErr) {
                 if (res.message === "vehicle is already paid for") {
                     setSuccess(true)
-                    await getBooking()
-                    setStripeData(res.data)
+                    router.push(`/checkout/${bookingId}/success`)
                 } else {
                     alert("Something went wrong")
                 }
@@ -90,10 +98,9 @@ const StripeCheckout = ({
 
     return (
         <>
-            {success && <Success booking={booking} />}
             <section>
                 <div
-                    className="flex flex-col gap-2 mx-2 border-2 border-blue-500 rounded-md p-2 mb-4 max-w-3xl md:mx-auto"
+                    className="flex flex-col gap-2 mx-2 border-2 border-blue-500 rounded-md p-2 mb-4 max-w-3xl md:mx-auto motion-translate-x-in-[-23%] motion-translate-y-in-[14%] motion-rotate-in-[22deg]"
                 >
                     {booking.stripe?.items?.length && booking.stripe?.items?.map(item => (
                         <div
@@ -122,10 +129,17 @@ const StripeCheckout = ({
                     <Elements 
                         stripe={stripePromise} 
                         options={{ 
-                            clientSecret: stripeData?.clientSecret
+                            clientSecret: stripeData?.clientSecret,
+                            appearance: {
+                                theme: localStorage.getItem('theme') === "dark" ? "night" : "stripe",
+                                labels: 'floating',
+                            },
                         }}
                     >
-                        <PE clientSecret={stripeData.clientSecret} />
+                        <PE 
+                            clientSecret={stripeData.clientSecret}
+                            booking={booking}
+                        />
                     </Elements>
                 }
             </section>

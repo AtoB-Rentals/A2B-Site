@@ -27,7 +27,7 @@ async function Rentals({
     return (
         <div>
             <section
-                className="p-2"
+                className="flex flex-col max-w-2xl justify-center items-center mx-auto pb-4"
             >
                 <Filter 
                     initialLocStr={ locationStr }
@@ -39,7 +39,7 @@ async function Rentals({
                         long: ipD.longitude
                     } : undefined}
                 />
-                <section className="mt-5 flex flex-col gap-4">
+                <section className="mt-5 flex flex-col gap-4 mx-2">
                     <PubCarList />
                 </section>
             </section>

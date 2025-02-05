@@ -42,10 +42,8 @@ export const ReqUserSchema = z.object({
     }, "Invalid email provided"),
     password: z.string().min(8, "Must be at least 8 characters"),
     dob: z.string().refine(value => {
-        console.log("dob: ", value)
         const date = DateTime.fromFormat(value, "yyyy-MM-dd")
-        // if (!date.isValid) return
-        console.log("date.isValid: ", date.isValid)
+        if (!date.isValid) return false
         // Get the current date
         const now = DateTime.now();
 

@@ -33,7 +33,6 @@ const PubCarList = () => {
 
     const handleGetCars = async () => {
         if (!isValid) {
-            console.log("fail")
             return
         }
 

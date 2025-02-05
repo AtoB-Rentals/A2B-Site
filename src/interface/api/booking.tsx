@@ -67,6 +67,7 @@ export interface BookingI {
     endTime: TimeI
     totalPrice: number
     vehicle: CarI
+    paidFor: boolean
 
     carAddons: {
         name: string

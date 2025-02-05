@@ -1,6 +1,7 @@
 import { roleT } from '../../interface/api'
 
 export const apiURL = process.env.NEXT_PUBLIC_API!
+export const siteURL = process.env.NEXT_PUBLIC_WEB_URL!
 
 export interface ApiRes<T> {
     status: string; // or whatever type response.Success is
@@ -70,7 +71,6 @@ export const vR = (...roles: roleT[]): boolean => {
 }
 
 export const extractFirstParenthesesValue = (input: string): string | null => {
-    console.log("input: ", input)
     const openIndex = input.indexOf('(');
     const closeIndex = input.indexOf(')', openIndex);
 

@@ -1,45 +1,56 @@
+/* Import Tailwind's base styles, which include CSS resets */
 @tailwind base;
+
+/* Import Tailwind's component styles */
 @tailwind components;
+
+/* Import Tailwind's utility classes */
 @tailwind utilities;
 
 /* ===== Scrollbar CSS ===== */
-/* Firefox */
+
+/* Firefox Scrollbar */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #2682c5 rgb(249 115 22);
+  scrollbar-width: thin; /* Thin scrollbar */
+  scrollbar-color: #2682c5 rgb(249 115 22); /* Thumb and track color */
 }
 
-@layer components {
-  .hamburger div:first-child {
-    @apply rotate-45 translate-y-1.5;
-  }
-  .hamburger div:last-child {
-    @apply -rotate-45 -translate-y-1;
-  }
-}
-
-/* Chrome, Edge, and Safari */
+/* Chrome, Edge, and Safari Scrollbar */
 *::-webkit-scrollbar {
-  width: 24px;
+  width: 12px; /* Reduce the width for a cleaner look */
 }
 
 *::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: #f3f4f6; /* Neutral background for track */
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #2682c5;
-  border-radius: 100%;
-  border: 3px solid #050ce6;
+  background-color: #2682c5; /* Blue scrollbar thumb */
+  border-radius: 100px; /* Rounded scrollbar thumb */
+  border: 3px solid #ffffff; /* White border for a clean contrast */
 }
 
+/* Body Global Styles */
 body {
   padding: 0;
   margin: 0;
-  background-color: white;
+  font-family: 'Inter', sans-serif; /* Ensure consistent font-family */
+  background-color: var(--tw-bg-base-100); /* DaisyUI base background color */
 }
 
+/* Custom Components - Hamburger Menu */
+@layer components {
+  .hamburger div:first-child {
+    @apply rotate-45 translate-y-1.5 transition-all ease-in-out duration-300;
+  }
+  .hamburger div:last-child {
+    @apply -rotate-45 -translate-y-1 transition-all ease-in-out duration-300;
+  }
+}
+
+/* Custom Utilities */
 @layer utilities {
+  /* Text Balance Utility */
   .text-balance {
     text-wrap: balance;
   }

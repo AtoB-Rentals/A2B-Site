@@ -27,9 +27,9 @@ const RentalInfo = async ({car}: RentalInfoI) => {
     return (
         <>
             <div 
-                className="rounded-md shadow-[0px_0px_4px_1px] flex flex-col items-center md:items-start py-3 px-2 gap-2 md:grid grid-cols-3 auto-cols-max mb-12"
+                className="rounded-md shadow-[0px_0px_4px_1px] flex flex-col items-center md:items-start py-3 px-2 gap-2 md:grid grid-cols-3 auto-cols-max mb-12 "
             >
-                <div className="relative w-full min-h-56 md:w-full md:min-h-56 rounded-md flex justify-center md:col-span-1 md:row-span-2">
+                <div className="relative w-full min-h-56 md:w-full md:min-h-56 rounded-md flex justify-center md:col-span-1 md:row-span-2 motion-preset-slide-up">
                     <Image 
                         src={!!car.profilePicture.url ? car.profilePicture.url : "/images/sedan.png"} 
                         alt={car.name}
@@ -38,25 +38,25 @@ const RentalInfo = async ({car}: RentalInfoI) => {
                     />
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full text-center md:text-left col-span-2 font-bold text-lg">
-                    <div className=" p-3 rounded-lg w-full md:w-30 bg-green-500 text-white">
+                    <div className=" p-3 rounded-lg w-full md:w-30 bg-green-600 text-white motion-preset-slide-left delay-0">
                         <p>${numToDallor(car.price)}/day</p>
                     </div>
-                    <div className="bg-slate-200 p-3 rounded-lg w-full md:w-30">
+                    <div className="bg-primary glass p-3 rounded-lg w-full md:w-30 motion-preset-slide-left motion-delay-300">{/*bg-slate-200 */}
                         <p>Seats {car.passengers}</p>
                     </div>
-                    <div className="bg-slate-200 p-3 rounded-lg w-full md:w-30">
+                    <div className="bg-primary glass p-3 rounded-lg w-full md:w-30 motion-preset-slide-left motion-delay-700">{/*bg-slate-200 */}
                         <p>{car.transmission}</p>
                     </div>
                 </div>
-                <div className="col-start-2 col-span-2 text-lg">
-                    <p className="font-bold ">
+                <div className="col-start-2 col-span-2 text-lg motion-preset-slide-left">
+                    <p className="font-bold text-primary">
                         Description
                     </p>
                     <p>
                         {`${car.name} in ${car.address?.formatted}`}
                     </p>
                 </div>
-                <div className="col-start-1 col-span-1">
+                <div className="col-start-1 col-span-1 motion-preset-slide-up motion-delay-700">
                     <RentalSchedule 
                         carId={car.id}
                     />
@@ -67,7 +67,7 @@ const RentalInfo = async ({car}: RentalInfoI) => {
                         <BookBttn carId={car.id} timezone={timezone}/>
                     </div>
                 </div>
-                <div className="col-start-2 col-span-2 row-start-3 self-start w-full">
+                <div className="col-start-2 col-span-2 row-start-3 self-start w-full motion-preset-slide-left delay-700">
                     <Options addOns={car.addOns}/>
                 </div>
                 <div className="col-start-2 col-span-2 row-start-4 self-start w-full">

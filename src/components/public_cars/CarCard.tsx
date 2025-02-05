@@ -16,21 +16,25 @@ const CarCard = ({ c, qParams }: CarCardI) => {
 
     return (
         <Link
-            className='flex shadow-[0_4px_6px_#0000001A] rounded-md h-32 overflow-hidden border border-gray-600 w-full cursor-pointer transition ease hover:-translate-y-1'
             href={`/rental/${c.id}?${qParams}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="card md:card-side glass bg-base-100 shadow-xl w-full motion-preset-pop transform hover:scale-105 transition-transform"
         >
-            <div className="relative h-full w-32">
-                <Image 
-                    src={c.profilePicture.url ? c.profilePicture.url : "/images/sedan.png"}
-                    alt={c.name}
-                    layout="fill"
-                    className=" object-cover"
-                />
-            </div>
-            <div className="p-2 flex flex-col justify-between">
-                <p className="text-lg text-blue-600 font-bold">
+            <figure>
+                <div className="relative h-36 md:h-full w-80 md:w-36">
+                    <Image 
+                        src={c.profilePicture.url ? c.profilePicture.url : "/images/sedan.png"} 
+                        alt={c.name}
+                        layout="fill"
+                        className="object-cover w-full md:w-auto"
+                    />
+                </div>
+            </figure>
+            <div className="card-body">
+                <h2 className="text-lg text-blue-600 font-bold">
                     {c.name}
-                </p>
+                </h2>
                 <div className="flex justify-between gap-2 items-center">
                     <p>{c.type}</p>
                     <div className="block size-2 rounded-full bg-slate-950"></div>
@@ -39,7 +43,7 @@ const CarCard = ({ c, qParams }: CarCardI) => {
                     <p>{c.transmission}</p>
                 </div>
                 <p className="font-extrabold text-xl text-green-600">
-                    ${numToDallor(c.price)}
+                    ${numToDallor(c.price)}/day
                 </p>
             </div>
         </Link>

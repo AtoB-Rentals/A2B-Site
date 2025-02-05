@@ -2,25 +2,36 @@ import StripeCheckout from "@/components/checkout/StripeCheckout"
 import { getBookingById } from "@/constants/requests/bookings"
 import { apiURL } from "@/constants/requests/constants"
 import { BookingI } from "@/interface/api/booking"
+import { cookies } from "next/headers"
 
-const handleGetBooking = async (bookingId: string): Promise<BookingI | null> => {
-    try {
-        const res = await fetch(`${apiURL}/api/bookings/${bookingId}`, { 
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        })
+const getBooking = async (bookingId: string): Promise<boolean> => {
+    const cookieStore = cookies();
+    const sessionCookie = cookieStore.get("next-auth-token");
 
-        if (!res.ok) {
-            return null
+    const res = await fetch(
+      `${apiURL}/api/bookings/${bookingId}/is_intent_paid`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: sessionCookie
+            ? `${sessionCookie.name}=${sessionCookie.value}`
+            : "",
+        },
+        credentials: "include",
+      }
+    );
+
+    if (!res.ok) {
+        if (res.status === 401 || res.status === 403) {
+            return false
         }
-
-        return await res.json() as BookingI
-    } catch {
-        return null
+        return false
     }
+
+    const data = await res.json()
+
+    return data.data as boolean
 }
 
 
@@ -34,7 +45,7 @@ const CheckoutPage = async ({
     return (
         <div>
             <h1
-                className="text-center font-bold text-2xl"
+                className="text-center font-bold text-2xl text-secondary"
             >
                 Checkout
             </h1>
