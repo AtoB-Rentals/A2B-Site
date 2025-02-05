@@ -7,6 +7,7 @@ import { getCars } from '@/constants/requests/cars'
 import { DateTime } from 'luxon'
 import { objectToQueryString } from '@/constants/requests/constants'
 import { validateAddressType } from '@/interface/api/address'
+import Loading from '../assets/loading'
 
 const PubCarList = () => {
     const [ cars, setCars ] = useState<CarI[]>([])
@@ -73,6 +74,8 @@ const PubCarList = () => {
             // place
         }) || ""
     }
+
+    if (loading) return <Loading />
 
     return (
         <Suspense>

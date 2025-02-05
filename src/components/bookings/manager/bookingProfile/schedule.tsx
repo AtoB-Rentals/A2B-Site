@@ -1,6 +1,6 @@
 'usee client'
 import { DateTime } from 'luxon';
-import { BookingI } from '../../../interface/api/booking';
+import { BookingI } from '../../../../interface/api/booking';
 import { vR } from '@/constants/requests/constants';
 
 

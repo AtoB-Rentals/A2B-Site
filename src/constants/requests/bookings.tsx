@@ -1,4 +1,3 @@
-'use client'
 import { BookingI, ReqBookingI, StripeBookingI } from "@/interface/api/booking";
 import { ApiRes, apiURL, err, throwError, unknownErr } from "./constants";
 import { ReqAddressI } from "@/interface/api/address";
@@ -117,6 +116,37 @@ export const UpdatePickupAddress = async (
             },
             credentials: 'include',
             body: JSON.stringify(address)
+        })
+    
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+    
+        return await response.json() as ApiRes<BookingI>
+    } catch (e) {
+        return unknownErr()
+    }
+}
+
+export const cancelBooking = async (
+    bookingId: string,
+    body: {
+        reason: string
+        refund: boolean
+    }
+): Promise<ApiRes<BookingI> | err> => {
+    try {
+        const response = await fetch(`${apiURL}/api/bookings/${bookingId}/cancel`, { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(body)
         })
     
         if (!response.ok) {

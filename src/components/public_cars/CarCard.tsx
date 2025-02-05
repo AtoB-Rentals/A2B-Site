@@ -21,8 +21,8 @@ const CarCard = ({ c, qParams }: CarCardI) => {
             rel="noopener noreferrer"
             className="card md:card-side glass bg-base-100 shadow-xl w-full motion-preset-pop transform hover:scale-105 transition-transform"
         >
-            <figure>
-                <div className="relative h-36 md:h-full w-80 md:w-36">
+            <figure className="card-image">
+                <div className="relative h-36 md:h-full w-full md:w-36">
                     <Image 
                         src={c.profilePicture.url ? c.profilePicture.url : "/images/sedan.png"} 
                         alt={c.name}
