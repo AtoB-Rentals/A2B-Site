@@ -64,7 +64,7 @@ const BookingDateGroup = ({
             <Link 
                 className='flex items-start justify-between p-2 border-b-2 border-blue-600 last:border-b-0 cursor-pointer'
                 key={b.id}
-                href={`/manager/bookings/${b.id}`}
+                href={`/manager/booking/${b.id}`}
             >
                 <div>
                     <h2
@@ -110,9 +110,6 @@ const ListBookings = () => {
 
     return (
         <section>
-            <h1 className="text-center text-4xl font-bold">
-                Bookings
-            </h1>
             {bookings.length === 0 && <h1>
                 Couldn't find any bookings    
             </h1>}

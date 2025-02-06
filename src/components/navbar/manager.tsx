@@ -40,7 +40,7 @@ const Navbar = async () => {
                     <li className="hidden md:flex">
                         <DesktopUser />
                     </li>
-                    <li className="md:hidden">
+                    {/* <li className="md:hidden"> */}
                         <MobileMenu>
                             <Link href="/manager/cars">
                                 Cars
@@ -51,7 +51,7 @@ const Navbar = async () => {
                             <MobileUser />
                             <ThemeToggle />
                         </MobileMenu>
-                    </li>
+                    {/* </li> */}
                     <li className={`hidden md:flex text-primary`}>
                         <ThemeToggle />
                     </li>
