@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "next-themes"
 import { NextAuthProvider } from "./providers"
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -28,6 +29,7 @@ export default function RootLayout({
           </ThemeProvider>
         </NextAuthProvider>
       </body>
+      <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID!} />
     </html>
   )
 }

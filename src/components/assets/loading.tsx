@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 const Loading = () => {
     return (
-        <section className='mt-2'>
+        <section className=''>
             <Image 
                 src='/images/logo_icon.png'
                 alt='loading'
