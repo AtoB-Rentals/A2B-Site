@@ -34,20 +34,19 @@ const CarRow = ({
                     {booking.vehicle.name}
                 </p>
             </div>
-            {dates.map(date => {
+            {dates.map((date, index) => {
                 let bookingStartTime: DateTime | null = null
                 let bookingDuration: number = 0
 
                 bookings.forEach(b => {
                     if (date.hasSame(fromTimeI(b.startTime), 'day')) {
-                        console.log("found booking: ", b)
                         bookingStartTime = fromTimeI(b.startTime)
                         bookingDuration = fromTimeI(b.endTime).diff(bookingStartTime, 'days').as('days')
                     }
                 })
 
                 if (!bookingStartTime) return (
-                    <div className="bg-base-300 w-32 flex flex-col items-center justify-center gap-2 border-r-2 border-primary shrink-0">
+                    <div key={`No start - ${index}`} className="bg-base-300 w-32 flex flex-col items-center justify-center gap-2 border-r-2 border-primary shrink-0">
                     
                     </div>
                 )
@@ -56,8 +55,6 @@ const CarRow = ({
                 console.log("bookingDuration: ", bookingDuration)
 
                 const test = (bookingDuration*128).toString()
-
-                console.log
 
                 return (
                     <div 
