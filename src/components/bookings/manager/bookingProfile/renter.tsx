@@ -5,7 +5,7 @@ import { BookingI } from "@/interface/api/booking"
 const Renter = (renter: BookingI['renter']) => {
 
     return (
-        <div className="bg-slate-100 p-2 rounded-md text-md md:text-lg col-span-4">
+        <div className="p-2 rounded-md text-md md:text-lg col-span-4">
             <h3
                 className="text-xl md:text-2xl text-blue-600"
             >

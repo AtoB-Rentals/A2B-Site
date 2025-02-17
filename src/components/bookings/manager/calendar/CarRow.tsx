@@ -14,10 +14,7 @@ const CarRow = ({
     dates: DateTime[]
     onCarClick: (carId: string) => void
 }) => {
-    const [indexer, setIndexer] = useState(0)
     const booking = bookings[0]
-
-    console.log("bookings by car: ", {car: booking.vehicle.name, bookingsAmount: bookings.length})
 
     return (
         <div className="flex border-b-2 border-primary border-dashed">
@@ -40,7 +37,6 @@ const CarRow = ({
 
                 bookings.forEach(b => {
                     if (date.hasSame(fromTimeI(b.startTime), 'day')) {
-                        console.log("found booking: ", b)
                         bookingStartTime = fromTimeI(b.startTime)
                         bookingDuration = fromTimeI(b.endTime).diff(bookingStartTime, 'days').as('days')
                     }
@@ -52,12 +48,7 @@ const CarRow = ({
                     </div>
                 )
 
-                console.log("bookingStartTime: ", bookingStartTime)
-                console.log("bookingDuration: ", bookingDuration)
-
                 const test = (bookingDuration*128).toString()
-
-                console.log
 
                 return (
                     <div 

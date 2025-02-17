@@ -5,7 +5,7 @@ import Image from 'next/image'
 const Vehicle = (vehicle: BookingI['vehicle']) => {
 
     return (
-        <div className="bg-slate-100 p-2 rounded-lg text-sm md:text-lg col-span-8">
+        <div className="p-2 rounded-lg text-sm md:text-lg col-span-8">
             {/* <h3 className="text-xl md:text-2xl text-blue-600">
                 Vehicle Information
             </h3> */}

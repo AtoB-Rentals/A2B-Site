@@ -52,7 +52,7 @@ const Location = ({
         <>
             <div className="text-md md:text-lg md:flex justify-between gap-3 col-start-1 col-end-9">
                 <div 
-                    className="rounded-md transition p-2 hover:bg-slate-100 ease-linear cursor-pointer"
+                    className="rounded-md transition p-2 hover:bg-base-300 ease-linear cursor-pointer"
                     onClick={() => handleAddressSet(false)}
                 >
                     <h3 className="text-xl md:text-2xl text-blue-600">
@@ -63,7 +63,7 @@ const Location = ({
                     </div>
                 </div>
                 <div
-                    className="rounded-md transition p-2 hover:bg-slate-100 ease-linear cursor-pointer"
+                    className="rounded-md transition p-2 hover:bg-base-300 ease-linear cursor-pointer"
                     onClick={() => handleAddressSet(true)}
                 >
                     <h3 className="text-xl md:text-2xl text-blue-600">
