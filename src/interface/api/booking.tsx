@@ -1,7 +1,7 @@
 import { string, z } from "zod"
 import { AddressI, ReqAddressI } from "./address"
 import { CarI } from "./car"
-import { TimeI } from "./time"
+import { PostTimeI, TimeI } from "./time"
 import { UserI } from "./user"
 import { InvoiceItemI } from "./invoice"
 
@@ -29,14 +29,8 @@ export interface ReqBookingI {
     phoneNumber: string
     vehicleId: CarI["id"]
     sameAsPickup: boolean
-    startTime: {
-        local: string
-        iana: string
-    }
-    endTime: {
-        local: string
-        iana: string
-    }
+    startTime: PostTimeI
+    endTime: PostTimeI
     dropoffAddress?: ReqAddressI
     pickupAddress: ReqAddressI
 
@@ -97,11 +91,6 @@ const ReqBookingSchema = z.object({
     dropoffAddress: z.string().optional(),
     pickupAddress: z.string().optional(),
 })
-
-// type PostTime struct {
-// 	Local string `json:"local" validate:"required"`
-// 	IANA  string `json:"iana" validate:"required"`
-// }
 
 export interface RecordI {
     bookingId: string

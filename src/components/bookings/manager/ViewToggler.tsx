@@ -1,5 +1,6 @@
 'use client'
 
+import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -23,22 +24,18 @@ const ViewToggler = () => {
 
             </span>
 
-            <button 
+            <Link href="/manager/bookings" 
                 className={`btn btn-ghost p-2 py-0 ${endpoint === 'bookings' ? 'text-black' : ''}`}
                 onClick={() => setEndpoint("bookings")}
             >
-                <a href="/manager/bookings">
-                    Bookings
-                </a>
-            </button>
-            <button 
+                Bookings
+            </Link>
+            <Link href="/manager/bookings/calendar" 
                 className={`btn btn-ghost p-2 py-0 ${endpoint === 'calendar' ? 'text-black' : ''}`}
                 onClick={() => setEndpoint("calendar")}
             >
-                <a href="/manager/bookings/calendar">
-                    Calendar
-                </a>
-            </button>
+                Calendar
+            </Link>
         </div>
     )
 }

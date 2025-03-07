@@ -1,6 +1,7 @@
 "use client"
 import { useSearchParams } from 'next/navigation'
 import { useRef, useEffect, Suspense } from 'react'
+import Loading from '../assets/loading'
 
 type Props = {
     title: string,
@@ -67,9 +68,9 @@ export default function FormModal({
                                 <span className='bg-red-500 w-5 h-1 rounded-full block ${spanOne} transition-all -rotate-45 translate-y-[-2px]'></span>
                             </button>
                         </div>
-                        <form className='relative overflow-y-auto h-64'>
+                        <form className='relative overflow-y-auto md:min-h-64'>
                             {loading && <div className='w-full h-full bg-slate-500/90 flex items-center justify-center'>
-                                <p>Loading...</p>
+                                <Loading />
                             </div>
                             }
                             {children}

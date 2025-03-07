@@ -60,26 +60,30 @@ const BookingDateGroup = ({
         <div className='bg-blue-600 text-white text-center md:text-left py-1 px-2'>
             <h2 className='text-2xl font-bold'>{date}</h2>
         </div>
-        {bookings.map(b => (
-            <Link 
-                className='flex items-start justify-between p-2 border-b-2 border-blue-600 last:border-b-0 cursor-pointer'
-                key={b.id}
-                href={`/manager/booking/${b.id}`}
-            >
-                <div>
-                    <h2
-                        className={`font-bold text-xl ${b.isDropoffDate && "text-red-600"}`}
-                    >{b.vehicle.name}</h2>
-                    <p className='italic'>{b.pickupAddress.formatted}</p>
-                    <p>{`${b.renter.firstName} ${b.renter.lastName}`}</p>
-                    <p>{DateTime.fromJSDate(new Date(b.startTime.goTime)).toFormat("hh:mm a")}</p>
+        {bookings.map(b => {
+            const block = b.status === "Blocked"
+            return (
+                <Link 
+                    className='flex items-start justify-between p-2 border-b-2 border-blue-600 last:border-b-0 cursor-pointer'
+                    key={b.id}
+                    href={`/manager/booking/${b.id}`}
+                >
+                    <div>
+                        <h2
+                            className={`font-bold text-xl ${b.isDropoffDate && "text-red-600"}`}
+                        >
+                            {block && "(Block)"} {b.vehicle.name}
+                        </h2>
+                        {!block && <p className='italic'>{b.pickupAddress.formatted}</p>}
+                        {!block && <p>{b.renter.firstName} {b.renter.lastName}</p>}
+                        <p>{DateTime.fromJSDate(new Date(b.startTime.goTime)).toFormat("hh:mm a")}</p>
+                    </div>
+                    <div>
 
-                </div>
-                <div>
-
-                </div>
-            </Link>
-        ))}
+                    </div>
+                </Link>
+            )
+        })}
     </div>
 )
 

@@ -162,3 +162,27 @@ export const cancelBooking = async (
         return unknownErr()
     }
 }
+
+export const RemBooking = async (bookingId: string): Promise<ApiRes<BookingI> | err> => {
+    try {
+        const response = await fetch(`${apiURL}/api/bookings/${bookingId}`, { 
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        })
+    
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+    
+        return await response.json() as ApiRes<BookingI>
+    } catch (e) {
+        return unknownErr()
+    }
+}

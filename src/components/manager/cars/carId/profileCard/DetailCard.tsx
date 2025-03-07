@@ -61,7 +61,7 @@ const DetailCard = ({
 
     return (
         <div 
-            className={`relative capitalize h-32 bg-slate-300 rounded-md p-3 ${cursor && "cursor-pointer"}`}
+            className={`relative capitalize h-32 bg-slate-300 dark:bg-base-300 rounded-md p-3 ${cursor && "cursor-pointer"}`}
             onClick={() => {
                 if (!!customClick) return customClick()
                 editable && setEdit(true)
@@ -111,7 +111,7 @@ const DetailCard = ({
                         </select>
                     </div>}
                     {edit && <button
-                        className="bg-blue-600 text-white font-bold rounded-md py-1"
+                        className="bg-blue-600 font-bold rounded-md py-1"
                         onClick={() => handleSave()}
                     >
                         Save

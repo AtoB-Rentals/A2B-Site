@@ -4,6 +4,7 @@ import { AddCarI, CarI, CarStatusT, PictureTypeT, TransmissionT } from '../../in
 import { AddressI, ReqAddressI } from "@/interface/api/address";
 import { ReqInvoiceItemI } from '../../interface/api/invoice';
 import { RecordI } from "@/interface/api/booking";
+import { PostTimeI } from '../../interface/api/time';
 
 export const getCars = async (params?: QueryParams): Promise<ApiRes<CarI[]> | err> => {
 
@@ -459,6 +460,41 @@ export const getAddons = async (carId: string): Promise<ApiRes<CarI['addOns']> |
         }
 
         return await response.json() as ApiRes<CarI['addOns']>
+    } catch (e) {
+        return unknownErr()
+    }
+}
+
+export const blockCar = async (vehicleId: string, startTime: string, endTime: string, tz: string): Promise<ApiRes<CarI> | err> => {
+    try {
+        const response = await fetch(`${apiURL}/api/bookings/block`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                vehicleId,
+                startTime: {
+                    local: startTime,
+                    iana: tz
+                },
+                endTime: {
+                    local: endTime,
+                    iana: tz
+                }
+            })
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+
+        return await response.json() as ApiRes<CarI>
     } catch (e) {
         return unknownErr()
     }

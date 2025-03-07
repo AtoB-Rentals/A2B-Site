@@ -18,17 +18,11 @@ const StripeCheckout = ({
 }: {
     bookingId: string
 }) => {
-
     const [ stripeData, setStripeData ] = useState<BookingI['stripe']>()
     const [ booking, setBooking ] = useState<BookingI>()
     const [ success, setSuccess ] = useState<boolean>(false)
     const [ loading, setLoading ] = useState<boolean>(true)
     const router = useRouter()
-
-    // const stripe = useStripe()
-    // const elements = useElements()
-
-    const [errorMessage, setErrorMessage] = useState(null)
 
     const getBooking = async () => {
         try {
