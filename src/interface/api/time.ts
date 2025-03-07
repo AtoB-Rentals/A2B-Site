@@ -9,3 +9,8 @@ export interface TimeI {
     /**UTC of JS understandable time */
     goTime: Date
 }
+
+export interface PostTimeI {
+    local: string
+    iana: string
+}

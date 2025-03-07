@@ -10,7 +10,7 @@ const DeliverAddressCard = ({
 }) => {
 
     return (
-        <div className='relative capitalize h-32 bg-slate-300 rounded-md p-3'>
+        <div className='relative capitalize h-32 bg-base-300 rounded-md p-3'>
             <p className='font-bold text-lg'>
                 {a.type}
             </p>

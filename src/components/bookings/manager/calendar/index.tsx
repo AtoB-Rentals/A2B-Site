@@ -4,9 +4,8 @@ import { bookingsFromTodayOn } from "@/constants/requests/bookings"
 import Header from "./Header"
 import { useRouter } from "next/navigation"
 import { BookingI } from "@/interface/api/booking"
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import Loading from "@/components/assets/loading"
-import { object, set } from "zod"
 import CarRow from "./CarRow"
 import { DateTime } from "luxon"
 
@@ -57,7 +56,7 @@ const Calendar = () => {
 
     if (!bookings) return (
         <h2 className="text-secondary text-2xl font-bold text-center">
-            Someething went wrong. Please try again later
+            Something went wrong. Please try again later
         </h2>
     )
 
@@ -71,20 +70,15 @@ const Calendar = () => {
         }
     })
 
-    console.log("carBookings", carBookings)
-
     return (
         <div className="overflow-x-scroll mt-4">
             <Header dates={dates} />
             <section id='bookings'>
                 {Object.keys(carBookings).map((key, i) => <CarRow 
-                    key={key} 
-                    bookings={carBookings[key]} 
-                    dates={dates}
-                    onCarClick={function (carId: string): void {
-                        throw new Error("Function not implemented.")
-                    }}
-                />
+                        key={key} 
+                        bookings={carBookings[key]} 
+                        dates={dates}
+                    />
                 )}
             </section>
         </div>
