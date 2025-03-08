@@ -5,6 +5,11 @@ import Schedule from "./schedule"
 import Location from "./Location"
 import Vehicle from "./Vehicle"
 import Renter from "./renter"
+import { RemBooking } from "@/constants/requests/bookings"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import RemBookingModal from "./RemBookingModal"
+import CancelBookingModal from "./CancelBookingModal"
 
 
 const BookingProfile = ({
@@ -15,6 +20,7 @@ const BookingProfile = ({
     hydration: () => void
 }) => {
     const [booking, setBooking] = useState<BookingI>(b)
+    const router = useRouter()
 
     const statusColors: {[key in BookingStatusT]: string} = {
         Scheduled: "yellow",
@@ -38,9 +44,18 @@ const BookingProfile = ({
                         {booking.status}
                     </span>
                 </h1>
-                <button className="btn btn-accent">
-                    
-                </button>
+                {!booking.paidFor && <Link 
+                    className="btn btn-accent"
+                    href={`/manager/booking/${booking.id}?remove_booking=y`}
+                >
+                    Remove {booking.status === 'Blocked' ? "Blockage" : "Booking"}
+                </Link>}
+                {booking.status !== "Blocked" && <Link 
+                    className="btn btn-secondary"
+                    href={`/manager/booking/${booking.id}?cancel_booking=y`}
+                >
+                    Cancel Booking
+                </Link>}
             </div>
             <div
                 className="rounded-md shadow-[0px_0px_4px_1px] shadow-gray-400 overflow-hidden p-3 mb-56 md:grid grid-cols-8 gap-y-8 gap-x-2"
@@ -58,6 +73,13 @@ const BookingProfile = ({
                 />}
                 <Vehicle {...booking.vehicle}/>
             </div>
+            <RemBookingModal
+                bookingId={booking.id}
+                isBlocked={booking.status === 'Blocked'}
+            />
+            <CancelBookingModal
+                booking={booking}
+            />
         </section>
     )
 }
