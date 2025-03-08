@@ -6,7 +6,6 @@ import useModal from "@/hooks/ModalHook";
 import { BookingI } from "@/interface/api/booking";
 import { useRouter } from "next/navigation"
 import { useState } from "react";
-import { set } from 'zod';
 
 
 const CancelBookingModal = ({
@@ -17,6 +16,7 @@ const CancelBookingModal = ({
     const router = useRouter()
     const [ reason, setReason ] = useState<string>('')
     const [ refund, setRefund ] = useState<boolean>(booking.status === 'Scheduled')
+    const [ refundAmount, setRefundAmount ] = useState<number>(0)
 
     const handleCancelBooking = async (): Promise<boolean> => {
         if (!reason) {
@@ -34,9 +34,15 @@ const CancelBookingModal = ({
             return false
         }
 
+        if (refundAmount > booking.totalPrice) {
+            alert('Refund amount cannot be greater than total price')
+            return false
+        }
+
         const res = await cancelBooking(booking.id, {
             reason,
-            refund
+            refund,
+            refundAmount
         })
 
         if (res.isErr) {
@@ -46,7 +52,7 @@ const CancelBookingModal = ({
             }
             return false
         }
-        alert('Booking deleted')
+
         router.refresh()
 
         return true
@@ -78,9 +84,9 @@ const CancelBookingModal = ({
     const dialog: JSX.Element  = (
         <dialog ref={dialogRef} className="modal bg-base-300 fade" id="cancelModal" aria-labelledby="cancelModalLabel" aria-hidden="true">
             <div className="modal-dialog">
-                <div className="modal-content">
+                <form className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title" id="cancelModalLabel">Cancel booking</h5>
+                        <h5 className="modal-title font-bold text-secondary text-lg" id="cancelModalLabel">Cancel booking</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                     </div>
                     <div className="modal-body my-8">
@@ -98,6 +104,12 @@ const CancelBookingModal = ({
                                 value={reason}
                                 onChange={(e) => setReason(e.target.value)}
                                 id="reason"
+                                required
+                                minLength={10}
+                                maxLength={1000}
+                                rows={4}
+                                style={{ resize: 'none' }}
+                                autoFocus={true}
                             />
                         </div>
                         <div className="form-control w-full max-w-xs">
@@ -117,15 +129,28 @@ const CancelBookingModal = ({
                         </div>
                         {refund && <>
                             <p className="text-sm text-gray-500">*Refund will be processed within 5-7 business days</p>
-                            <p>Maximum: ${numToDallor(booking.totalPrice)}</p>
-                            <input type="number" name="refundAmount" id="refund Amount" className="input"/>
+                            <div className="flex flex-col items-start">
+                                <label htmlFor="refundAmound">Refund Amount</label>
+                                <input 
+                                    type="number" 
+                                    name="refundAmount" 
+                                    id="refundAmount" 
+                                    className="input" 
+                                    max={booking.totalPrice}
+                                    value={refundAmount}
+                                    onChange={(e) => setRefundAmount(Number(e.target.value))}
+                                />
+                            </div>
+                            <p>Maximum: 
+                                <span className="text-secondary font-bold"> ${numToDallor(booking.totalPrice)}</span>
+                            </p>
                         </>}
                     </div>
                     <div className="modal-footer gap-3">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={closeDialog}>Close</button>
-                        <button type="button" className="btn btn-error ml-4" onClick={() => clickOk()}>Cancel Booking</button>
+                        <button type="submit" className="btn btn-error ml-4" onClick={() => clickOk()}>Cancel Booking</button>
                     </div>
-                </div>
+                </form>
             </div>
         </dialog>
     )

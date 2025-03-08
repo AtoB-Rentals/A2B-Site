@@ -23,8 +23,9 @@ const RemBookingModal = ({
             }
             return false
         }
-        alert('Booking deleted')
-        router.refresh()
+        
+        // window.history.replaceState({}, '', `?`)
+        window.history.go(-2)
 
         return true
     }
@@ -66,7 +67,7 @@ const RemBookingModal = ({
                     </div>
                     <div className="modal-footer gap-3">
                         <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={closeDialog}>Close</button>
-                        <button type="button" className="btn btn-error ml-4" onClick={() => clickOk()}>Cancel Booking</button>
+                        <button type="button" className="btn btn-error ml-4" onClick={() => clickOk()}>Remove {isBlocked ? "Blockage" : "Booking"}</button>
                     </div>
                 </div>
             </div>

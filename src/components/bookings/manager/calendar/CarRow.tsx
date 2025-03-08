@@ -16,7 +16,6 @@ const CarRow = ({
     dates: DateTime[]
     // onCarClick: (carId: string) => void
 }) => {
-    const [indexer, setIndexer] = useState(0)
     const booking = bookings[0]
     
     const router = useRouter()

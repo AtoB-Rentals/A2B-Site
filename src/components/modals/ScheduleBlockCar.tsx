@@ -36,7 +36,7 @@ const ScheduleBlockCarPop = ({pCarId}: {
             setLoading(true)
             const res = await getCarSchedule(id)
             if (res.isErr) {
-                alert("something when wrong")
+                console.log("handleGetRecords error", res.message)
             }
             setRecords(res.data)
         }
@@ -52,7 +52,7 @@ const ScheduleBlockCarPop = ({pCarId}: {
             setLoading(true)
             const res = await getCar(id)
             if (res.isErr) {
-                alert("something when wrong")
+                console.log("handleGetCar error", res)
             }
             setCar(res.data)
         }
@@ -63,8 +63,10 @@ const ScheduleBlockCarPop = ({pCarId}: {
 
     useEffect(() => {
         const carId = q.get('car_id') || pCarId || ""
-        handleGetCar(carId)
-        handleGetRecords(carId)
+        if (carId) {
+            handleGetCar(carId)
+            handleGetRecords(carId)
+        }
     }, [ q ])
 
     useEffect(() => {
@@ -86,7 +88,6 @@ const ScheduleBlockCarPop = ({pCarId}: {
     const handleBlockRental = async (): Promise<boolean> => {
         if (!car || !start || !end) return false
         setLoading(true)
-        // do something
         try {
             const res = await blockCar(car.id, start.toISO()!, end.toISO()!, tz)
             
@@ -95,6 +96,10 @@ const ScheduleBlockCarPop = ({pCarId}: {
                 return false
             }
 
+            window.history.replaceState({}, '', `?`)
+
+            window.location.reload()
+
             return true
         } catch (e) {
             console.error(e)
@@ -102,8 +107,6 @@ const ScheduleBlockCarPop = ({pCarId}: {
         } finally {
             setLoading(false)
         }
-
-        return false
     }
 
     const ranges = records ? records.map(r => ({

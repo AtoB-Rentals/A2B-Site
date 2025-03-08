@@ -137,6 +137,10 @@ export const cancelBooking = async (
     body: {
         reason: string
         refund: boolean
+        /**
+         * **Leave refund as 0 if not a manager
+         */
+        refundAmount: number
     }
 ): Promise<ApiRes<BookingI> | err> => {
     try {
