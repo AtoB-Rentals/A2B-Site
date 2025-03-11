@@ -10,6 +10,7 @@ import "react-day-picker/style.css"
 import { inThirty } from "@/constants/formatting/time"
 import { useSearchParams } from "next/navigation"
 import { CarI } from "@/interface/api/car"
+import carScheduleHook from "@/hooks/CarScheduleHook"
 
 const ScheduleBlockCarPop = ({pCarId}: {
     pCarId?: string
@@ -17,7 +18,6 @@ const ScheduleBlockCarPop = ({pCarId}: {
     const q = useSearchParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [ car, setCar ] = useState<CarI | null>(null)
-    const [records, setRecords] = useState<RecordI[]>([])
     const [ dates, setDates ] = useState<DateRange>()
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
@@ -29,21 +29,11 @@ const ScheduleBlockCarPop = ({pCarId}: {
             end: "9:30 AM"
     })
 
-    const handleGetRecords = async (id: string) => {
-        if (!id) return
-
-        try {
-            setLoading(true)
-            const res = await getCarSchedule(id)
-            if (res.isErr) {
-                console.log("handleGetRecords error", res.message)
-            }
-            setRecords(res.data)
-        }
-        finally {
-            setLoading(false)
-        }
-    }
+    const [
+        ranges,
+        handleGetRecords,
+        recordsLoading,
+    ] = carScheduleHook(q.get('car_id') || "")
 
     const handleGetCar = async (id: string) => {
         if (!id) return
@@ -109,17 +99,12 @@ const ScheduleBlockCarPop = ({pCarId}: {
         }
     }
 
-    const ranges = records ? records.map(r => ({
-        from: DateTime.fromISO(r.startTime.utc, {zone:'utc'}).setZone(tz).toJSDate(),
-        to: DateTime.fromISO(r.endTime.utc, {zone:'utc'}).setZone(tz).toJSDate()
-    })) : []
-
     return (
         <FormModal
             title="Block Rental"
             paramKey="block_rental"
             onOk={ () => handleBlockRental() }
-            loading={ loading }
+            loading={ loading || recordsLoading }
         >
             
             {car !== null && <div className="h-96">
