@@ -91,6 +91,40 @@ export const gPlaceId = async (placeId: string): Promise<google.maps.GeocoderRes
     }
 }
 
+// export const getDistance = async (originPlaceId: string, destinationPlaceId: string): Promise<number | null> => {
+//     const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=place_id:${originPlaceId}&destinations=place_id:${destinationPlaceId}&key=${googleKey}`
+
+//     try {
+//         const response = await fetch(url, {
+//             method: 'GET',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         });
+//         console.log("response: ", response)
+//         const data = await response.json() as google.maps.DistanceMatrixResponse;
+//         console.log("Distance Data: ", data)
+
+//         if (data.rows.length && data.rows[0].elements.length) {
+//             const distance = data.rows[0].elements[0].distance.value; // distance in meters
+//             return distance;
+//         } else {
+//             return null
+//         }
+//     } catch (error) {
+//         console.error('Error fetching distance data:', error);
+//         return null
+//     }
+// }
+
+export const metersToMiles = (meters: number): number => {
+    const exact = meters * 0.000621371; // Convert meters to miles
+    return Math.round(exact * 100) / 100; // Round to two decimal places
+}
+export const metersToKm = (meters: number): number => {
+    return meters / 1000; // Convert meters to kilometers
+}
+
 export interface GeocodeResultI {
     placeId: string
     address: string

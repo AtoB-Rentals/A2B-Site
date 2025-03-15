@@ -6,7 +6,7 @@ import { CarI } from "@/interface/api/car"
 import { DateTime } from "luxon"
 import { useEffect, useState } from "react"
 
-const carScheduleHook = (carId: string) => {
+const carScheduleHook = (carId: string | undefined) => {
     const [records, setRecords] = useState<RecordI[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone

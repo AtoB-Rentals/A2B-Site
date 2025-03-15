@@ -2,10 +2,15 @@
 
 import Loading from "@/components/assets/loading"
 import Vehicle from "@/components/bookings/manager/bookingProfile/Vehicle"
+import Addons from "@/components/bookings/manager/CreateBooking/addons/Addons"
+import Address from "@/components/bookings/manager/CreateBooking/address/Address"
 import CarSect from "@/components/bookings/manager/CreateBooking/CarSect"
 import BookingSechedule from "@/components/bookings/manager/CreateBooking/Schedule"
 import { getCar } from "@/constants/requests/cars"
+import { PickDropI, ReqAddressI } from "@/interface/api/address"
+import { BookingI } from "@/interface/api/booking"
 import { CarI } from "@/interface/api/car"
+import { ScheduleI } from "@/interface/api/time"
 import { get } from "http"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -13,6 +18,12 @@ import { useEffect, useState } from "react"
 const CreateBooking = () => {
     const q = useSearchParams()
     const [ car, setCar ] = useState<CarI>()
+    const [ schedule, setSchedule ] = useState<ScheduleI>()
+    const [ addresses, setAddresses ] = useState<PickDropI>({
+        pickup: null,
+        dropoff: null
+    })
+    const [addons, setAddons] = useState<BookingI["addons"]>([])
     const [loading, setLoading] = useState<boolean>(true)
 
     const getVehicle = async (carId: string) => {
@@ -44,10 +55,6 @@ const CreateBooking = () => {
 
     useEffect(() => {
         handleQ()
-    }, [])
-
-    useEffect(() => {
-        handleQ()
     }, [q])
 
     if (loading) return (
@@ -62,7 +69,25 @@ const CreateBooking = () => {
                 <h1 className="font-bold text-primary text-2xl">Create Booking</h1>
             </section>
             {car && <Vehicle {...car} />}
-            {car && <BookingSechedule carId={car?.id} /> }
+            {/* BOOKING SCHEDULING AND RECORDS */}
+            <BookingSechedule 
+                carId={car?.id} 
+                updateSchedule={(schedule: ScheduleI) => setSchedule(schedule)}
+            />
+            {/* Address Section */}
+            <Address 
+                car={car} 
+                addresses={addresses} 
+                updateAddresses={(addresses: PickDropI) => setAddresses(addresses)}
+            />
+
+            {/* Add Ons */}
+            {car && <Addons 
+                car={car}
+                addons={addons}
+                updateAddons={(addons: BookingI["addons"]) => setAddons(addons)}
+                addresses={addresses}
+            />}
         </main>
     )
 }

@@ -29,7 +29,7 @@ export interface ReqInvoiceItemI {
 
 export interface InvoiceItemI {
     id?: string
-    ItemNum: number
+    ItemNum?: number
     name: string
     description: string
     amount: number

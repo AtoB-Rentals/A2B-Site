@@ -190,3 +190,27 @@ export const RemBooking = async (bookingId: string): Promise<ApiRes<BookingI> | 
         return unknownErr()
     }
 }
+
+export const calcDistance = async (
+    originPlaceId: string,
+    destinationPlaceId: string
+): Promise<number | null> => {
+    const url = `${apiURL}/api/bookings/calc_distance?origin=${originPlaceId}&destination=${destinationPlaceId}`
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        });
+        const data = await response.json();
+
+        console.log("Distance Data: ", data)
+        return data.data as number
+    } catch (error) {
+        console.error('Error fetching distance data:', error);
+        return null
+    }
+}

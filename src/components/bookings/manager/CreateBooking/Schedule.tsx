@@ -4,11 +4,19 @@ import Loading from "@/components/assets/loading";
 import { inThirty, timeFormat, timeUserFormat } from "@/constants/formatting/time";
 import carScheduleHook from "@/hooks/CarScheduleHook";
 import Link from "next/link";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
 import "react-day-picker/style.css"
+import { ScheduleI } from '../../../../interface/api/time';
+import { DateTime } from "luxon";
 
-const BookingSechedule = ({carId}: {carId: string}) => {
+const BookingSechedule = ({
+    carId,
+    updateSchedule
+}: {
+    carId: string | undefined
+    updateSchedule: (schedule: ScheduleI) => void
+}) => {
     const [ dates, setDates ] = useState<DateRange>()
     const [ times, setTimes ] = useState<{start: string, end: string}>({
             start: "9:30 AM",
@@ -22,6 +30,32 @@ const BookingSechedule = ({carId}: {carId: string}) => {
         recordsLoading,
         records
     ] = carScheduleHook(carId)
+
+    useEffect(() => {
+        const timeFormat = "yyyy-MM-dd t"
+        
+        if (!dates?.from || !dates?.to || !times?.start || !times?.end) return
+
+        const start_date = DateTime.fromJSDate(dates.from).toFormat("yyyy-MM-dd")
+        const start_time = DateTime.fromFormat(`${start_date} ${times.start}`, timeFormat)
+        
+        const end_date = DateTime.fromJSDate(dates.to).toFormat("yyyy-MM-dd")
+        const end_time = DateTime.fromFormat(`${end_date} ${times.end}`, timeFormat)
+
+        if (start_time.isValid && end_time.isValid) {
+            updateSchedule({
+                start: start_time,
+                end: end_time
+            })
+        }
+    }, [times, dates])
+
+    useEffect(() => {
+        if (recordsLoading) return
+        if (carId) {
+            handleGetRecords(carId)
+        }
+    }, [ carId ])
 
     if (recordsLoading) return <Loading />
 
@@ -117,8 +151,25 @@ const BookingSechedule = ({carId}: {carId: string}) => {
                                 <p 
                                     className={`font-weight text-lg ${record.status === 'Scheduled' ?"text-success" : "text-error"}`}
                                 >{record.status}</p>
-                                <p>{timeFormat(record.startTime, timeUserFormat)}</p>
-                                <p>{timeFormat(record.endTime, timeUserFormat)}</p>
+                                <div className="flex justify-between items-center text-lg text-center">
+                                    <div>
+                                        <p>
+                                            {timeFormat(record.startTime, 'MM/dd/yyyy')}
+                                        </p>
+                                        <p>
+                                            {timeFormat(record.startTime, 't')}
+                                        </p>
+                                    </div>
+                                    <span className="block w-full h-1 rounded-full bg-gradient-to-r from-secondary to-primary mx-4"></span>
+                                    <div>
+                                        <p>
+                                            {timeFormat(record.endTime, 'MM/dd/yyyy')}
+                                        </p>
+                                        <p>
+                                            {timeFormat(record.endTime, 't')}
+                                        </p>
+                                    </div>
+                                </div>
                             </Link>
                         ))}
                     </div>
