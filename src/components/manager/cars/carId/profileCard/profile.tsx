@@ -170,6 +170,16 @@ const CarProfile = ({
                 </div>
                 {/* CAR'S DETAILS *some can be editted */}
                 <div className="grid grid-cols-1 p-3 gap-2 md:grid-cols-3 lg:grid-cols-4">
+                    {car.status === 'available' && <DetailCard
+                        title="Create booking"
+                        customClick={() => router.push(`/manager/booking/new?car_id=${car.id}`)}
+                    >
+                        <button
+                            className="bg-success text-white font-bold rounded-md p-2"
+                        >
+                            Create Booking
+                        </button>
+                    </DetailCard>}
                     <DetailCard 
                         title="Status"
                         inputType="select"

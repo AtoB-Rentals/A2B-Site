@@ -83,7 +83,8 @@ const BookingProfile = ({
     const handleCancelBooking = async (): Promise<boolean> => {
         const res = await cancelBooking(bookingId, {
             reason: 'User requested',
-            refund: true
+            refund: true,
+            refundAmount: 0
         })
 
         if (res.isErr) {

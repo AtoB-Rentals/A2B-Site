@@ -1,8 +1,9 @@
 import { BookingI } from "@/interface/api/booking"
+import { CarI } from "@/interface/api/car"
 import Image from 'next/image'
 
 
-const Vehicle = (vehicle: BookingI['vehicle']) => {
+const Vehicle = (vehicle: CarI) => {
 
     return (
         <div className="bg-base-300 p-2 rounded-lg text-sm md:text-lg col-span-8">

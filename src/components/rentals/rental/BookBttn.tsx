@@ -116,6 +116,7 @@ const BookBttn = ({
                 iana: timezone
             },
             carAddons,
+            addons: []
         }
 
         const res = await createBooking(reqBooking)

@@ -97,8 +97,8 @@ const PE = ({
                 options={{
                     defaultValues: {
                         billingDetails: {
-                            email: booking.renter.email,
-                            phone: booking.renter.phoneNumber
+                            email: booking.renter?.email || "",
+                            phone: booking.renter?.phoneNumber || ""
                         }
                     }
                 }}

@@ -1,6 +1,7 @@
 import { BookingI, ReqBookingI, StripeBookingI } from "@/interface/api/booking";
 import { ApiRes, apiURL, err, throwError, unknownErr } from "./constants";
 import { ReqAddressI } from "@/interface/api/address";
+import { ReqUserI } from "@/interface/api/user";
 
 export const createBooking = async (req: ReqBookingI): Promise<ApiRes<BookingI> | err> => {
     try {
@@ -137,6 +138,10 @@ export const cancelBooking = async (
     body: {
         reason: string
         refund: boolean
+        /**
+         * **Leave refund as 0 if not a manager
+         */
+        refundAmount: number
     }
 ): Promise<ApiRes<BookingI> | err> => {
     try {
@@ -171,6 +176,56 @@ export const RemBooking = async (bookingId: string): Promise<ApiRes<BookingI> | 
                 'Content-Type': 'application/json',
             },
             credentials: 'include'
+        })
+    
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+    
+        return await response.json() as ApiRes<BookingI>
+    } catch (e) {
+        return unknownErr()
+    }
+}
+
+export const calcDistance = async (
+    originPlaceId: string,
+    destinationPlaceId: string
+): Promise<number | null> => {
+    const url = `${apiURL}/api/bookings/calc_distance?origin=${originPlaceId}&destination=${destinationPlaceId}`
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        });
+        const data = await response.json();
+
+        console.log("Distance Data: ", data)
+        return data.data as number
+    } catch (error) {
+        console.error('Error fetching distance data:', error);
+        return null
+    }
+}
+
+export const updateRenter = async (bookingId: string, reqRenter: ReqUserI): Promise<ApiRes<BookingI> | err> => {
+
+    try {
+        const response = await fetch(`${apiURL}/api/bookings/${bookingId}/renter`, { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ ...reqRenter })
         })
     
         if (!response.ok) {

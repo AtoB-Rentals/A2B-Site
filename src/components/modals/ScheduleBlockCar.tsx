@@ -10,6 +10,7 @@ import "react-day-picker/style.css"
 import { inThirty } from "@/constants/formatting/time"
 import { useSearchParams } from "next/navigation"
 import { CarI } from "@/interface/api/car"
+import CarScheduleHook from "@/hooks/CarScheduleHook"
 
 const ScheduleBlockCarPop = ({pCarId}: {
     pCarId?: string
@@ -17,7 +18,6 @@ const ScheduleBlockCarPop = ({pCarId}: {
     const q = useSearchParams()
     const [loading, setLoading] = useState<boolean>(false)
     const [ car, setCar ] = useState<CarI | null>(null)
-    const [records, setRecords] = useState<RecordI[]>([])
     const [ dates, setDates ] = useState<DateRange>()
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
@@ -29,21 +29,11 @@ const ScheduleBlockCarPop = ({pCarId}: {
             end: "9:30 AM"
     })
 
-    const handleGetRecords = async (id: string) => {
-        if (!id) return
-
-        try {
-            setLoading(true)
-            const res = await getCarSchedule(id)
-            if (res.isErr) {
-                alert("something when wrong")
-            }
-            setRecords(res.data)
-        }
-        finally {
-            setLoading(false)
-        }
-    }
+    const [
+        ranges,
+        handleGetRecords,
+        recordsLoading,
+    ] = CarScheduleHook(q.get('car_id') || "")
 
     const handleGetCar = async (id: string) => {
         if (!id) return
@@ -52,7 +42,7 @@ const ScheduleBlockCarPop = ({pCarId}: {
             setLoading(true)
             const res = await getCar(id)
             if (res.isErr) {
-                alert("something when wrong")
+                console.log("handleGetCar error", res)
             }
             setCar(res.data)
         }
@@ -63,8 +53,10 @@ const ScheduleBlockCarPop = ({pCarId}: {
 
     useEffect(() => {
         const carId = q.get('car_id') || pCarId || ""
-        handleGetCar(carId)
-        handleGetRecords(carId)
+        if (carId) {
+            handleGetCar(carId)
+            handleGetRecords(carId)
+        }
     }, [ q ])
 
     useEffect(() => {
@@ -86,7 +78,6 @@ const ScheduleBlockCarPop = ({pCarId}: {
     const handleBlockRental = async (): Promise<boolean> => {
         if (!car || !start || !end) return false
         setLoading(true)
-        // do something
         try {
             const res = await blockCar(car.id, start.toISO()!, end.toISO()!, tz)
             
@@ -95,6 +86,10 @@ const ScheduleBlockCarPop = ({pCarId}: {
                 return false
             }
 
+            window.history.replaceState({}, '', `?`)
+
+            window.location.reload()
+
             return true
         } catch (e) {
             console.error(e)
@@ -102,21 +97,14 @@ const ScheduleBlockCarPop = ({pCarId}: {
         } finally {
             setLoading(false)
         }
-
-        return false
     }
-
-    const ranges = records ? records.map(r => ({
-        from: DateTime.fromISO(r.startTime.utc, {zone:'utc'}).setZone(tz).toJSDate(),
-        to: DateTime.fromISO(r.endTime.utc, {zone:'utc'}).setZone(tz).toJSDate()
-    })) : []
 
     return (
         <FormModal
             title="Block Rental"
             paramKey="block_rental"
             onOk={ () => handleBlockRental() }
-            loading={ loading }
+            loading={ loading || recordsLoading }
         >
             
             {car !== null && <div className="h-96">

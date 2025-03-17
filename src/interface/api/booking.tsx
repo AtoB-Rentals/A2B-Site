@@ -3,7 +3,7 @@ import { AddressI, ReqAddressI } from "./address"
 import { CarI } from "./car"
 import { PostTimeI, TimeI } from "./time"
 import { UserI } from "./user"
-import { InvoiceItemI } from "./invoice"
+import { InvoiceItemI, InvoiceItemTypeT } from "./invoice"
 
 export type BookingStatusT = 
     | "Scheduled"
@@ -38,6 +38,24 @@ export interface ReqBookingI {
         name: string
         quantity: number
     }[]
+
+    addons: ReqAddonI[]
+}
+
+export interface ReqAddonI {
+    name: string
+    description: string
+    quantity: number
+    amount: number
+}
+
+export interface AddonI {
+    name: string
+    description: string
+    quantity: number
+    amount: number,
+    total: number
+    type: InvoiceItemTypeT
 }
 
 export interface StripeBookingI {
@@ -71,6 +89,8 @@ export interface BookingI {
         name: string
         quantity: number
     }[]
+
+    addons: AddonI[]
 
     dropOffAddress: AddressI
     pickupAddress: AddressI
