@@ -96,8 +96,18 @@ const StripeCheckout = ({
             .then(() => getPaymentIntent())
     }, [])
 
+    if (loading) return <Loading />
+
+    if (!booking) {
+        return (
+            <h1 className="text-center font-bold text-lg">
+                Booking not found
+            </h1>
+        )
+    }
+
     useEffect(() => {
-        if (session.status === 'authenticated' && !!booking) {
+        if (session.status === 'authenticated') {
             if (session?.data?.user?.email !== booking?.renter?.email) {
                 handleUpdaterRenter()
             }
@@ -110,16 +120,6 @@ const StripeCheckout = ({
             router.push('/login')
         }
     }, [session])
-
-    if (loading) return <Loading />
-
-    if (!booking) {
-        return (
-            <h1 className="text-center font-bold text-lg">
-                Booking not found
-            </h1>
-        )
-    }
 
     return (
         <>
