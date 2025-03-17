@@ -129,9 +129,7 @@ const Addons = ({
         let newAddons: BookingI["addons"] = [...addons]
         const newDisplayAddons = [...displayAddons]
 
-        let amount = 60 * distance
-        amount = Math.round(amount)
-
+        const amount = Math.round(60 * distance)
 
         const newDevAddon: AddonI = {
             name: "Delivery",
@@ -162,13 +160,6 @@ const Addons = ({
         setDisplayAddons([...newDisplayAddons])
         updateAddons([...newAddons])
     }
-    
-
-    useEffect(() => {
-        // handleDistance()
-        console.table(addons)
-        console.log("Display Addons: ", displayAddons)
-    }, [addons])
 
     useEffect(() => {
         if (addresses.pickup?.placeId) {

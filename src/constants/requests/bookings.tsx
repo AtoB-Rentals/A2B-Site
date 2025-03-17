@@ -1,6 +1,7 @@
 import { BookingI, ReqBookingI, StripeBookingI } from "@/interface/api/booking";
 import { ApiRes, apiURL, err, throwError, unknownErr } from "./constants";
 import { ReqAddressI } from "@/interface/api/address";
+import { ReqUserI } from "@/interface/api/user";
 
 export const createBooking = async (req: ReqBookingI): Promise<ApiRes<BookingI> | err> => {
     try {
@@ -212,5 +213,31 @@ export const calcDistance = async (
     } catch (error) {
         console.error('Error fetching distance data:', error);
         return null
+    }
+}
+
+export const updateRenter = async (bookingId: string, reqRenter: ReqUserI): Promise<ApiRes<BookingI> | err> => {
+
+    try {
+        const response = await fetch(`${apiURL}/api/bookings/${bookingId}/renter`, { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ ...reqRenter })
+        })
+    
+        if (!response.ok) {
+            const errorData = await response.json() as err
+            return throwError(
+                response,
+                errorData
+            )
+        }
+    
+        return await response.json() as ApiRes<BookingI>
+    } catch (e) {
+        return unknownErr()
     }
 }

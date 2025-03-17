@@ -4,18 +4,16 @@ import Loading from "@/components/assets/loading"
 import Vehicle from "@/components/bookings/manager/bookingProfile/Vehicle"
 import Addons from "@/components/bookings/manager/CreateBooking/addons/Addons"
 import Address from "@/components/bookings/manager/CreateBooking/address/Address"
-import CarSect from "@/components/bookings/manager/CreateBooking/CarSect"
+import BookingSection from "@/components/bookings/manager/CreateBooking/booking/Booking"
 import BookingSechedule from "@/components/bookings/manager/CreateBooking/Schedule"
-import { createBooking } from "@/constants/requests/bookings"
+import { bookingPaymentIntent, createBooking, getBookingById } from "@/constants/requests/bookings"
 import { getCar } from "@/constants/requests/cars"
 import { PickDropI, ReqAddressI } from "@/interface/api/address"
 import { BookingI, ReqBookingI } from "@/interface/api/booking"
 import { CarI } from "@/interface/api/car"
 import { ScheduleI } from "@/interface/api/time"
-import { get } from "http"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { set } from 'zod';
 
 const CreateBooking = () => {
     const q = useSearchParams()
@@ -27,7 +25,7 @@ const CreateBooking = () => {
     })
     const [addons, setAddons] = useState<BookingI["addons"]>([])
     const [loading, setLoading] = useState<boolean>(true)
-    const [bookking, setBooking] = useState<BookingI>()
+    const [booking, setBooking] = useState<BookingI>()
 
     const getVehicle = async (carId: string) => {
         try {
@@ -40,7 +38,6 @@ const CreateBooking = () => {
     
             setCar(res.data)
         } finally {
-            console.log("done")
             setLoading(false)
         }
     }
@@ -93,7 +90,7 @@ const CreateBooking = () => {
             sameAsPickup: false
         }
 
-        const res = await createBooking(booking)
+        let res = await createBooking(booking)
         if (res.isErr) {
             if (res.status === 500) {
                 return alert("An error occurred. Please try again later.")
@@ -105,8 +102,31 @@ const CreateBooking = () => {
             return
         }
 
-        setBooking(res.data)
-        alert(res.data.id)
+        const intentRes = await bookingPaymentIntent(res.data.id)
+        if (intentRes.isErr) {
+            if (intentRes.status === 500) {
+                return alert("An error occurred. Please try again later.")
+            }
+            if (intentRes.status === 400) {
+                return alert(intentRes.data.message)
+            }
+
+            return
+        }
+
+        const bookingRes = await getBookingById(res.data.id)
+        if (bookingRes.isErr) {
+            if (bookingRes.status === 500) {
+                return alert("An error occurred. Please try again later.")
+            }
+            if (bookingRes.status === 400) {
+                return alert(bookingRes.data.message)
+            }
+
+            return
+        }
+
+        setBooking(bookingRes.data)
     }
 
     if (loading) return (
@@ -115,41 +135,62 @@ const CreateBooking = () => {
         </main>
     )
 
-    return (
-        <main className="rounded-md shadow-[0px_0px_4px_1px] shadow-gray-400 overflow-hidden p-3 mb-56 mx-2 md:mx-auto max-w-[1000px]">
-            <section className="text-center">
-                <h1 className="font-bold text-primary text-2xl">Create Booking</h1>
-            </section>
-            {car && <Vehicle {...car} />}
-            {/* BOOKING SCHEDULING AND RECORDS */}
-            <BookingSechedule 
-                carId={car?.id} 
-                updateSchedule={(schedule: ScheduleI) => setSchedule(schedule)}
-            />
-            {/* Address Section */}
-            <Address 
-                car={car} 
-                addresses={addresses} 
-                updateAddresses={(addresses: PickDropI) => setAddresses(addresses)}
-            />
+    const checkoutUrl: string = booking ? `${window.location.origin}/checkout/${booking?.id}` : ""
 
-            {/* Add Ons */}
-            {car && <Addons 
-                car={car}
-                addons={addons}
-                updateAddons={(addons: BookingI["addons"]) => setAddons(addons)}
-                addresses={addresses}
-            />}
-            
-            {/* create booking button */}
-            <div className="flex justify-center items-center mt-4">
-                <button 
-                    className="btn btn-primary w-1/2 md:w-1/4 text-lg font-bold"
-                    onClick={() => handleCreateBooking()}
-                >
-                    Create Booking
-                </button>
-            </div>
+    return (
+        <main className="mb-56">        
+            <section className="rounded-md shadow-[0px_0px_4px_1px] shadow-gray-400 mb-4 overflow-hidden p-3 mx-2 md:mx-auto max-w-[1000px]">
+                <section className="text-center">
+                    <h1 className="font-bold text-primary text-2xl">Create Booking</h1>
+                </section>
+                {car && <Vehicle {...car} />}
+                {/* BOOKING SCHEDULING AND RECORDS */}
+                <BookingSechedule 
+                    carId={car?.id} 
+                    updateSchedule={(schedule: ScheduleI) => setSchedule(schedule)}
+                />
+                {/* Address Section */}
+                <Address 
+                    car={car} 
+                    addresses={addresses} 
+                    updateAddresses={(addresses: PickDropI) => setAddresses(addresses)}
+                />
+
+                {/* Add Ons */}
+                {car && <Addons 
+                    car={car}
+                    addons={addons}
+                    updateAddons={(addons: BookingI["addons"]) => setAddons(addons)}
+                    addresses={addresses}
+                />}
+                
+                {/* create booking button */}
+                <div className="flex justify-center items-center mt-4 w-full">
+                    <button 
+                        className="btn btn-primary w-full md:w-1/4 text-lg font-bold"
+                        onClick={() => handleCreateBooking()}
+                    >
+                        Create Booking
+                    </button>
+                </div>
+            </section>
+            {/* Booking Section */}
+            <section className="">
+                {booking && <BookingSection booking={booking} />}
+                <div className="flex justify-center flex-col items-center mt-4 w-full text-center break-words mx-2">
+                    <p className="text-wrap text-ellipsis w-3/4 md:w-1/4 font-bold">
+                        checkout url: <span className="text-primary">
+                            {checkoutUrl}
+                            </span>
+                        </p>
+                    <button
+                        className="btn btn-success md:w-1/4 text-lg font-bold"
+                        onClick={() => navigator.clipboard.writeText(checkoutUrl)}
+                    >
+                        Copy URL
+                    </button>
+                </div>
+            </section>
         </main>
     )
 }

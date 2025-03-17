@@ -1,6 +1,6 @@
 "use client"
 
-import { bookingPaymentIntent, getBookingById } from "@/constants/requests/bookings"
+import { bookingPaymentIntent, getBookingById, updateRenter } from "@/constants/requests/bookings"
 import { BookingI } from "@/interface/api/booking"
 import { useEffect, useState } from 'react'
 import { loadStripe } from '@stripe/stripe-js';
@@ -32,7 +32,15 @@ const StripeCheckout = ({
             await setLoading(true)
             const res = await getBookingById(bookingId)
             if (res.isErr) {
-                alert("invalid booking id")
+                if (res.status === 404) {
+                    alert(res.message)
+                    return
+                }
+
+                if (res.status === 500) {
+                    alert("An error occurred. Please try again later.")
+                    return
+                }
                 return
             }
 
@@ -56,8 +64,6 @@ const StripeCheckout = ({
                 if (res.message === "vehicle is already paid for") {
                     setSuccess(true)
                     router.push(`/checkout/${bookingId}/success`)
-                } else {
-                    alert("Something went wrong")
                 }
 
                 return
@@ -70,14 +76,31 @@ const StripeCheckout = ({
         }
     }
 
+    const handleUpdaterRenter = async () => {
+        if (session.status !== 'authenticated' || !booking) return
+        const res = await updateRenter(bookingId, {
+            email: session.data.user.email,
+            firstName: "",
+            lastName: "",
+            phoneNumber: "",
+            dob: ""
+        })
+        if (res.isErr) {
+            return
+        }
+        setBooking(res.data)
+    }
+
     useEffect(() => {
-        // getBooking()
-        getPaymentIntent()
+        getBooking()
+            .then(() => getPaymentIntent())
     }, [])
 
     useEffect(() => {
-        if (session.status === 'authenticated') {
-            getBooking()
+        if (session.status === 'authenticated' && !!booking) {
+            if (session?.data?.user?.email !== booking?.renter?.email) {
+                handleUpdaterRenter()
+            }
         } else if (session.status === 'unauthenticated') {
             localStorage.setItem(
                 'redirectURL', 
