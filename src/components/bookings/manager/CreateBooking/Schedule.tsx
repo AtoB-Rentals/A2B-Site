@@ -2,7 +2,7 @@
 
 import Loading from "@/components/assets/loading";
 import { inThirty, timeFormat, timeUserFormat } from "@/constants/formatting/time";
-import <Cap></Cap>arScheduleHook from "@/hooks/CarScheduleHook";
+import CarScheduleHook from "@/hooks/CarScheduleHook";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 import { DateRange, DayPicker } from "react-day-picker";
@@ -29,7 +29,7 @@ const BookingSechedule = ({
         handleGetRecords,
         recordsLoading,
         records
-    ] = carScheduleHook(carId)
+    ] = CarScheduleHook(carId)
 
     useEffect(() => {
         const timeFormat = "yyyy-MM-dd t"

@@ -10,7 +10,7 @@ import "react-day-picker/style.css"
 import { inThirty } from "@/constants/formatting/time"
 import { useSearchParams } from "next/navigation"
 import { CarI } from "@/interface/api/car"
-import carScheduleHook from "@/hooks/CarScheduleHook"
+import CarScheduleHook from "@/hooks/CarScheduleHook"
 
 const ScheduleBlockCarPop = ({pCarId}: {
     pCarId?: string
@@ -33,7 +33,7 @@ const ScheduleBlockCarPop = ({pCarId}: {
         ranges,
         handleGetRecords,
         recordsLoading,
-    ] = carScheduleHook(q.get('car_id') || "")
+    ] = CarScheduleHook(q.get('car_id') || "")
 
     const handleGetCar = async (id: string) => {
         if (!id) return
