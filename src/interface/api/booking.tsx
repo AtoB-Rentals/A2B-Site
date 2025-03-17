@@ -39,7 +39,14 @@ export interface ReqBookingI {
         quantity: number
     }[]
 
-    addons: AddonI[]
+    addons: ReqAddonI[]
+}
+
+export interface ReqAddonI {
+    name: string
+    description: string
+    quantity: number
+    amount: number
 }
 
 export interface AddonI {

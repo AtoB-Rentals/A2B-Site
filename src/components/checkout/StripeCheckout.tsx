@@ -9,6 +9,7 @@ import PE from "./PaymentElement";
 import { numToDallor } from "@/constants/formatting/money";
 import { useRouter } from "next/navigation";
 import Loading from "../assets/loading";
+import { useSession } from "next-auth/react";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!)
 
@@ -24,6 +25,8 @@ const StripeCheckout = ({
     const [ loading, setLoading ] = useState<boolean>(true)
     const router = useRouter()
 
+    const session = useSession()
+
     const getBooking = async () => {
         try {
             await setLoading(true)
@@ -34,9 +37,6 @@ const StripeCheckout = ({
             }
 
             const bookingData = res.data
-            if (bookingData.status !== 'Draft') {
-                router.push(`/checkout/${bookingData.id}/success`)
-            }
 
             if (bookingData.paidFor) {
                 router.push(`/checkout/${bookingData.id}/success`)
@@ -46,7 +46,6 @@ const StripeCheckout = ({
         } finally {
             setLoading(false)
         }
-
     }
 
     const getPaymentIntent = async () => {
@@ -72,8 +71,22 @@ const StripeCheckout = ({
     }
 
     useEffect(() => {
+        // getBooking()
         getPaymentIntent()
     }, [])
+
+    useEffect(() => {
+        if (session.status === 'authenticated') {
+            getBooking()
+        } else if (session.status === 'unauthenticated') {
+            localStorage.setItem(
+                'redirectURL', 
+                `/checkout/${bookingId}?}`
+            )
+
+            router.push('/login')
+        }
+    }, [session])
 
     if (loading) return <Loading />
 
