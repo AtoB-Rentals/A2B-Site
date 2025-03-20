@@ -94,4 +94,9 @@ export interface AddressI {
     type: AddressType
     /**Store things like the airport id here */
     index?: string
-} 
+}
+
+export interface PickDropI {
+    pickup: AddressI | null,
+    dropoff: AddressI | null
+}

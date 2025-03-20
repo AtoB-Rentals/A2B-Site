@@ -16,7 +16,7 @@
     "@stripe/react-stripe-js": "^2.8.1",
     "@stripe/stripe-js": "^4.9.0",
     "axios": "^1.7.7",
-    "daisyui": "^4.12.14",
+    "daisyui": "^4.12.24",
     "i": "^0.3.7",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",

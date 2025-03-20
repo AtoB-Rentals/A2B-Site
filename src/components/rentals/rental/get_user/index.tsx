@@ -54,7 +54,7 @@ const GetUserMain = ({timezone, carId}:{
                 lastName: user.lastName,
                 email: user.email,
                 phoneNumber: user.phoneNumber,
-    
+
                 vehicleId: carId,
                 pickupAddress: {
                     street1: q.get("address") || "",
@@ -74,7 +74,8 @@ const GetUserMain = ({timezone, carId}:{
                     local: end_time.toISO()!,
                     iana: timezone
                 },
-                carAddons
+                carAddons,
+                addons: []
             }
     
             const res = await createBooking(reqBooking)

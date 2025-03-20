@@ -14,6 +14,7 @@ import DeliverAddressCard from "./DelAddressCard"
 import NewAddonModal from "@/components/modals/cars/NewAddonModal"
 import { ReqInvoiceItemI } from "@/interface/api/invoice"
 import AddonCard from "./AddonCard"
+import ScheduleBlockCarPop from "@/components/modals/ScheduleBlockCar"
 
 interface ManCarProfileI {
     car: CarI
@@ -169,6 +170,16 @@ const CarProfile = ({
                 </div>
                 {/* CAR'S DETAILS *some can be editted */}
                 <div className="grid grid-cols-1 p-3 gap-2 md:grid-cols-3 lg:grid-cols-4">
+                    {car.status === 'available' && <DetailCard
+                        title="Create booking"
+                        customClick={() => router.push(`/manager/booking/new?car_id=${car.id}`)}
+                    >
+                        <button
+                            className="bg-success text-white font-bold rounded-md p-2"
+                        >
+                            Create Booking
+                        </button>
+                    </DetailCard>}
                     <DetailCard 
                         title="Status"
                         inputType="select"
@@ -209,7 +220,7 @@ const CarProfile = ({
                             setCarInfo(prev => ({...prev, price}))
                         }}
                     >
-                        <p className="text-black font-bold w-fit rounded-md">
+                        <p className="font-bold w-fit rounded-md">
                             ${numToDallor(carInfo.price)}
                         </p>
                     </DetailCard>
@@ -229,7 +240,7 @@ const CarProfile = ({
                             setCarInfo(prev => ({...prev, transmission}))
                         }}
                     >
-                        <p className="text-black font-bold w-fit rounded-md">
+                        <p className=" font-bold w-fit rounded-md">
                             {carInfo.transmission}
                         </p>
                     </DetailCard>
@@ -249,14 +260,14 @@ const CarProfile = ({
                             setCarInfo(prev => ({...prev, passengers}))
                         }}
                     >
-                        <p className="text-black font-bold w-fit rounded-md">
+                        <p className=" font-bold w-fit rounded-md">
                             {carInfo.passengers}
                         </p>
                     </DetailCard>
                     <DetailCard 
                         title="Publicly Visibility"
                     >
-                        <p className="text-black font-bold w-fit rounded-md">
+                        <p className=" font-bold w-fit rounded-md">
                             {carInfo.status === 'available' ? 'visible' : 'hidden'}
                         </p>
                     </DetailCard>
@@ -271,6 +282,16 @@ const CarProfile = ({
                         >
                             {carInfo.address ? carInfo.address.formatted : "N/A" }
                         </Link>
+                    </DetailCard>
+                    <DetailCard
+                        title="Cancel Booking"
+                        customClick={() => router.push(`/manager/cars/${car.id}?block_rental=y&car_id=${car.id}`)}
+                    >
+                        <button
+                            className="bg-red-600 text-white font-bold rounded-md p-2"
+                        >
+                            Block
+                        </button>
                     </DetailCard>
                 </div>
                 {/* ADD-ONS SECTION */}
@@ -408,6 +429,7 @@ const CarProfile = ({
             <NewAddonModal 
                 callback={(req) => handleNewAddon(req)}
             />
+            <ScheduleBlockCarPop />
         </>
     )
 }

@@ -1,9 +1,9 @@
 import { string, z } from "zod"
 import { AddressI, ReqAddressI } from "./address"
 import { CarI } from "./car"
-import { TimeI } from "./time"
+import { PostTimeI, TimeI } from "./time"
 import { UserI } from "./user"
-import { InvoiceItemI } from "./invoice"
+import { InvoiceItemI, InvoiceItemTypeT } from "./invoice"
 
 export type BookingStatusT = 
     | "Scheduled"
@@ -29,14 +29,8 @@ export interface ReqBookingI {
     phoneNumber: string
     vehicleId: CarI["id"]
     sameAsPickup: boolean
-    startTime: {
-        local: string
-        iana: string
-    }
-    endTime: {
-        local: string
-        iana: string
-    }
+    startTime: PostTimeI
+    endTime: PostTimeI
     dropoffAddress?: ReqAddressI
     pickupAddress: ReqAddressI
 
@@ -44,6 +38,24 @@ export interface ReqBookingI {
         name: string
         quantity: number
     }[]
+
+    addons: ReqAddonI[]
+}
+
+export interface ReqAddonI {
+    name: string
+    description: string
+    quantity: number
+    amount: number
+}
+
+export interface AddonI {
+    name: string
+    description: string
+    quantity: number
+    amount: number,
+    total: number
+    type: InvoiceItemTypeT
 }
 
 export interface StripeBookingI {
@@ -78,6 +90,8 @@ export interface BookingI {
         quantity: number
     }[]
 
+    addons: AddonI[]
+
     dropOffAddress: AddressI
     pickupAddress: AddressI
 
@@ -97,11 +111,6 @@ const ReqBookingSchema = z.object({
     dropoffAddress: z.string().optional(),
     pickupAddress: z.string().optional(),
 })
-
-// type PostTime struct {
-// 	Local string `json:"local" validate:"required"`
-// 	IANA  string `json:"iana" validate:"required"`
-// }
 
 export interface RecordI {
     bookingId: string

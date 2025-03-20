@@ -1,6 +1,6 @@
 "use client"
 
-import { bookingPaymentIntent, getBookingById } from "@/constants/requests/bookings"
+import { bookingPaymentIntent, getBookingById, updateRenter } from "@/constants/requests/bookings"
 import { BookingI } from "@/interface/api/booking"
 import { useEffect, useState } from 'react'
 import { loadStripe } from '@stripe/stripe-js';
@@ -9,6 +9,7 @@ import PE from "./PaymentElement";
 import { numToDallor } from "@/constants/formatting/money";
 import { useRouter } from "next/navigation";
 import Loading from "../assets/loading";
+import { useSession } from "next-auth/react";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!)
 
@@ -18,31 +19,32 @@ const StripeCheckout = ({
 }: {
     bookingId: string
 }) => {
-
     const [ stripeData, setStripeData ] = useState<BookingI['stripe']>()
     const [ booking, setBooking ] = useState<BookingI>()
     const [ success, setSuccess ] = useState<boolean>(false)
     const [ loading, setLoading ] = useState<boolean>(true)
     const router = useRouter()
 
-    // const stripe = useStripe()
-    // const elements = useElements()
-
-    const [errorMessage, setErrorMessage] = useState(null)
+    const session = useSession()
 
     const getBooking = async () => {
         try {
             await setLoading(true)
             const res = await getBookingById(bookingId)
             if (res.isErr) {
-                alert("invalid booking id")
+                if (res.status === 404) {
+                    alert(res.message)
+                    return
+                }
+
+                if (res.status === 500) {
+                    alert("An error occurred. Please try again later.")
+                    return
+                }
                 return
             }
 
             const bookingData = res.data
-            if (bookingData.status !== 'Draft') {
-                router.push(`/checkout/${bookingData.id}/success`)
-            }
 
             if (bookingData.paidFor) {
                 router.push(`/checkout/${bookingData.id}/success`)
@@ -52,7 +54,6 @@ const StripeCheckout = ({
         } finally {
             setLoading(false)
         }
-
     }
 
     const getPaymentIntent = async () => {
@@ -63,8 +64,6 @@ const StripeCheckout = ({
                 if (res.message === "vehicle is already paid for") {
                     setSuccess(true)
                     router.push(`/checkout/${bookingId}/success`)
-                } else {
-                    alert("Something went wrong")
                 }
 
                 return
@@ -77,9 +76,42 @@ const StripeCheckout = ({
         }
     }
 
+    const handleUpdaterRenter = async () => {
+        if (session.status !== 'authenticated' || !booking) return
+        const res = await updateRenter(bookingId, {
+            email: session.data.user.email,
+            firstName: "",
+            lastName: "",
+            phoneNumber: "",
+            dob: ""
+        })
+        if (res.isErr) {
+            return
+        }
+        setBooking(res.data)
+    }
+
     useEffect(() => {
-        getPaymentIntent()
+        getBooking()
+            .then(() => getPaymentIntent())
     }, [])
+
+    useEffect(() => {
+        if (session.status === 'authenticated') {
+            if (!!booking) {
+                if (session?.data?.user?.email !== booking?.renter?.email) {
+                    handleUpdaterRenter()
+                }
+            }
+        } else if (session.status === 'unauthenticated') {
+            localStorage.setItem(
+                'redirectURL', 
+                `/checkout/${bookingId}?}`
+            )
+
+            router.push('/login')
+        }
+    }, [session])
 
     if (loading) return <Loading />
 

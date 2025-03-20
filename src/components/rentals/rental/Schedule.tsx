@@ -42,7 +42,7 @@ const RentalSchedule = ({carId}: RentalScheduleI) => {
     const handleGetRecords = async () => {
         const res = await getCarSchedule(carId)
         if (res.isErr) {
-            alert("something when wrong")
+            alert("something went wrong")
         }
         setRecords(res.data)
     }
